@@ -1,0 +1,51 @@
+{
+  "eleccion": "Ejemplo de carga — Junta Municipal de Asunción",
+  "bancas": 12,
+  "umbral": 0,
+  "modo": "bloqueada",
+  "blancos": 1200,
+  "nulos": 800,
+  "listas": [
+    {
+      "numero": 1,
+      "partido": "Lista de ejemplo A",
+      "sigla": "EJA",
+      "color": 0,
+      "votos": 48000,
+      "candidatos": [
+        "Primera candidata de la lista A",
+        "Segundo candidato de la lista A",
+        "Tercera candidata de la lista A",
+        "Cuarto candidato de la lista A",
+        "Quinta candidata de la lista A",
+        "Sexto candidato de la lista A",
+        "Séptima candidata de la lista A",
+        "Octavo candidato de la lista A"
+      ]
+    },
+    {
+      "numero": 2,
+      "partido": "Lista de ejemplo B",
+      "sigla": "EJB",
+      "color": 1,
+      "votos": 26000,
+      "candidatos": [
+        { "nombre": "Primera candidata de la lista B", "pref": 4100 },
+        { "nombre": "Segundo candidato de la lista B", "pref": 900 },
+        { "nombre": "Tercera candidata de la lista B", "pref": 7300 },
+        { "nombre": "Cuarto candidato de la lista B", "pref": 2200 }
+      ]
+    },
+    {
+      "numero": 3,
+      "partido": "Lista de ejemplo C",
+      "sigla": "EJC",
+      "color": 2,
+      "votos": 9500,
+      "candidatos": [
+        "Primera candidata de la lista C",
+        "Segundo candidato de la lista C"
+      ]
+    }
+  ]
+}

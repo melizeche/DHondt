@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="es-PY">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora D'Hondt — Junta Municipal de Asunción</title>
+<meta name="description" content="Calculadora del reparto de bancas por el método D'Hondt para la Junta Municipal de Asunción: cargá los votos de cada lista y mirá qué concejales resultan electos.">
+<link rel="stylesheet" href="css/base.css">
+<style>
+.cand-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 4px 14px; }
+/* con la columna de votos preferentes la fila necesita más ancho o el nombre parte */
+.cand-grid.con-pref { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+.cand { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 6px; font-size: .85rem; }
+.cand.in { background: color-mix(in srgb, var(--good) 14%, transparent); }
+.cand.in .nm { font-weight: 600; }
+.cand .n { flex: none; width: 24px; font-family: var(--mono); font-size: .76rem; color: var(--text-muted); text-align: right; font-variant-numeric: tabular-nums; }
+.cand .nm { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.cand .tag-electo { flex: none; min-width: 44px; text-align: right; }
+.cand .pref { flex: none; width: 68px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="nav no-print">
+  <a href="index.html" aria-current="page">Votos por lista</a>
+  <a href="candidatos.html">Votos por candidato</a>
+</nav>
+
+<div class="top">
+  <div>
+    <h1>Calculadora D'Hondt — Junta Municipal de Asunción</h1>
+    <p class="sub">Cargá los votos de cada lista y la calculadora reparte las bancas por el método D'Hondt,
+      marcando qué candidatos resultan electos concejales.</p>
+  </div>
+  <div class="toolbar no-print">
+    <button id="btn-ejemplo">Votos de ejemplo</button>
+    <button id="btn-importar">Importar JSON</button>
+    <button id="btn-exportar">Exportar JSON</button>
+    <button id="btn-imprimir">Imprimir</button>
+    <button id="btn-tema" class="ghost" title="Cambiar tema">◐</button>
+    <button id="btn-reset" class="ghost danger">Restablecer</button>
+  </div>
+</div>
+
+<div class="callout no-print" id="aviso-relleno" hidden>
+  <strong>Hay nóminas con nombres de relleno.</strong>
+  Alguna lista tiene candidatos genéricos («Candidato/a 1», «Candidato/a 2»…) que no corresponden a ninguna
+  nómina oficial. Cambialos con «Editar candidatos» en cada lista, o importá un JSON. El cálculo D'Hondt
+  funciona igual con cualquier nómina.
+</div>
+
+<p class="footer no-print" id="origen-datos" style="margin:-8px 0 20px"></p>
+
+<section class="card no-print">
+  <header>
+    <h2>Configuración</h2>
+    <span class="hint" id="cfg-hint"></span>
+  </header>
+  <div class="config">
+    <div class="field">
+      <label for="cfg-bancas">Bancas a repartir</label>
+      <input type="number" id="cfg-bancas" min="1" max="99" step="1">
+    </div>
+    <div class="field">
+      <label for="cfg-umbral">Umbral (% de votos válidos)</label>
+      <input type="number" id="cfg-umbral" min="0" max="20" step="0.1">
+      <div class="note">Sin umbral legal: dejalo en 0.</div>
+    </div>
+    <div class="field">
+      <label for="cfg-modo">Tipo de lista</label>
+      <select id="cfg-modo">
+        <option value="bloqueada">Cerrada y bloqueada</option>
+        <option value="desbloqueada">Desbloqueada (voto preferente)</option>
+      </select>
+      <div class="note">El desbloqueo reordena cada lista por votos preferentes.</div>
+    </div>
+    <div class="field">
+      <label for="cfg-blancos">Votos en blanco</label>
+      <input type="number" id="cfg-blancos" min="0" step="1">
+      <div class="note">No entran en el reparto.</div>
+    </div>
+    <div class="field">
+      <label for="cfg-nulos">Votos nulos</label>
+      <input type="number" id="cfg-nulos" min="0" step="1">
+      <div class="note">No entran en el reparto.</div>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <header>
+    <h2>Listas y votos</h2>
+    <span class="hint">Tocá una lista para ver o editar sus candidatos.</span>
+  </header>
+  <div class="listas" id="listas"></div>
+  <div class="row no-print" style="margin-top:12px">
+    <button id="btn-agregar">+ Agregar lista</button>
+  </div>
+</section>
+
+<section class="card">
+  <header><h2>Resumen</h2></header>
+  <div class="stats" id="stats"></div>
+</section>
+
+<section class="card">
+  <header>
+    <h2>Reparto de bancas</h2>
+    <span class="hint" id="reparto-hint"></span>
+  </header>
+  <div id="empates"></div>
+  <div class="ribbon" id="ribbon" role="img" aria-label="Distribución de bancas por lista"></div>
+  <div class="seats-grid" id="seats-grid" aria-hidden="true"></div>
+  <div class="legend" id="legend"></div>
+  <div class="table-scroll" style="margin-top:16px">
+    <table id="tabla-reparto">
+      <thead>
+        <tr>
+          <th>Lista</th>
+          <th class="num">Votos</th>
+          <th class="num">% válidos</th>
+          <th class="num">Bancas</th>
+          <th class="num">% bancas</th>
+          <th class="num">Votos por banca</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card">
+  <header>
+    <h2>Concejales electos</h2>
+    <span class="hint">En el orden en que cada banca fue adjudicada.</span>
+  </header>
+  <div class="table-scroll">
+    <table id="tabla-electos">
+      <thead>
+        <tr>
+          <th class="num">#</th>
+          <th class="nombre">Concejal electo</th>
+          <th>Lista</th>
+          <th class="num">Pos. en lista</th>
+          <th class="num">Cociente</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card">
+  <header>
+    <h2>Tabla de cocientes</h2>
+    <span class="hint">Votos ÷ divisor. Las celdas resaltadas son las bancas adjudicadas, con su orden.</span>
+  </header>
+  <div class="table-scroll">
+    <table class="qtable" id="tabla-cocientes"><thead></thead><tbody></tbody></table>
+  </div>
+  <div class="row no-print" style="margin-top:12px">
+    <button id="btn-mas-filas" class="ghost">Mostrar todos los divisores</button>
+  </div>
+</section>
+
+<p class="footer">
+  Herramienta de cálculo no oficial. El método D'Hondt divide los votos de cada lista por 1, 2, 3… y adjudica
+  las bancas a los mayores cocientes; los empates se resuelven por sorteo, así que acá quedan señalados en vez
+  de decididos. Los datos se guardan solamente en este navegador.
+</p>
+
+</div>
+
+<dialog id="dlg-lista">
+  <form method="dialog">
+    <div class="dlg-body">
+      <h3 style="margin-bottom:14px">Editar lista</h3>
+      <div class="config">
+        <div class="field">
+          <label for="dl-num">Número de lista</label>
+          <input type="number" id="dl-num" min="0" step="1">
+        </div>
+        <div class="field" style="grid-column: span 2">
+          <label for="dl-partido">Partido / movimiento / alianza</label>
+          <input type="text" id="dl-partido">
+        </div>
+        <div class="field">
+          <label for="dl-sigla">Sigla</label>
+          <input type="text" id="dl-sigla" maxlength="14">
+        </div>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>Color</label>
+        <div class="swatches" id="dl-colores"></div>
+      </div>
+    </div>
+    <div class="dlg-foot">
+      <button value="cancel" class="ghost">Cancelar</button>
+      <button value="ok" class="primary">Guardar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg-cand">
+  <form method="dialog">
+    <div class="dlg-body">
+      <h3 id="dc-titulo" style="margin-bottom:6px">Editar candidatos</h3>
+      <p style="color:var(--text-muted); font-size:.82rem; margin-bottom:12px">
+        Un nombre por línea, en el orden de la lista. Las líneas vacías se ignoran.
+      </p>
+      <textarea id="dc-texto" rows="16" spellcheck="false"></textarea>
+    </div>
+    <div class="dlg-foot">
+      <button value="cancel" class="ghost">Cancelar</button>
+      <button value="ok" class="primary">Guardar nómina</button>
+    </div>
+  </form>
+</dialog>
+
+<input type="file" id="file-input" accept="application/json,.json" hidden>
+
+<script src="js/datos-asuncion.js"></script>
+<script src="js/core.js"></script>
+<script>
+"use strict";
+
+estado = cargarEstado();
+let verTodosLosDivisores = false;
+
+/* ============================================================== render */
+function render() {
+  const res = calcularDHondt(estado.listas, estado.bancas, estado.umbral);
+  renderConfig();
+  renderProcedencia();
+  renderListas(res);
+  renderStats(res);
+  renderReparto(res);
+  renderElectos(res);
+  renderCocientes(res);
+}
+
+function renderConfig() {
+  document.getElementById("cfg-bancas").value = estado.bancas;
+  document.getElementById("cfg-umbral").value = estado.umbral;
+  document.getElementById("cfg-modo").value = estado.modo;
+  document.getElementById("cfg-blancos").value = estado.blancos;
+  document.getElementById("cfg-nulos").value = estado.nulos;
+}
+
+function renderListas(res) {
+  const cont = document.getElementById("listas");
+  cont.textContent = "";
+
+  if (!estado.listas.length) {
+    cont.appendChild(el("p", { class: "empty", text: "No hay listas cargadas. Agregá al menos una." }));
+    return;
+  }
+
+  estado.listas.forEach(function (lista) {
+    const gan = res.ganadas.get(lista.id) || 0;
+
+    const inputVotos = el("input", {
+      type: "number", min: "0", step: "1", value: String(lista.votos),
+      "aria-label": "Votos de la lista " + lista.numero + " " + lista.sigla,
+      oninput: function (e) {
+        lista.votos = clampInt(e.target.value, 0, 1e12, 0);
+        reconciliarSoloLista(lista);
+        guardar();
+        renderTrasVotos();
+      },
+    });
+
+    const cabecera = el("div", { class: "lista-head" }, [
+      el("div", { class: "lista-color", style: "background:" + colorDe(lista) }),
+      el("div", { class: "lista-num", text: String(lista.numero) }),
+      el("div", { class: "lista-nombre" }, [
+        el("div", { class: "p", text: lista.partido }),
+        el("div", { class: "s", text: lista.sigla + " · " + lista.candidatos.length + " candidatos" }),
+      ]),
+      el("div", { class: "lista-votos" }, [inputVotos]),
+      el("div", { class: "lista-pct", text: pct(lista.votos, res.votosValidos) }),
+      el("div", { class: "lista-bancas" }, [
+        el("span", { class: "bancas-badge" + (gan > 0 ? " win" : ""), text: String(gan), title: gan + " banca(s)" }),
+        el("button", {
+          class: "ghost tiny no-print",
+          text: lista.abierta ? "▲" : "▼",
+          "aria-expanded": lista.abierta ? "true" : "false",
+          "aria-label": (lista.abierta ? "Ocultar" : "Ver") + " candidatos de " + lista.sigla,
+          onclick: function () { lista.abierta = !lista.abierta; guardar(); render(); },
+        }),
+      ]),
+    ]);
+
+    const nodo = el("div", { class: "lista" + (gan > 0 ? " electa" : "") }, [cabecera]);
+    if (lista.abierta) nodo.appendChild(cuerpoLista(lista, gan));
+    cont.appendChild(nodo);
+  });
+}
+
+function cuerpoLista(lista, gan) {
+  const desbloqueada = estado.modo === "desbloqueada";
+  const filas = detalleOrden(lista, estado.modo, gan);
+
+  const grid = el("div", { class: "cand-grid" + (desbloqueada ? " con-pref" : "") });
+  filas.forEach(function (f) {
+    const fila = el("div", { class: "cand" + (f.electo ? " in" : "") }, [
+      el("div", { class: "n", text: String(f.posFinal) }),
+      el("div", { class: "nm", text: f.nombre }),
+      el("div", { class: "tag-electo", text: f.electo ? "Electo" : "" }),
+    ]);
+    if (desbloqueada) {
+      fila.appendChild(el("input", {
+        type: "number", min: "0", step: "1", class: "pref", value: String(f.pref),
+        "aria-label": "Votos preferentes de " + f.nombre,
+        // En esta página el total de la lista es el que se escribió arriba:
+        // los votos preferentes reparten ese total, no se le suman. Lo que
+        // ningún candidato se lleva queda como voto de sola lista.
+        oninput: function (e) {
+          f.candidato.pref = clampInt(e.target.value, 0, 1e12, 0);
+          reconciliarSoloLista(lista);
+          guardar();
+        },
+        onchange: function () { render(); },
+      }));
+    }
+    grid.appendChild(fila);
+  });
+
+  const barra = el("div", { class: "cand-toolbar no-print" }, [
+    el("button", { class: "tiny", text: "Editar candidatos", onclick: function () { abrirDialogoCandidatos(lista); } }),
+    el("button", { class: "tiny", text: "Editar lista", onclick: function () { abrirDialogoLista(lista); } }),
+    el("span", { class: "grow" }),
+    el("button", {
+      class: "tiny ghost danger", text: "Eliminar lista",
+      onclick: function () {
+        if (!confirm("¿Eliminar la lista " + lista.numero + " – " + lista.sigla + "?")) return;
+        estado.listas = estado.listas.filter(function (x) { return x.id !== lista.id; });
+        guardar(); render();
+      },
+    }),
+  ]);
+
+  const cuerpo = el("div", { class: "lista-body" }, [barra]);
+  if (desbloqueada) {
+    const sumaPref = sumaPreferentes(lista);
+    if (sumaPref > lista.votos) {
+      cuerpo.appendChild(el("div", { class: "callout" }, [
+        el("strong", { text: "Los votos preferentes no cierran. " }),
+        document.createTextNode(
+          "Suman " + n(sumaPref) + " pero la lista tiene " + n(lista.votos) + " votos en total. " +
+          "El reparto entre listas usa el total; corregilo arriba o bajá los preferentes. " +
+          "Si preferís cargar la elección candidato por candidato y que el total salga solo, usá la otra página."),
+      ]));
+    } else {
+      cuerpo.appendChild(el("p", {
+        class: "empty",
+        text: "Lista desbloqueada: el orden lo definen los votos preferentes. De los " + n(lista.votos) +
+              " votos, " + n(sumaPref) + " nombraron a un candidato y " + n(lista.soloLista) + " eligieron sólo la lista.",
+      }));
+    }
+  }
+  cuerpo.appendChild(grid);
+  return cuerpo;
+}
+
+function renderStats(res) {
+  const cont = document.getElementById("stats");
+  cont.textContent = "";
+
+  const emitidos = res.votosValidos + estado.blancos + estado.nulos;
+  const conBanca = estado.listas.filter(function (l) { return (res.ganadas.get(l.id) || 0) > 0; }).length;
+
+  [
+    { k: "Votos válidos", v: n(res.votosValidos), d: emitidos > 0 ? pct(res.votosValidos, emitidos) + " de los emitidos" : "—" },
+    { k: "Votos emitidos", v: n(emitidos), d: n(estado.blancos) + " blancos · " + n(estado.nulos) + " nulos" },
+    { k: "Bancas", v: String(estado.bancas), d: res.rondas.length + " adjudicadas" },
+    { k: "Listas con banca", v: conBanca + " / " + estado.listas.length, d: res.excluidas.length ? res.excluidas.length + " bajo el umbral" : "Sin umbral aplicado" },
+    { k: "Última banca", v: res.ultima ? fmtCociente.format(res.ultima.cociente) : "—",
+      d: res.ultima ? "Cociente que entró (ronda " + res.ultima.ronda + ")" : "Cargá votos para calcular" },
+    { k: "Primera afuera", v: res.siguiente ? fmtCociente.format(res.siguiente.cociente) : "—",
+      d: res.siguiente ? res.siguiente.lista.sigla + " fue la más cerca" : "—" },
+  ].forEach(function (t) {
+    cont.appendChild(el("div", { class: "stat" }, [
+      el("div", { class: "k", text: t.k }),
+      el("div", { class: "v", text: t.v }),
+      el("div", { class: "d", text: t.d }),
+    ]));
+  });
+}
+
+function renderReparto(res) {
+  const ordenadas = estado.listas.slice().sort(function (a, b) {
+    const d = (res.ganadas.get(b.id) || 0) - (res.ganadas.get(a.id) || 0);
+    return d !== 0 ? d : b.votos - a.votos;
+  });
+  // La cinta y los puntos van en orden de lista (boletín), no por tamaño: así
+  // los colores vecinos son siempre los mismos y conservan la separación
+  // cromática validada. La tabla de abajo sí ordena por bancas.
+  const conBanca = estado.listas.filter(function (l) { return (res.ganadas.get(l.id) || 0) > 0; });
+
+  document.getElementById("reparto-hint").textContent =
+    res.rondas.length + " de " + estado.bancas + " bancas adjudicadas";
+
+  const avisos = document.getElementById("empates");
+  avisos.textContent = "";
+  res.empates.forEach(function (e) {
+    avisos.appendChild(el("div", { class: "callout" }, [
+      el("strong", { text: "Empate en la banca " + e.ronda + ". " }),
+      document.createTextNode(
+        e.listas.map(function (l) { return l.sigla; }).join(", ") +
+        " comparten el cociente " + fmtCociente.format(e.cociente) +
+        " y quedan " + e.enDisputa + " banca(s) en disputa. El Código Electoral resuelve estos casos por sorteo; " +
+        "acá la banca se muestra adjudicada al primero por orden de lista."),
+    ]));
+  });
+
+  const ribbon = document.getElementById("ribbon");
+  ribbon.textContent = "";
+  const totalAdj = res.rondas.length;
+  if (!totalAdj) {
+    ribbon.appendChild(el("div", { class: "ribbon-seg", style: "flex:1; background:var(--surface-2); border:1px dashed var(--border-strong)" }));
+    ribbon.setAttribute("aria-label", "Sin bancas adjudicadas todavía");
+  } else {
+    conBanca.forEach(function (l) {
+      const b = res.ganadas.get(l.id);
+      ribbon.appendChild(el("div", {
+        class: "ribbon-seg",
+        style: "flex:" + b + " 1 0; background:" + colorDe(l),
+        title: l.sigla + ": " + b + " banca(s)",
+      }, [el("span", { text: b / totalAdj >= 0.09 ? l.sigla + " " + b : String(b) })]));
+    });
+    ribbon.setAttribute("aria-label", "Distribución: " +
+      conBanca.map(function (l) { return l.sigla + " " + res.ganadas.get(l.id); }).join(", "));
+  }
+
+  const grid = document.getElementById("seats-grid");
+  grid.textContent = "";
+  conBanca.forEach(function (l) {
+    for (let i = 0; i < res.ganadas.get(l.id); i++) {
+      grid.appendChild(el("div", { class: "seat-dot", style: "background:" + colorDe(l) }));
+    }
+  });
+  for (let i = 0; i < estado.bancas - totalAdj; i++) {
+    grid.appendChild(el("div", { class: "seat-dot", style: "background:var(--surface-2); box-shadow:0 0 0 1px var(--border-strong)" }));
+  }
+
+  const leyenda = document.getElementById("legend");
+  leyenda.textContent = "";
+  estado.listas.forEach(function (l) {
+    leyenda.appendChild(el("span", { class: "item" }, [
+      el("span", { class: "chip", style: "background:" + colorDe(l) }),
+      el("span", { text: l.sigla + " · " + (res.ganadas.get(l.id) || 0) }),
+    ]));
+  });
+
+  const tbody = document.querySelector("#tabla-reparto tbody");
+  tbody.textContent = "";
+  ordenadas.forEach(function (l) {
+    const b = res.ganadas.get(l.id) || 0;
+    tbody.appendChild(el("tr", null, [
+      el("td", null, [
+        el("span", { class: "chip", style: "background:" + colorDe(l) }),
+        document.createTextNode(l.numero + " · " + l.sigla),
+        res.excluidas.indexOf(l) !== -1 ? el("span", { style: "color:var(--text-muted)", text: " (bajo umbral)" }) : null,
+      ]),
+      el("td", { class: "num", text: n(l.votos) }),
+      el("td", { class: "num", text: pct(l.votos, res.votosValidos) }),
+      el("td", { class: "num", text: String(b) }),
+      el("td", { class: "num", text: pct(b, estado.bancas) }),
+      el("td", { class: "num", text: b > 0 ? n(l.votos / b) : "—" }),
+    ]));
+  });
+  tbody.appendChild(el("tr", { class: "total" }, [
+    el("td", { text: "Total" }),
+    el("td", { class: "num", text: n(res.votosValidos) }),
+    el("td", { class: "num", text: res.votosValidos > 0 ? "100,0 %" : "—" }),
+    el("td", { class: "num", text: String(res.rondas.length) }),
+    el("td", { class: "num", text: res.rondas.length ? pct(res.rondas.length, estado.bancas) : "—" }),
+    el("td", { class: "num", text: res.rondas.length ? n(res.votosValidos / res.rondas.length) : "—" }),
+  ]));
+}
+
+function renderElectos(res) {
+  const tbody = document.querySelector("#tabla-electos tbody");
+  tbody.textContent = "";
+
+  if (!res.rondas.length) {
+    tbody.appendChild(el("tr", null, [
+      el("td", { colspan: "5", class: "empty", text: "Cargá los votos de al menos una lista para ver los electos." }),
+    ]));
+    return;
+  }
+
+  const porLista = new Map();
+  res.rondas.forEach(function (r) {
+    const lista = estado.listas.find(function (l) { return l.id === r.listaId; });
+    if (!lista) return;
+    if (!porLista.has(lista.id)) porLista.set(lista.id, { orden: ordenInterno(lista, estado.modo), usados: 0 });
+    const info = porLista.get(lista.id);
+    const idx = info.orden[info.usados];
+    info.usados++;
+    const cand = idx !== undefined ? lista.candidatos[idx] : null;
+
+    tbody.appendChild(el("tr", null, [
+      el("td", { class: "num", text: String(r.ronda) }),
+      el("td", { class: "nombre", text: cand ? cand.nombre : "— sin candidato en la nómina —" }),
+      el("td", null, [
+        el("span", { class: "chip", style: "background:" + colorDe(lista) }),
+        document.createTextNode(lista.numero + " · " + lista.sigla),
+      ]),
+      el("td", { class: "num", text: String(info.usados) }),
+      el("td", { class: "num", text: fmtCociente.format(r.cociente) }),
+    ]));
+  });
+}
+
+function renderCocientes(res) {
+  const thead = document.querySelector("#tabla-cocientes thead");
+  const tbody = document.querySelector("#tabla-cocientes tbody");
+  thead.textContent = "";
+  tbody.textContent = "";
+
+  const listas = estado.listas.filter(function (l) { return l.votos > 0; });
+  const btn = document.getElementById("btn-mas-filas");
+
+  if (!listas.length) {
+    thead.appendChild(el("tr", null, [el("th", { text: "Sin votos cargados" })]));
+    btn.hidden = true;
+    return;
+  }
+
+  let maxGanadas = 0;
+  listas.forEach(function (l) { maxGanadas = Math.max(maxGanadas, res.ganadas.get(l.id) || 0); });
+  const filas = verTodosLosDivisores ? estado.bancas : Math.min(estado.bancas, maxGanadas + 2);
+  btn.hidden = estado.bancas <= maxGanadas + 2;
+  btn.textContent = verTodosLosDivisores ? "Mostrar solo los divisores relevantes" : "Mostrar todos los divisores";
+
+  const ganadorPorClave = new Map();
+  res.rondas.forEach(function (r) { ganadorPorClave.set(r.listaId + ":" + r.divisor, r.ronda); });
+
+  const filaEnc = el("tr", null, [el("th", { class: "div", text: "÷" })]);
+  listas.forEach(function (l) {
+    filaEnc.appendChild(el("th", { class: "num" }, [
+      el("span", { class: "chip", style: "background:" + colorDe(l) }),
+      document.createTextNode(l.sigla),
+    ]));
+  });
+  thead.appendChild(filaEnc);
+
+  for (let d = 1; d <= filas; d++) {
+    const tr = el("tr", null, [el("th", { class: "div", scope: "row", text: String(d) })]);
+    listas.forEach(function (l) {
+      const ronda = ganadorPorClave.get(l.id + ":" + d);
+      const celda = el("td", { class: "num" + (ronda ? " hit" : "") }, [
+        document.createTextNode(fmtCociente.format(l.votos / d)),
+        ronda ? el("span", { class: "r", text: "#" + ronda }) : null,
+      ]);
+      if (ronda) celda.title = "Banca " + ronda + " para " + l.sigla;
+      tr.appendChild(celda);
+    });
+    tbody.appendChild(tr);
+  }
+}
+
+/* Recalcula sin rehacer los inputs de voto, para no perder el foco mientras
+   se tipea. */
+function renderTrasVotos() {
+  const activo = document.activeElement;
+  const res = calcularDHondt(estado.listas, estado.bancas, estado.umbral);
+  renderStats(res);
+  renderReparto(res);
+  renderElectos(res);
+  renderCocientes(res);
+  actualizarInsigniasListas(res);
+  if (activo && document.contains(activo)) activo.focus();
+}
+
+function actualizarInsigniasListas(res) {
+  const nodos = document.querySelectorAll("#listas .lista");
+  estado.listas.forEach(function (lista, i) {
+    const nodo = nodos[i];
+    if (!nodo) return;
+    const gan = res.ganadas.get(lista.id) || 0;
+    const badge = nodo.querySelector(".bancas-badge");
+    if (badge) {
+      badge.textContent = String(gan);
+      badge.className = "bancas-badge" + (gan > 0 ? " win" : "");
+    }
+    const p = nodo.querySelector(".lista-pct");
+    if (p) p.textContent = pct(lista.votos, res.votosValidos);
+    nodo.className = "lista" + (gan > 0 ? " electa" : "");
+    if (lista.abierta) {
+      const viejo = nodo.querySelector(".lista-body");
+      if (viejo) nodo.replaceChild(cuerpoLista(lista, gan), viejo);
+    }
+  });
+}
+
+/* ============================================================== diálogos */
+let listaEnEdicion = null;
+
+function abrirDialogoLista(lista) {
+  listaEnEdicion = lista;
+  document.getElementById("dl-num").value = lista.numero;
+  document.getElementById("dl-partido").value = lista.partido;
+  document.getElementById("dl-sigla").value = lista.sigla;
+
+  renderSelectorColor(document.getElementById("dl-colores"), lista);
+  document.getElementById("dlg-lista").showModal();
+}
+
+document.getElementById("dlg-lista").addEventListener("close", function (e) {
+  if (e.target.returnValue === "ok" && listaEnEdicion) {
+    listaEnEdicion.numero = clampInt(document.getElementById("dl-num").value, 0, 9999, listaEnEdicion.numero);
+    listaEnEdicion.partido = document.getElementById("dl-partido").value.trim() || listaEnEdicion.partido;
+    listaEnEdicion.sigla = document.getElementById("dl-sigla").value.trim() || listaEnEdicion.sigla;
+    guardar();
+  }
+  listaEnEdicion = null;
+  render();
+});
+
+function abrirDialogoCandidatos(lista) {
+  listaEnEdicion = lista;
+  document.getElementById("dc-titulo").textContent = "Candidatos — " + lista.numero + " · " + lista.partido;
+  document.getElementById("dc-texto").value = lista.candidatos.map(function (c) { return c.nombre; }).join("\n");
+  document.getElementById("dlg-cand").showModal();
+}
+
+document.getElementById("dlg-cand").addEventListener("close", function (e) {
+  if (e.target.returnValue === "ok" && listaEnEdicion) {
+    const nombres = document.getElementById("dc-texto").value
+      .split("\n").map(function (s) { return s.trim(); })
+      .filter(function (s) { return s !== ""; });
+    if (nombres.length) {
+      const previos = listaEnEdicion.candidatos;
+      listaEnEdicion.candidatos = nombres.map(function (nom, i) {
+        // conserva los votos preferentes si el nombre no cambió de posición
+        const pref = previos[i] && previos[i].nombre === nom ? previos[i].pref : 0;
+        return { nombre: nom, pref: pref };
+      });
+      reconciliarSoloLista(listaEnEdicion);
+      guardar();
+    }
+  }
+  listaEnEdicion = null;
+  render();
+});
+
+/* ============================================================== eventos */
+function enlazarConfig(id, aplicar) {
+  document.getElementById(id).addEventListener("input", function (e) {
+    aplicar(e.target.value);
+    guardar();
+    render();
+  });
+}
+enlazarConfig("cfg-bancas", function (v) { estado.bancas = clampInt(v, 1, 99, BANCAS_ASUNCION); });
+enlazarConfig("cfg-umbral", function (v) { estado.umbral = clampNum(v, 0, 20, 0); });
+enlazarConfig("cfg-modo", function (v) { estado.modo = v === "desbloqueada" ? "desbloqueada" : "bloqueada"; });
+enlazarConfig("cfg-blancos", function (v) { estado.blancos = clampInt(v, 0, 1e12, 0); });
+enlazarConfig("cfg-nulos", function (v) { estado.nulos = clampInt(v, 0, 1e12, 0); });
+
+document.getElementById("btn-agregar").addEventListener("click", function () {
+  const i = estado.listas.length;
+  estado.listas.push({
+    id: proximoId++,
+    numero: i + 1,
+    partido: "Nueva lista " + (i + 1),
+    sigla: "L" + (i + 1),
+    color: i % PALETA.length,
+    votos: 0,
+    soloLista: 0,
+    abierta: true,
+    candidatos: nominaPorDefecto(estado.bancas),
+  });
+  guardar();
+  render();
+});
+
+document.getElementById("btn-ejemplo").addEventListener("click", function () {
+  estado.listas.forEach(function (l, i) {
+    l.votos = VOTOS_EJEMPLO[i] !== undefined ? VOTOS_EJEMPLO[i] : 0;
+    reconciliarSoloLista(l);
+  });
+  estado.blancos = 4200;
+  estado.nulos = 3100;
+  guardar();
+  render();
+});
+
+document.getElementById("btn-reset").addEventListener("click", function () {
+  if (!confirm("Se borran los votos, las nóminas y los cambios de listas. ¿Continuar?")) return;
+  estado = datosPorDefecto();
+  guardar();
+  render();
+});
+
+document.getElementById("btn-imprimir").addEventListener("click", function () { window.print(); });
+document.getElementById("btn-exportar").addEventListener("click", function () { exportarJSON(); });
+conectarImportacion("btn-importar", "file-input", render);
+
+document.getElementById("btn-mas-filas").addEventListener("click", function () {
+  verTodosLosDivisores = !verTodosLosDivisores;
+  render();
+});
+
+inicializarTema(render);
+render();
+</script>
+</body>
+</html>

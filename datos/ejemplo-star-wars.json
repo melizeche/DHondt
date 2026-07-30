@@ -1,0 +1,79 @@
+{
+  "eleccion": "Senado Galáctico — ejemplo de prueba",
+  "bancas": 10,
+  "umbral": 0,
+  "modo": "desbloqueada",
+  "blancos": 12400,
+  "nulos": 8900,
+  "listas": [
+    {
+      "numero": 4,
+      "partido": "Alianza para Restaurar la República",
+      "sigla": "Rebelión",
+      "color": 2,
+      "colorHex": "#eb6834",
+      "votos": 318000,
+      "soloLista": 198000,
+      "candidatos": [
+        { "nombre": "Leia Organa", "pref": 38000 },
+        { "nombre": "Mon Mothma", "pref": 9500 },
+        { "nombre": "Luke Skywalker", "pref": 41200 },
+        { "nombre": "Han Solo", "pref": 12400 },
+        { "nombre": "Chewbacca", "pref": 3100 },
+        { "nombre": "Lando Calrissian", "pref": 2600 },
+        { "nombre": "Wedge Antilles", "pref": 1900 },
+        { "nombre": "Jyn Erso", "pref": 4800 },
+        { "nombre": "Cassian Andor", "pref": 2300 },
+        { "nombre": "Bail Organa", "pref": 1700 },
+        { "nombre": "Almirante Ackbar", "pref": 1500 },
+        { "nombre": "Hera Syndulla", "pref": 1000 }
+      ]
+    },
+    {
+      "numero": 66,
+      "partido": "Imperio Galáctico",
+      "sigla": "Imperio",
+      "color": 1,
+      "colorHex": "#2a78d6",
+      "votos": 452000,
+      "soloLista": 292000,
+      "candidatos": [
+        { "nombre": "Sheev Palpatine", "pref": 52000 },
+        { "nombre": "Darth Vader", "pref": 61500 },
+        { "nombre": "Wilhuff Tarkin", "pref": 18300 },
+        { "nombre": "Gran Almirante Thrawn", "pref": 14200 },
+        { "nombre": "Orson Krennic", "pref": 4100 },
+        { "nombre": "Almirante Piett", "pref": 3300 },
+        { "nombre": "General Veers", "pref": 2200 },
+        { "nombre": "Almirante Ozzel", "pref": 900 },
+        { "nombre": "Moff Jerjerrod", "pref": 1100 },
+        { "nombre": "Almirante Motti", "pref": 800 },
+        { "nombre": "Mas Amedda", "pref": 1000 },
+        { "nombre": "Ysanne Isard", "pref": 600 }
+      ]
+    },
+    {
+      "numero": 1138,
+      "partido": "Confederación de Sistemas Independientes",
+      "sigla": "Separatistas",
+      "color": 3,
+      "colorHex": "#1baf7a",
+      "votos": 141000,
+      "soloLista": 81000,
+      "candidatos": [
+        { "nombre": "Conde Dooku", "pref": 24500 },
+        { "nombre": "Nute Gunray", "pref": 8200 },
+        { "nombre": "General Grievous", "pref": 15700 },
+        { "nombre": "Wat Tambor", "pref": 3400 },
+        { "nombre": "San Hill", "pref": 2100 },
+        { "nombre": "Poggle el Menor", "pref": 1900 },
+        { "nombre": "Shu Mai", "pref": 1400 },
+        { "nombre": "Passel Argente", "pref": 900 },
+        { "nombre": "Rune Haako", "pref": 800 },
+        { "nombre": "Lott Dod", "pref": 600 },
+        { "nombre": "Tikkes", "pref": 300 },
+        { "nombre": "Po Nudo", "pref": 200 }
+      ]
+    }
+  ]
+}
