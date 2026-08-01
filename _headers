@@ -1,0 +1,9 @@
+# Cabeceras para Cloudflare Pages (y Netlify, que usa el mismo formato).
+# GitHub Pages ignora este archivo: no lee cabeceras del repositorio.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), interest-cohort=()
+  # SAMEORIGIN y no DENY: así la calculadora se puede embeber en un iframe
+  # desde el mismo sitio si alguna vez hace falta.
+  X-Frame-Options: SAMEORIGIN

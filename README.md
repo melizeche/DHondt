@@ -197,6 +197,9 @@ no cambia ningún total.
 ```
 index.html                          página por lista
 candidatos.html                     página por candidato
+favicon.svg                         ícono
+.nojekyll                           que GitHub Pages publique los archivos tal cual
+_headers                            cabeceras de seguridad para Cloudflare Pages
 js/core.js                          estado, cálculo D'Hondt, orden interno, color, formato
 js/datos-asuncion.js                candidaturas que las páginas traen cargadas (generado)
 css/base.css                        estilos compartidos
@@ -235,8 +238,63 @@ sigan siendo distinguibles entre sí en los dos modos.
 
 ## Publicar
 
-Es un sitio estático: sirve cualquier hosting. Para GitHub Pages, en
-*Settings → Pages* se elige la rama y la carpeta raíz.
+Es un sitio estático sin build: HTML, CSS, JS y JSON servidos tal cual. Anda en
+cualquier hosting estático y también abriendo `index.html` con doble clic.
+
+### GitHub Pages
+
+No hace falta ningún workflow. Una vez que esto esté en la rama principal:
+
+1. *Settings → Pages*
+2. **Source**: «Deploy from a branch»
+3. **Branch**: la rama principal, carpeta `/ (root)` → *Save*
+
+Queda en `https://<usuario>.github.io/DHondt/`. El sitio está pensado para
+funcionar bajo ese subdirectorio: todas las rutas son relativas, no hay ninguna
+que arranque con `/`, y no se usa `fetch`, así que no hay nada que romper ni
+ninguna base URL que configurar.
+
+El `.nojekyll` de la raíz le dice a Pages que publique los archivos tal cual en
+vez de pasarlos por Jekyll. Con este contenido Jekyll no rompería nada, pero
+saltearlo es más rápido y evita sorpresas si mañana se agrega algún archivo que
+empiece con guion bajo.
+
+### Cloudflare Pages (sirve con el repositorio privado)
+
+GitHub Pages sólo publica desde repositorios privados en los planes pagos.
+Cloudflare Pages lo hace en el plan gratuito, así que es la opción si el
+repositorio tiene que seguir privado.
+
+En el panel de Cloudflare: *Workers & Pages → Create → Pages → Connect to Git*,
+se elige el repositorio y:
+
+| Ajuste | Valor |
+|---|---|
+| Framework preset | None |
+| Build command | *(vacío)* |
+| Build output directory | `/` |
+| Root directory | *(vacío)* |
+
+No hay build: se publican los archivos tal cual. Queda en
+`https://<proyecto>.pages.dev`, y cada push a la rama elegida vuelve a
+desplegar.
+
+**Repositorio privado no es lo mismo que sitio privado.** El código queda
+privado, pero lo publicado en `pages.dev` es visible para cualquiera que tenga
+el enlace. Si lo que hace falta es que el sitio tampoco sea público, se le pone
+adelante **Cloudflare Access** (Zero Trust, gratis hasta 50 usuarios): se
+protege con una política por correo o dominio y recién ahí el sitio deja de ser
+abierto.
+
+`_headers` es de Cloudflare (Netlify usa el mismo formato) y agrega unas
+cabeceras de seguridad. GitHub Pages lo ignora, así que no molesta.
+
+### Otros
+
+Cualquier hosting estático sirve igual, sin cambios: Netlify, Vercel, Firebase
+Hosting o un bucket de Cloud Storage o S3. Nada de esto tiene servidor: los
+datos que se cargan quedan en el `localStorage` del navegador y no se envían a
+ningún lado.
 
 ---
 
