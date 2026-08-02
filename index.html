@@ -167,8 +167,15 @@
 
 <p class="footer">
   Herramienta de cálculo no oficial. El método D'Hondt divide los votos de cada lista por 1, 2, 3… y adjudica
-  las bancas a los mayores cocientes; los empates se resuelven por sorteo, así que acá quedan señalados en vez
-  de decididos. Los datos se guardan solamente en este navegador.
+  las bancas a los mayores cocientes. Está en el
+  <a href="https://www.bacn.gov.py/leyes-paraguayas/2346/ley-n-834-establece-el-codigo-electoral-paraguayo"
+     target="_blank" rel="noopener">Artículo 258 del Código Electoral (Ley N° 834/96)</a>,
+  cuyo texto vigente viene de la
+  <a href="https://www.bacn.gov.py/leyes-paraguayas/10452/ley-n-6918-modifica-los-articulos-170-246-247-248-y-258-de-la-ley-n-8341996-que-establece-el-codigo-electoral-paraguayo-y-sus-modificatorias-leyes-ns-31662007-y-63182019"
+     target="_blank" rel="noopener">Ley N° 6918/2022</a>.
+  Ese artículo también resuelve los empates: a igual cociente la banca va a la lista con más votos, y sólo si
+  el empate persiste se define por sorteo — por eso esos casos acá quedan señalados en vez de decididos.
+  Los datos se guardan solamente en este navegador.
 </p>
 
 </div>
@@ -410,9 +417,11 @@ function renderReparto(res) {
       el("strong", { text: "Empate en la banca " + e.ronda + ". " }),
       document.createTextNode(
         e.listas.map(function (l) { return l.sigla; }).join(", ") +
-        " comparten el cociente " + fmtCociente.format(e.cociente) +
-        " y quedan " + e.enDisputa + " banca(s) en disputa. El Código Electoral resuelve estos casos por sorteo; " +
-        "acá la banca se muestra adjudicada al primero por orden de lista."),
+        " comparten el cociente " + fmtCociente.format(e.cociente) + " y la misma cantidad de votos, " +
+        "con " + e.enDisputa + " banca(s) en disputa. El Artículo 258 del Código Electoral manda que, a igual " +
+        "cociente, la banca vaya a la lista con más votos; como acá también empatan en votos, se define por " +
+        "sorteo. La banca se muestra adjudicada a la primera por orden de lista, pero esa parte no la decide " +
+        "el cálculo."),
     ]));
   });
 

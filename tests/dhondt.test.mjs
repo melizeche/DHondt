@@ -31,6 +31,30 @@ console.log("\nReparto D'Hondt entre listas");
   check("ejemplo canónico, 8 bancas", bancasDe(res, listas), [4, 3, 1, 0]);
 }
 
+/* El propio Artículo 258 publica un cuadro de ejemplo. Los cocientes que
+ * calculamos tienen que dar exactamente esos números. */
+{
+  const listas = L([["A", 168000], ["B", 104000], ["C", 72000], ["D", 64000], ["E", 40000]]);
+  const cuadro = listas.map(function (l) {
+    return [1, 2, 3, 4].map(function (d) { return Math.trunc(l.votos / d); });
+  });
+  check("cuadro del Artículo 258: divisiones por 1, 2, 3 y 4", cuadro, [
+    [168000, 84000, 56000, 42000],
+    [104000, 52000, 34666, 26000],
+    [72000, 36000, 24000, 18000],
+    [64000, 32000, 21333, 16000],
+    [40000, 20000, 13333, 10000],
+  ]);
+
+  // «las bancas se atribuirán a las listas que hubieran obtenido los cocientes
+  // mayores en el cuadro, atendiendo a un orden decreciente»
+  const res = calcularDHondt(listas, 5, 0);
+  check("con esas cifras y 5 bancas", bancasDe(res, listas), [2, 1, 1, 1, 0]);
+  check("las bancas salen en orden decreciente de cociente",
+    res.rondas.map(function (r) { return Math.trunc(r.cociente); }),
+    [168000, 104000, 84000, 72000, 64000]);
+}
+
 // La suma de bancas siempre cierra
 {
   let malas = 0;
@@ -71,8 +95,12 @@ console.log("\nReparto D'Hondt entre listas");
     }));
     const bancas = 24;
     const cocientes = [];
-    for (const l of listas) for (let d = 1; d <= bancas; d++) cocientes.push({ id: l.id, q: l.votos / d });
-    cocientes.sort(function (a, b) { return b.q - a.q; });
+    for (const l of listas) for (let d = 1; d <= bancas; d++) {
+      cocientes.push({ id: l.id, q: l.votos / d, votos: l.votos });
+    }
+    // mismo criterio del Artículo 258, para que un empate de cocientes no
+    // haga que esta comparación falle por azar
+    cocientes.sort(function (a, b) { return (b.q - a.q) || (b.votos - a.votos); });
     const esperado = new Map(listas.map(function (l) { return [l.id, 0]; }));
     cocientes.slice(0, bancas).forEach(function (c) { esperado.set(c.id, esperado.get(c.id) + 1); });
     const res = calcularDHondt(listas, bancas, 0);
@@ -89,6 +117,40 @@ console.log("\nEmpates, umbral y casos límite");
   check("empate a tres por 2 bancas: se avisa", res.empates.length > 0, true);
   check("empate: se reparten igual las 2 bancas",
     bancasDe(res, listas).reduce(function (a, b) { return a + b; }, 0), 2);
+}
+
+/* Artículo 258: a igual cociente gana la lista con más votos, y sólo si el
+ * empate persiste va a sorteo. Dos listas con distinto total pueden empatar
+ * en un cociente, así que la primera regla hace trabajo de verdad. */
+{
+  // A: 200/2 = 100.  B: 100/1 = 100.  Empatan en cociente, no en votos.
+  const listas = L([["A", 200], ["B", 100]]);
+  const res = calcularDHondt(listas, 3, 0);
+  check("a igual cociente gana la lista con más votos", bancasDe(res, listas), [2, 1]);
+  check("y eso no es un sorteo: no se avisa", res.empates.length, 0);
+}
+{
+  // el orden en que llegan las listas no puede cambiar el resultado
+  const listas = L([["B", 100], ["A", 200]]);
+  const res = calcularDHondt(listas, 3, 0);
+  check("el desempate por votos no depende del orden de las listas", bancasDe(res, listas), [1, 2]);
+}
+{
+  // mismo cociente y mismos votos: ahí sí hay sorteo
+  const listas = L([["A", 300], ["B", 300]]);
+  const res = calcularDHondt(listas, 3, 0);
+  check("mismo cociente y mismos votos: se avisa sorteo", res.empates.length > 0, true);
+  check("las listas empatadas quedan registradas",
+    res.empates[0].listas.map(function (l) { return l.sigla; }).sort(), ["A", "B"]);
+  check("se reparten las 3 bancas igual", bancasDe(res, listas).reduce(function (a, b) { return a + b; }, 0), 3);
+}
+{
+  // tres listas empatadas en cociente con votos distintos: ordena por votos
+  const listas = L([["A", 400], ["B", 200], ["C", 100]]);
+  const res = calcularDHondt(listas, 7, 0);   // cociente 100 lo alcanzan las tres
+  check("con varias empatadas en cociente, manda el total de votos",
+    bancasDe(res, listas), [4, 2, 1]);
+  check("sin sorteo en ese caso", res.empates.length, 0);
 }
 {
   const listas = L([["A", 100], ["B", 100]]);
@@ -132,12 +194,36 @@ function listaDe(prefs) {
   check("desbloqueada: ordena por votos preferentes", ordenInterno(l, "desbloqueada"), [1, 2, 0]);
 }
 {
-  check("empate de preferentes: gana el orden original",
+  // Art. 258: «En caso de empate entre candidatos votados de manera preferencial
+  // dentro de una misma lista, la cuestión se definirá en favor del orden
+  // inicial propuesto por el Partido, Movimiento Político, Concertación o
+  // Alianza respectivo.»
+  check("empate de preferentes: gana el orden inicial de la lista",
     ordenInterno(listaDe([40, 40, 40]), "desbloqueada"), [0, 1, 2]);
 }
 {
   check("sin votos preferentes no se reordena",
     ordenInterno(listaDe([0, 0, 0]), "desbloqueada"), [0, 1, 2]);
+}
+{
+  // Art. 258: «En caso de que la cantidad de candidatos individualmente elegidos
+  // mediante el voto preferencial no alcance para llenar el número de bancas […]
+  // los lugares faltantes serán llenados con los nombres propuestos por la lista
+  // original, según el orden en ella establecido, excluyendo los de aquellos que
+  // hayan obtenido votos preferenciales.»
+  const l = listaDe([0, 50, 0, 30, 0]);   // sólo dos candidatos con preferentes
+  const orden = ordenInterno(l, "desbloqueada");
+  check("primero los votados por preferencia, de mayor a menor",
+    orden.slice(0, 2), [1, 3]);
+  check("y los lugares faltantes, por el orden original de la nómina",
+    orden.slice(2), [0, 2, 4]);
+
+  const d = detalleOrden(l, "desbloqueada", 4);
+  check("con 4 bancas entran los dos con preferentes y los dos primeros del resto",
+    d.filter(function (f) { return f.electo; }).map(function (f) { return f.posOriginal; }),
+    [2, 4, 1, 3]);
+  check("nadie entra dos veces",
+    new Set(d.map(function (f) { return f.posOriginal; })).size, 5);
 }
 {
   const d = detalleOrden(listaDe([10, 50, 30, 5]), "desbloqueada", 2);

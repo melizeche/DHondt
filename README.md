@@ -175,15 +175,58 @@ Hay dos ejemplos para importar:
 
 ## Cómo se calcula
 
+La norma es el **Artículo 258 del Código Electoral**
+([Ley N° 834/96](https://www.bacn.gov.py/leyes-paraguayas/2346/ley-n-834-establece-el-codigo-electoral-paraguayo)),
+con el texto vigente de la
+[Ley N° 6918/2022](https://www.bacn.gov.py/leyes-paraguayas/10452/ley-n-6918-modifica-los-articulos-170-246-247-248-y-258-de-la-ley-n-8341996-que-establece-el-codigo-electoral-paraguayo-y-sus-modificatorias-leyes-ns-31662007-y-63182019).
+Las listas desbloqueadas con voto preferente vienen de la
+[Ley N° 6318/2019](https://www.bacn.gov.py/leyes-paraguayas/8850/ley-n-6318-modifica-la-ley-n-83496-que-establece-el-codigo-electoral-paraguayo-modificado-por-la-ley-n-316607-que-modifica-los-articulos-106-170-246-247-248-y-258-de-la-ley-n-83496-que-establece-el-codigo-electoral-paraguayo-e-incorpora-el-sistema-de-listas-cerradas-desbloqueadas-y-de-representacion-proporcional-para-cargos-pluripersonales).
+
 **Entre listas.** Para cada lista se divide su total de votos por 1, 2, 3… y se
 ordenan todos los cocientes de mayor a menor: las bancas van a los más altos. Se
 adjudica banca por banca, comparando los cocientes con productos cruzados de
 enteros (`vᵢ · dⱼ` contra `vⱼ · dᵢ`) en vez de dividir, para que un empate exacto
 se detecte como tal y no quede escondido detrás de un error de redondeo.
 
+**Empates de cocientes.** El Artículo 258 los resuelve en dos pasos: a igual
+cociente la banca va a la lista **con más votos**, y sólo si el empate persiste
+se define **por sorteo**. El primer paso hace trabajo de verdad, porque dos
+listas con distinto total pueden empatar en un cociente (100 ÷ 1 y 200 ÷ 2 dan
+lo mismo); ese caso lo resuelve el cálculo. El segundo no lo puede resolver una
+herramienta, así que cuando aparece queda señalado en pantalla: la banca se
+muestra adjudicada a la primera por orden de lista y se aclara que esa parte la
+define el sorteo.
+
 **Dentro de cada lista.** Las bancas se asignan por orden de la nómina, o por
-votos preferentes de mayor a menor si la lista está desbloqueada; los empates de
-votos preferentes se resuelven a favor del orden original de la nómina.
+votos preferentes de mayor a menor si la lista está desbloqueada. El Artículo
+258 agrega dos reglas que la herramienta sigue:
+
+- **Empate de votos preferentes** entre candidatos de una misma lista: se define
+  «en favor del orden inicial propuesto» por el partido.
+- **Si los electos por preferencia no llenan las bancas ganadas**, los lugares
+  faltantes se completan «con los nombres propuestos por la lista original,
+  según el orden en ella establecido, excluyendo los de aquellos que hayan
+  obtenido votos preferenciales». En la práctica: primero van los que sacaron
+  votos preferentes, de mayor a menor; después los que no sacaron ninguno, en el
+  orden original de la nómina; y nadie aparece dos veces.
+
+### Un detalle sobre el total de cada lista
+
+El artículo dice que «los votos preferenciales totales de cada lista» establecen
+la cantidad de escaños. Bajo esa lectura estricta cada voto va a un candidato y
+el total de la lista es la suma de sus preferentes: para eso, se deja
+`soloLista` en 0 y la herramienta hace exactamente eso.
+
+Se admite igual un voto de sola lista —el que elige la lista sin nombrar
+candidato— porque el total de la lista puede venir informado aparte del detalle
+por candidato. Es un supuesto más general: si no existen esos votos, queda en 0
+y no cambia nada.
+
+### Lo que la herramienta no hace
+
+El artículo también dice que el voto preferencial «se computará también para la
+lista de candidatos suplentes». Acá no se modelan suplentes: se calculan las
+bancas y quiénes las ocupan como titulares.
 
 **El total de una lista** son los votos que la eligieron sin nombrar candidato
 («sola lista») más los que además nombraron a uno. Las dos páginas trabajan sobre

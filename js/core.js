@@ -341,7 +341,14 @@ function calcularDHondt(listas, bancas, umbralPct) {
       // l.votos / d  contra  mejor.lista.votos / mejor.divisor
       const cmp = l.votos * mejor.divisor - mejor.lista.votos * d;
       if (cmp > 0) { mejor = { lista: l, divisor: d }; empatadas = [l]; }
-      else if (cmp === 0) { empatadas.push(l); }
+      else if (cmp === 0) {
+        // Artículo 258: a igual cociente la banca va a la lista con más votos.
+        // Dos listas con distinto total pueden empatar en un cociente (100/1 y
+        // 200/2 dan 100), así que esto no es un caso raro. Recién si también
+        // empatan en votos hay sorteo.
+        if (l.votos > mejor.lista.votos) { mejor = { lista: l, divisor: d }; empatadas = [l]; }
+        else if (l.votos === mejor.lista.votos) { empatadas.push(l); }
+      }
     }
 
     if (!mejor) break;

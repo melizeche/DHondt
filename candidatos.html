@@ -218,9 +218,19 @@
 </section>
 
 <p class="footer">
-  Herramienta de cálculo no oficial. El voto preferente reordena la nómina de mayor a menor cantidad de votos;
-  los empates de votos preferentes quedan a favor del orden original de la lista, y los empates de cocientes
-  entre listas se resuelven por sorteo, así que acá quedan señalados en vez de decididos.
+  Herramienta de cálculo no oficial. El reparto entre listas sale del
+  <a href="https://www.bacn.gov.py/leyes-paraguayas/2346/ley-n-834-establece-el-codigo-electoral-paraguayo"
+     target="_blank" rel="noopener">Artículo 258 del Código Electoral (Ley N° 834/96)</a>,
+  con el texto vigente de la
+  <a href="https://www.bacn.gov.py/leyes-paraguayas/10452/ley-n-6918-modifica-los-articulos-170-246-247-248-y-258-de-la-ley-n-8341996-que-establece-el-codigo-electoral-paraguayo-y-sus-modificatorias-leyes-ns-31662007-y-63182019"
+     target="_blank" rel="noopener">Ley N° 6918/2022</a>:
+  a igual cociente la banca va a la lista con más votos, y sólo si el empate persiste se define por sorteo, así
+  que esos casos acá quedan señalados en vez de decididos. El voto preferente que reordena la nómina viene de la
+  <a href="https://www.bacn.gov.py/leyes-paraguayas/8850/ley-n-6318-modifica-la-ley-n-83496-que-establece-el-codigo-electoral-paraguayo-modificado-por-la-ley-n-316607-que-modifica-los-articulos-106-170-246-247-248-y-258-de-la-ley-n-83496-que-establece-el-codigo-electoral-paraguayo-e-incorpora-el-sistema-de-listas-cerradas-desbloqueadas-y-de-representacion-proporcional-para-cargos-pluripersonales"
+     target="_blank" rel="noopener">Ley N° 6318/2019</a>, que incorporó las listas desbloqueadas.
+  El mismo Artículo 258 resuelve los empates de votos preferentes dentro de una lista a favor del orden inicial
+  propuesto por el partido, y manda que, si los electos por preferencia no alcanzan a llenar las bancas
+  ganadas, los lugares faltantes se llenen con la nómina original en su orden.
   Los datos se guardan solamente en este navegador y se comparten con la
   <a href="index.html">página de votos por lista</a>.
 </p>
@@ -550,9 +560,11 @@ function renderReparto(res) {
       el("strong", { text: "Empate en la banca " + e.ronda + ". " }),
       document.createTextNode(
         e.listas.map(function (l) { return l.sigla; }).join(", ") +
-        " comparten el cociente " + fmtCociente.format(e.cociente) +
-        " y quedan " + e.enDisputa + " banca(s) en disputa. El Código Electoral resuelve estos casos por sorteo; " +
-        "acá la banca se muestra adjudicada al primero por orden de lista."),
+        " comparten el cociente " + fmtCociente.format(e.cociente) + " y la misma cantidad de votos, " +
+        "con " + e.enDisputa + " banca(s) en disputa. El Artículo 258 del Código Electoral manda que, a igual " +
+        "cociente, la banca vaya a la lista con más votos; como acá también empatan en votos, se define por " +
+        "sorteo. La banca se muestra adjudicada a la primera por orden de lista, pero esa parte no la decide " +
+        "el cálculo."),
     ]));
   });
 
