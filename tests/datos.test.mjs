@@ -72,7 +72,12 @@ console.log("\nEl script que cargan las páginas dice lo mismo que el JSON");
 
 const js = readFileSync(new URL("../js/datos-asuncion.js", import.meta.url), "utf8");
 const embebido = JSON.parse(js.slice(js.indexOf("{"), js.lastIndexOf("}") + 1));
-check("mismo contenido que datos/asuncion-junta-municipal.json", embebido, datos);
+// El JSON lleva `$schema` para el editor; el script embebido no lo necesita.
+const sinSchema = Object.assign({}, datos);
+delete sinSchema.$schema;
+check("mismo contenido que datos/asuncion-junta-municipal.json", embebido, sinSchema);
+check("el JSON referencia el esquema", datos.$schema, "esquema.json");
+check("el script embebido no arrastra esa referencia", "$schema" in embebido, false);
 
 console.log("\nLa app los lee sin perder nada");
 

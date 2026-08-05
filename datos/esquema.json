@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Datos de una elección para la calculadora D'Hondt",
+  "description": "Formato que importan y exportan index.html y candidatos.html. Lo único imprescindible es `listas` con al menos una lista: todo lo demás tiene valor por defecto. El cargador es más tolerante que este esquema —ignora las propiedades que no conoce—, pero acá no se admiten para que un nombre mal escrito se note en vez de perderse en silencio.",
+  "type": "object",
+  "required": ["listas"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Referencia a este esquema. La app la ignora; sirve para que el editor valide el archivo."
+    },
+    "eleccion": {
+      "type": "string",
+      "description": "Nombre de la elección. Se muestra arriba de la página.",
+      "default": "Elecciones Municipales — Asunción",
+      "examples": ["Elecciones Municipales — Junta Municipal de Asunción"]
+    },
+    "fuente": {
+      "type": "object",
+      "description": "De dónde salieron las nóminas. Si falta, la página no acredita a nadie.",
+      "required": ["nombre"],
+      "additionalProperties": false,
+      "properties": {
+        "nombre": {
+          "type": "string",
+          "examples": ["simulador oficial del TSJE"]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "examples": ["https://simuladoroficial.tsje.gov.py/"]
+        }
+      }
+    },
+    "bancas": {
+      "type": "integer",
+      "description": "Bancas a repartir. La Junta Municipal de Asunción se integra con 24 concejales.",
+      "minimum": 1,
+      "maximum": 99,
+      "default": 24
+    },
+    "umbral": {
+      "type": "number",
+      "description": "Porcentaje mínimo de votos válidos para entrar al reparto. El reparto municipal no tiene barrera legal: va en 0.",
+      "minimum": 0,
+      "maximum": 20,
+      "default": 0
+    },
+    "modo": {
+      "type": "string",
+      "description": "Cómo se ordena cada lista por dentro. `desbloqueada` es el voto preferente de la Ley 6318/2019, que es lo que rige para la Junta Municipal.",
+      "enum": ["bloqueada", "desbloqueada"],
+      "default": "bloqueada"
+    },
+    "blancos": {
+      "type": "integer",
+      "description": "Votos en blanco. Cuentan para las estadísticas, no para el reparto.",
+      "minimum": 0,
+      "default": 0
+    },
+    "nulos": {
+      "type": "integer",
+      "description": "Votos nulos. Cuentan para las estadísticas, no para el reparto.",
+      "minimum": 0,
+      "default": 0
+    },
+    "listas": {
+      "type": "array",
+      "description": "Las listas que compiten. El orden acá es el que se usa para dibujarlas.",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/lista" }
+    }
+  },
+
+  "$defs": {
+    "lista": {
+      "type": "object",
+      "description": "Un partido, movimiento, concertación o alianza con su nómina.",
+      "additionalProperties": false,
+      "properties": {
+        "numero": {
+          "type": "integer",
+          "description": "Número de lista en la boleta.",
+          "minimum": 0,
+          "maximum": 9999,
+          "examples": [1, 2, 300]
+        },
+        "partido": {
+          "type": "string",
+          "description": "Nombre completo del partido, movimiento o alianza.",
+          "examples": ["PARTIDO LIBERAL RADICAL AUTENTICO"]
+        },
+        "nombre": {
+          "type": "string",
+          "description": "Alias de `partido`, aceptado por compatibilidad. Si están los dos, manda `partido`."
+        },
+        "sigla": {
+          "type": "string",
+          "description": "Sigla corta para las tablas y la cinta de bancas. Si falta se deduce del nombre.",
+          "examples": ["ANR", "PLRA"]
+        },
+        "color": {
+          "type": "integer",
+          "description": "Índice en la paleta de la app. Se usa sólo si no hay `colorHex`.",
+          "minimum": 0,
+          "maximum": 7,
+          "default": 0
+        },
+        "colorHex": {
+          "type": ["string", "null"],
+          "description": "Color oficial de la boleta. Tiene prioridad sobre `color`. Si no se distingue del fondo, la app le corrige la luminosidad conservando el tono; el valor de acá no se toca.",
+          "pattern": "^#?[0-9a-fA-F]{6}$",
+          "examples": ["#ff0000", "#002bc7"]
+        },
+        "votos": {
+          "type": "integer",
+          "description": "Total de votos de la lista: los de sola lista más los preferentes de sus candidatos.",
+          "minimum": 0,
+          "default": 0
+        },
+        "soloLista": {
+          "type": "integer",
+          "description": "Votos que eligieron la lista sin nombrar candidato. Si falta, se deduce restándole a `votos` la suma de los preferentes.",
+          "minimum": 0
+        },
+        "candidatos": {
+          "type": "array",
+          "description": "La nómina, en el orden en que fue presentada. Si está vacía, la app la rellena con nombres genéricos.",
+          "items": { "$ref": "#/$defs/candidato" }
+        }
+      }
+    },
+
+    "candidato": {
+      "description": "Un candidato: el nombre solo, o el nombre con sus votos preferentes.",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Forma corta: sólo el nombre, con cero votos preferentes.",
+          "examples": ["Leia Organa"]
+        },
+        {
+          "type": "object",
+          "required": ["nombre"],
+          "additionalProperties": false,
+          "properties": {
+            "nombre": { "type": "string" },
+            "pref": {
+              "type": "integer",
+              "description": "Votos preferentes. Definen el orden dentro de la lista cuando `modo` es `desbloqueada`.",
+              "minimum": 0,
+              "default": 0
+            }
+          }
+        }
+      ]
+    }
+  }
+}

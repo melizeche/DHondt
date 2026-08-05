@@ -1,4 +1,5 @@
 {
+  "$schema": "esquema.json",
   "eleccion": "Ejemplo de carga — Junta Municipal de Asunción",
   "bancas": 12,
   "umbral": 0,

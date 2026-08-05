@@ -168,7 +168,11 @@ const salida = {
   listas: listas,
 };
 
-const texto = JSON.stringify(salida, null, 2) + "\n";
+// El JSON lleva la referencia al esquema para que el editor lo valide; el
+// script embebido no, porque ahí no es un documento JSON que nadie valide.
+const salidaJson = Object.assign({ "$schema": "esquema.json" }, salida);
+
+const texto = JSON.stringify(salidaJson, null, 2) + "\n";
 const totalCandidatos = listas.reduce(function (s, l) { return s + l.candidatos.length; }, 0);
 const resumen = `${listas.length} listas, ${totalCandidatos} candidatos, ${bancas} bancas`;
 

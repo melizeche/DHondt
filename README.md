@@ -162,6 +162,24 @@ muestra al editar la lista. Elegir un color de la paleta descarta el oficial.
 si el archivo la trae: las nóminas que uno cargue no quedan acreditadas a nadie
 por defecto.
 
+### Esquema
+
+El formato está descrito en [`datos/esquema.json`](datos/esquema.json)
+(JSON Schema, draft 2020-12). Los archivos de `datos/` lo referencian con
+`"$schema": "esquema.json"`, así que un editor con soporte de JSON Schema
+—VS Code y varios más— autocompleta los campos y marca los errores mientras se
+escribe.
+
+Lo único obligatorio es `listas` con al menos una lista; todo lo demás tiene
+valor por defecto, al punto de que `{"listas": [{}]}` es válido. El esquema es
+un poco **más estricto que el cargador** en un solo aspecto: no admite
+propiedades que no conozca. El cargador las ignora sin decir nada, y así un
+`bankas` mal escrito se pierde en silencio; validando contra el esquema salta.
+
+Los archivos que exporta la app no llevan `$schema`, porque la referencia es
+relativa a `datos/` y no resolvería desde la carpeta de descargas. Para
+validarlos, se los mueve al lado del esquema o se le pasa la ruta al validador.
+
 Hay dos ejemplos para importar:
 
 - [`datos/ejemplo.json`](datos/ejemplo.json) — mínimo, para ver el formato.
@@ -247,11 +265,13 @@ js/core.js                          estado, cálculo D'Hondt, orden interno, col
 js/datos-asuncion.js                candidaturas que las páginas traen cargadas (generado)
 css/base.css                        estilos compartidos
 datos/asuncion-junta-municipal.json las mismas candidaturas, para importar (generado)
+datos/esquema.json                  JSON Schema del formato
 datos/ejemplo.json                  ejemplo mínimo del formato
 datos/ejemplo-star-wars.json        ejemplo chico: 3 listas, 10 bancas, voto preferente
 tools/tsje-a-json.mjs               conversor de los datos del TSJE
 tests/dhondt.test.mjs               cálculo
 tests/datos.test.mjs                datos generados
+tests/esquema.test.mjs              los datos contra el esquema
 ```
 
 Las dos páginas comparten `js/core.js`, así que el cálculo está escrito una sola
@@ -265,6 +285,7 @@ Sin dependencias: cargan `js/core.js` tal cual lo usa el navegador.
 ```sh
 node tests/dhondt.test.mjs
 node tests/datos.test.mjs
+node tests/esquema.test.mjs
 ```
 
 `dhondt.test.mjs` verifica el reparto contra el ejemplo canónico del método,
@@ -278,6 +299,13 @@ con sus 24 candidatos, sin nombres de relleno ni votos precargados, que los
 números de lista y las siglas no se repitan, que el JSON y el script embebido
 digan lo mismo, y que los 9 colores oficiales lleguen a 3:1 contra el fondo y
 sigan siendo distinguibles entre sí en los dos modos.
+
+`esquema.test.mjs` valida los tres archivos de `datos/` contra el esquema y
+prueba una veintena de casos que tiene que rechazar, para que el esquema no
+termine aceptando cualquier cosa. Trae un validador propio que cubre sólo las
+palabras clave que el esquema usa —hay una prueba que falla si aparece alguna
+sin implementar—; el esquema además se verificó aparte con
+[ajv](https://ajv.js.org/) en modo estricto, que coincidió en todos los casos.
 
 ## Publicar
 
