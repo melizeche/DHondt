@@ -35,8 +35,14 @@ const PARTIDOS_BASE = [
   { numero: 8, partido: "Partido Yo Creo",                                    sigla: "Yo Creo", color: 7 },
 ];
 
-const CLAVE_ALMACEN = "dhondt-asuncion-v1";
-const CLAVE_TEMA = "dhondt-asuncion-tema";
+/* Las claves ya no llevan «asuncion»: la herramienta sirve para cualquier
+ * elección y la de Asunción es sólo la que viene cargada. */
+const CLAVE_ALMACEN = "dhondt-datos-v1";
+const CLAVE_TEMA = "dhondt-tema";
+const CLAVE_ELECCION = "dhondt-eleccion";
+
+/* Carpeta con los conjuntos de datos y su índice. */
+const RUTA_DATOS = "datos/";
 
 let proximoId = 1;
 
@@ -105,10 +111,20 @@ const VOTOS_EJEMPLO = [95000, 62000, 41000, 3000, 5000, 12000, 2000, 1500, 900];
 /* ================================================================== estado */
 let estado = null;
 
+/* Queda en true cuando el estado se recuperó del navegador, y no cuando se
+ * armó de cero. Sirve para distinguir «primera visita» de «el usuario dejó
+ * las cosas así», que no se tratan igual. */
+let estadoRestaurado = false;
+
 function cargarEstado() {
+  estadoRestaurado = false;
   try {
     const crudo = localStorage.getItem(CLAVE_ALMACEN);
-    if (crudo) return normalizar(JSON.parse(crudo));
+    if (crudo) {
+      const recuperado = normalizar(JSON.parse(crudo));
+      estadoRestaurado = true;
+      return recuperado;
+    }
   } catch (e) { /* dato corrupto o almacenamiento bloqueado: arrancamos limpio */ }
   return datosPorDefecto();
 }
@@ -149,7 +165,10 @@ function normalizar(bruto) {
       colorHex: normalizarHex(l.colorHex),
       votos: clampInt(l.votos, 0, 1e12, 0),
       soloLista: clampInt(l.soloLista, 0, 1e12, -1),
-      abierta: false,
+      // Estado de la interfaz, no del dato: se guarda en el navegador para que
+      // recargar no cierre lo que estaba abierto, y se saca de lo que se
+      // exporta. Un archivo importado no la trae y arranca cerrada.
+      abierta: l.abierta === true,
       candidatos: candidatos,
     };
     // Si el archivo no trae "solo lista", se deduce del total para que las dos
@@ -504,10 +523,10 @@ function renderProcedencia() {
   const aviso = document.getElementById("aviso-relleno");
   if (aviso) aviso.hidden = !hayNombresDeRelleno();
 
-  // El encabezado de la página es el nombre de la herramienta; el de la
-  // elección que está cargada va acá, que puede no ser la de Asunción.
-  const hint = document.getElementById("cfg-hint");
-  if (hint) hint.textContent = estado.eleccion;
+  // El encabezado es el nombre de la herramienta, que no depende de la
+  // elección; cuál está cargada se dice acá.
+  const titulo = document.getElementById("eleccion-actual");
+  if (titulo) titulo.textContent = estado.eleccion;
 
   const origen = document.getElementById("origen-datos");
   if (!origen) return;
@@ -605,6 +624,104 @@ function exportarJSON(nombreArchivo) {
   URL.revokeObjectURL(url);
 }
 
+/* =============================================== elegir otra elección
+ * Los conjuntos de datos de `datos/` se traen con fetch, que es del mismo
+ * origen y no necesita servidor propio... pero sí necesita *un* servidor:
+ * con file:// el navegador lo bloquea por CORS. Por eso el que viene
+ * embebido sigue siendo un script, para que abrir el HTML a mano funcione
+ * igual, y el selector aparece sólo si se pudo leer el índice.
+ * ================================================================== */
+const VALOR_SIN_ARCHIVO = "";
+
+function recordarEleccion(archivo) {
+  try {
+    if (archivo) localStorage.setItem(CLAVE_ELECCION, archivo);
+    else localStorage.removeItem(CLAVE_ELECCION);
+  } catch (e) { /* sin almacenamiento: sólo se pierde cuál quedó elegida */ }
+}
+
+function eleccionRecordada() {
+  try { return localStorage.getItem(CLAVE_ELECCION); } catch (e) { return null; }
+}
+
+function hayVotosCargados() {
+  return estado.listas.some(function (l) {
+    return l.votos > 0 || l.soloLista > 0 || sumaPreferentes(l) > 0;
+  });
+}
+
+function conectarSelectorElecciones(idSelect, alCambiar) {
+  const sel = document.getElementById(idSelect);
+  if (!sel) return;
+  const campo = sel.closest(".field") || sel;
+  campo.hidden = true;   // hasta saber si hay índice que leer
+
+  // Con file:// el fetch está condenado a fallar por CORS y sólo dejaría un
+  // error en la consola, así que ni se intenta.
+  if (location.protocol === "file:") return;
+
+  fetch(RUTA_DATOS + "indice.json", { cache: "no-cache" })
+    .then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
+    .then(function (indice) {
+      const elecciones = (indice && indice.elecciones) || [];
+      if (!elecciones.length) return;
+
+      sel.textContent = "";
+      // Marcador para cuando lo cargado no sale de un archivo del índice:
+      // los datos embebidos, o algo que el usuario importó.
+      sel.appendChild(el("option", { value: VALOR_SIN_ARCHIVO, text: "— datos cargados —" }));
+      elecciones.forEach(function (e) {
+        sel.appendChild(el("option", {
+          value: e.archivo,
+          text: e.nombre,
+          title: e.detalle || "",
+        }));
+      });
+
+      const recordada = eleccionRecordada();
+      sel.value = elecciones.some(function (e) { return e.archivo === recordada; })
+        ? recordada : VALOR_SIN_ARCHIVO;
+
+      sel.addEventListener("change", function () {
+        const archivo = sel.value;
+        if (!archivo) return;   // el marcador no carga nada
+        if (hayVotosCargados() &&
+            !confirm("Cargar otra elección reemplaza las listas y los votos que tengas cargados. ¿Continuar?")) {
+          sel.value = eleccionRecordada() || VALOR_SIN_ARCHIVO;
+          return;
+        }
+        cargarEleccion(archivo)
+          .then(function () { alCambiar(); })
+          .catch(function (err) {
+            alert("No se pudo cargar esa elección: " + err.message);
+            sel.value = eleccionRecordada() || VALOR_SIN_ARCHIVO;
+          });
+      });
+
+      campo.hidden = false;
+    })
+    .catch(function () {
+      /* Sin índice —file://, o el archivo no está— el selector no aparece y
+         se sigue con los datos embebidos. Importar JSON sigue disponible. */
+    });
+}
+
+function cargarEleccion(archivo) {
+  return fetch(RUTA_DATOS + archivo, { cache: "no-cache" })
+    .then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
+    .then(function (bruto) {
+      estado = normalizar(bruto);
+      recordarEleccion(archivo);
+      guardar();
+    });
+}
+
 function conectarImportacion(idBoton, idInput, alImportar) {
   const boton = document.getElementById(idBoton);
   const input = document.getElementById(idInput);
@@ -617,6 +734,9 @@ function conectarImportacion(idBoton, idInput, alImportar) {
     lector.onload = function () {
       try {
         estado = normalizar(JSON.parse(String(lector.result)));
+        recordarEleccion(null);   // ya no corresponde a ningún archivo del índice
+        const sel = document.getElementById("cfg-eleccion");
+        if (sel) sel.value = VALOR_SIN_ARCHIVO;
         guardar();
         alImportar();
       } catch (err) {

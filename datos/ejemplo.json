@@ -10,8 +10,8 @@
     {
       "numero": 1,
       "partido": "Lista de ejemplo A",
-      "sigla": "EJA",
-      "color": 0,
+      "sigla": "Lista A",
+      "color": 1,
       "votos": 48000,
       "candidatos": [
         "Primera candidata de la lista A",
@@ -27,21 +27,33 @@
     {
       "numero": 2,
       "partido": "Lista de ejemplo B",
-      "sigla": "EJB",
-      "color": 1,
+      "sigla": "Lista B",
+      "color": 2,
       "votos": 26000,
       "candidatos": [
-        { "nombre": "Primera candidata de la lista B", "pref": 4100 },
-        { "nombre": "Segundo candidato de la lista B", "pref": 900 },
-        { "nombre": "Tercera candidata de la lista B", "pref": 7300 },
-        { "nombre": "Cuarto candidato de la lista B", "pref": 2200 }
+        {
+          "nombre": "Primera candidata de la lista B",
+          "pref": 4100
+        },
+        {
+          "nombre": "Segundo candidato de la lista B",
+          "pref": 900
+        },
+        {
+          "nombre": "Tercera candidata de la lista B",
+          "pref": 7300
+        },
+        {
+          "nombre": "Cuarto candidato de la lista B",
+          "pref": 2200
+        }
       ]
     },
     {
       "numero": 3,
       "partido": "Lista de ejemplo C",
-      "sigla": "EJC",
-      "color": 2,
+      "sigla": "Lista C",
+      "color": 3,
       "votos": 9500,
       "candidatos": [
         "Primera candidata de la lista C",

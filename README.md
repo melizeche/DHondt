@@ -5,6 +5,10 @@ método D'Hondt y ver **qué candidatos resultan electos concejales**.
 
 No necesita servidor ni build: abrí `index.html` en el navegador.
 
+Sirve para **cualquier elección proporcional por listas**: las bancas, las
+listas, las nóminas y el modo se cargan desde un JSON. Viene con la Junta
+Municipal de Asunción porque es para lo que se hizo, pero no está atada a ella.
+
 Son dos páginas sobre los mismos datos, y se puede saltar de una a la otra sin
 perder nada:
 
@@ -54,6 +58,36 @@ el resultado con voto preferente contra el de la lista cerrada y bloqueada.
 
 Nóminas, números de lista, siglas y colores editables, importación y exportación
 en JSON, guardado automático en el navegador e impresión.
+
+## Elegir otra elección
+
+El desplegable **Elección** lista los conjuntos de datos de `datos/`, según
+[`datos/indice.json`](datos/indice.json). Para agregar uno: se deja el JSON en
+`datos/` y se le suma una entrada al índice.
+
+```jsonc
+{
+  "elecciones": [
+    {
+      "archivo": "concepcion-junta-municipal.json",
+      "nombre": "Junta Municipal de Concepción",
+      "detalle": "7 listas · 12 bancas"        // opcional, sale como tooltip
+    }
+  ]
+}
+```
+
+Un detalle de cómo funciona: el desplegable trae los archivos con `fetch`, que
+es del mismo origen y no necesita nada del otro lado… pero sí necesita **un**
+servidor. Abriendo el HTML con doble clic (`file://`) el navegador bloquea esos
+pedidos por CORS, así que ahí el desplegable no aparece: se ve la elección que
+viene embebida en `js/datos-asuncion.js` y se puede cambiar con «Importar JSON»,
+que lee del disco y funciona siempre. Servido —Cloudflare Pages, GitHub Pages,
+`python3 -m http.server`— aparece y anda.
+
+Cuál quedó elegida se recuerda en el navegador y vale para las dos páginas.
+Importar un archivo suelto deja el desplegable en «— datos cargados —», porque
+lo que hay no sale del índice.
 
 ## Las candidaturas
 
@@ -259,8 +293,10 @@ no cambia ningún total.
 index.html                          página por lista
 candidatos.html                     página por candidato
 favicon.svg                         ícono
+og.png                              imagen de la vista previa al compartir (generada)
 .nojekyll                           que GitHub Pages publique los archivos tal cual
 _headers                            cabeceras de seguridad para Cloudflare Pages
+datos/indice.json                   qué elecciones ofrece el desplegable
 js/core.js                          estado, cálculo D'Hondt, orden interno, color, formato
 js/datos-asuncion.js                candidaturas que las páginas traen cargadas (generado)
 css/base.css                        estilos compartidos
@@ -359,6 +395,34 @@ abierto.
 
 `_headers` es de Cloudflare (Netlify usa el mismo formato) y agrega unas
 cabeceras de seguridad. GitHub Pages lo ignora, así que no molesta.
+
+### Vista previa al compartir
+
+Las dos páginas traen etiquetas Open Graph y Twitter Card, así que un enlace
+pegado en WhatsApp, X o Slack muestra título, descripción e imagen en vez de una
+URL pelada. La imagen es `og.png` (1200×630).
+
+El sitio vive en **`https://bancas.melizeche.com`**. Ese dominio aparece siete
+veces entre las dos páginas: `og:url`, `og:image` y `twitter:image` en cada una,
+más el `<link rel="canonical">`. Tienen que ser **absolutas**, porque los
+scrapers no ejecutan JavaScript y varios no resuelven rutas relativas; si alguna
+vez el sitio se muda, son esas líneas las que hay que cambiar.
+
+El `canonical` está porque Cloudflare Pages sirve el mismo contenido también en
+`<proyecto>.pages.dev`: sin él, los buscadores ven dos sitios idénticos en dos
+dominios.
+
+`og.png` se genera con `tools/og.mjs`: arma la cinta de bancas en HTML y la
+fotografía con un navegador headless. Necesita Playwright, que no es dependencia
+del proyecto —es para regenerar la imagen si cambia el diseño, no para usar el
+sitio— y acepta `CHROMIUM=<ruta>` para usar un navegador ya instalado.
+
+Dibuja **el ejemplo de `datos/ejemplo.json`, no una elección real**: listas A, B
+y C con los colores de la paleta. La herramienta sirve para cualquier elección,
+así que la vista previa no muestra partidos concretos con sus colores. El
+reparto que se ve (7-4-1 sobre 12 bancas) lo calcula el mismo `js/core.js` con
+esos votos, así que la imagen no puede quedar mostrando un reparto que el código
+no daría.
 
 ### Otros
 

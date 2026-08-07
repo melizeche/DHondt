@@ -3,8 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Calculadora D'Hondt — Junta Municipal de Asunción</title>
-<meta name="description" content="Calculadora del reparto de bancas por el método D'Hondt para la Junta Municipal de Asunción: cargá los votos de cada lista y mirá qué concejales resultan electos.">
+<title>Calculadora D'Hondt</title>
+<meta name="description" content="Calculadora del reparto de bancas por el método D'Hondt. Cargá los votos de cada lista y mirá qué candidatos resultan electos.">
+
+<!-- Cloudflare Pages sirve lo mismo en <proyecto>.pages.dev; esto le dice
+     a los buscadores cuál es la dirección buena. -->
+<link rel="canonical" href="https://bancas.melizeche.com/">
+
+<!-- Vista previa al compartir el enlace. Si el subdominio cambia, hay que
+     cambiar og:url y og:image: los scrapers no ejecutan JavaScript y las
+     URLs absolutas son lo único que leen con seguridad. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calculadora D'Hondt">
+<meta property="og:locale" content="es_PY">
+<meta property="og:title" content="Calculadora D'Hondt">
+<meta property="og:description" content="Cargá los votos de cada lista y mirá cómo se reparten las bancas y quiénes resultan electos.">
+<meta property="og:url" content="https://bancas.melizeche.com/">
+<meta property="og:image" content="https://bancas.melizeche.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Calculadora D'Hondt: reparto de bancas entre listas">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Calculadora D'Hondt">
+<meta name="twitter:description" content="Cargá los votos de cada lista y mirá cómo se reparten las bancas y quiénes resultan electos.">
+<meta name="twitter:image" content="https://bancas.melizeche.com/og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/base.css">
 <style>
@@ -24,15 +46,16 @@
 <div class="wrap">
 
 <nav class="nav no-print">
-  <a href="index.html" aria-current="page">Votos por lista</a>
-  <a href="candidatos.html">Votos por candidato</a>
+  <a href="index.html" aria-current="page">Votos por lista <span class="desc">un número por lista</span></a>
+  <a href="candidatos.html">Votos por candidato <span class="desc">cálculo completo</span></a>
 </nav>
 
 <div class="top">
   <div>
-    <h1>Calculadora D'Hondt — Junta Municipal de Asunción</h1>
+    <h1>Calculadora D'Hondt</h1>
+    <p class="eleccion-actual" id="eleccion-actual"></p>
     <p class="sub">Cargá los votos de cada lista y la calculadora reparte las bancas por el método D'Hondt,
-      marcando qué candidatos resultan electos concejales.</p>
+      marcando qué candidatos resultan electos.</p>
   </div>
   <div class="toolbar no-print">
     <button id="btn-ejemplo">Votos de ejemplo</button>
@@ -56,9 +79,13 @@
 <section class="card no-print">
   <header>
     <h2>Configuración</h2>
-    <span class="hint" id="cfg-hint"></span>
   </header>
   <div class="config">
+    <div class="field" id="campo-eleccion">
+      <label for="cfg-eleccion">Elección</label>
+      <select id="cfg-eleccion"></select>
+      <div class="note">Los conjuntos de datos de <code>datos/</code>.</div>
+    </div>
     <div class="field">
       <label for="cfg-bancas">Bancas a repartir</label>
       <input type="number" id="cfg-bancas" min="1" max="99" step="1">
@@ -716,6 +743,7 @@ document.getElementById("btn-mas-filas").addEventListener("click", function () {
   render();
 });
 
+conectarSelectorElecciones("cfg-eleccion", render);
 inicializarTema(render);
 render();
 </script>

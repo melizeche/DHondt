@@ -92,6 +92,8 @@ a { color: var(--accent-ink); }
   margin-bottom: 20px;
 }
 .top .sub { color: var(--text-secondary); font-size: .9rem; margin-top: 4px; max-width: 62ch; }
+/* Qué elección está cargada: el h1 nombra la herramienta, esto el dato */
+.eleccion-actual { font-size: 1rem; font-weight: 600; color: var(--accent-ink); margin-top: 2px; }
 .toolbar { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .nav { display: flex; gap: 4px; margin-bottom: 18px; border-bottom: 1px solid var(--border); }
@@ -102,6 +104,11 @@ a { color: var(--accent-ink); }
 }
 .nav a:hover { color: var(--text-primary); }
 .nav a[aria-current="page"] { color: var(--text-primary); border-bottom-color: var(--accent); }
+/* Qué se carga en cada página, para que la diferencia se entienda sin entrar */
+.nav a .desc { font-weight: 400; font-size: .78rem; color: var(--text-muted); }
+.nav a[aria-current="page"] .desc { color: var(--text-secondary); }
+.nav a .desc::before { content: "· "; }
+@media (max-width: 560px) { .nav a .desc { display: none; } }
 
 /* -------------------------------------------------------------- controles */
 button, .btn {

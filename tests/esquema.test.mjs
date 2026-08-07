@@ -122,6 +122,30 @@ valida("datos/asuncion-junta-municipal.json", "datos/asuncion-junta-municipal.js
 valida("datos/ejemplo.json", "datos/ejemplo.json");
 valida("datos/ejemplo-star-wars.json", "datos/ejemplo-star-wars.json");
 
+console.log("\nEl índice del desplegable apunta a archivos que existen y valen");
+{
+  const indice = JSON.parse(readFileSync(new URL("../datos/indice.json", import.meta.url), "utf8"));
+  const elecciones = indice.elecciones || [];
+  check("el índice trae al menos una elección", elecciones.length > 0, elecciones.length);
+
+  elecciones.forEach(function (e) {
+    check("«" + e.nombre + "» tiene archivo y nombre",
+      typeof e.archivo === "string" && typeof e.nombre === "string", e);
+    let dato = null;
+    try {
+      dato = JSON.parse(readFileSync(new URL("../datos/" + e.archivo, import.meta.url), "utf8"));
+    } catch (err) {
+      check("existe datos/" + e.archivo, false, err.message);
+      return;
+    }
+    check("datos/" + e.archivo + " cumple el esquema", validar(esquema, dato, esquema).length === 0,
+      validar(esquema, dato, esquema));
+  });
+
+  const archivos = elecciones.map(function (e) { return e.archivo; });
+  check("no hay archivos repetidos en el índice", new Set(archivos).size, archivos.length);
+}
+
 console.log("\nLo mínimo alcanza");
 {
   const errores = validar(esquema, { listas: [{ partido: "P", candidatos: ["Ana"] }] }, esquema);

@@ -1,0 +1,2 @@
+# Playwright, que sólo hace falta para regenerar og.png con tools/og.mjs
+node_modules/

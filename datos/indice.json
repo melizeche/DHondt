@@ -1,0 +1,19 @@
+{
+  "elecciones": [
+    {
+      "archivo": "asuncion-junta-municipal.json",
+      "nombre": "Junta Municipal de Asunción",
+      "detalle": "9 listas · 24 bancas · candidaturas oficiales del TSJE"
+    },
+    {
+      "archivo": "ejemplo-star-wars.json",
+      "nombre": "Senado Galáctico (ejemplo)",
+      "detalle": "3 listas · 10 bancas · voto preferente"
+    },
+    {
+      "archivo": "ejemplo.json",
+      "nombre": "Ejemplo mínimo del formato",
+      "detalle": "3 listas · 12 bancas"
+    }
+  ]
+}
