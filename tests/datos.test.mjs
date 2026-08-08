@@ -17,56 +17,64 @@ function check(nombre, obtenido, esperado) {
     (ok ? "" : `\n           esperado ${JSON.stringify(esperado)}, obtenido ${JSON.stringify(obtenido)}`));
 }
 
-const datos = JSON.parse(readFileSync(new URL("../datos/asuncion-junta-municipal.json", import.meta.url), "utf8"));
+function leer(archivo) {
+  return JSON.parse(readFileSync(new URL("../datos/" + archivo, import.meta.url), "utf8"));
+}
 
-console.log("\nCandidaturas de la Junta Municipal de Asunción");
+const datos = leer("asuncion-junta-municipal.json");
 
-check("9 listas", datos.listas.length, 9);
-check("24 bancas", datos.bancas, 24);
-check("voto preferente (la categoría JUN es preferente)", datos.modo, "desbloqueada");
-check("cada lista tiene 24 candidatos",
-  datos.listas.map(function (l) { return l.candidatos.length; }), Array(9).fill(24));
-check("216 candidatos en total",
-  datos.listas.reduce(function (s, l) { return s + l.candidatos.length; }, 0), 216);
+/* Las dos ciudades convertidas desde el TSJE: misma forma, distinto tamaño. */
+const ciudades = [
+  { archivo: "asuncion-junta-municipal.json", nombre: "Asunción", listas: 9, bancas: 24,
+    numeros: [1, 2, 3, 6, 7, 10, 16, 21, 300] },
+  { archivo: "encarnacion-junta-municipal.json", nombre: "Encarnación", listas: 7, bancas: 12,
+    numeros: [1, 5, 6, 15, 16, 21, 40] },
+  { archivo: "ciudad-del-este-junta-municipal.json", nombre: "Ciudad del Este", listas: 8, bancas: 12,
+    numeros: [1, 2, 6, 21, 44, 99, 123, 300] },
+];
 
-check("ningún nombre de relleno",
-  datos.listas.flatMap(function (l) { return l.candidatos; })
-    .filter(function (c) { return /^Candidato\/a \d+$/.test(c.nombre); }).length, 0);
-check("ningún nombre vacío",
-  datos.listas.flatMap(function (l) { return l.candidatos; })
-    .filter(function (c) { return !c.nombre || !c.nombre.trim(); }).length, 0);
-check("todos los votos preferentes arrancan en cero",
-  datos.listas.flatMap(function (l) { return l.candidatos; })
-    .filter(function (c) { return c.pref !== 0; }).length, 0);
-check("todos los totales arrancan en cero",
-  datos.listas.filter(function (l) { return l.votos !== 0 || l.soloLista !== 0; }).length, 0);
+ciudades.forEach(function (c) {
+  console.log("\nCandidaturas de la Junta Municipal de " + c.nombre);
+  const d = leer(c.archivo);
+  const cands = d.listas.flatMap(function (l) { return l.candidatos; });
 
-check("números de lista de la boleta",
-  datos.listas.map(function (l) { return l.numero; }), [1, 2, 3, 6, 7, 10, 16, 21, 300]);
-check("números de lista sin repetir",
-  new Set(datos.listas.map(function (l) { return l.numero; })).size, 9);
-check("siglas sin repetir",
-  new Set(datos.listas.map(function (l) { return l.sigla; })).size, 9);
-check("todas las listas traen su color oficial",
-  datos.listas.filter(function (l) { return normalizarHex(l.colorHex) === null; }).length, 0);
+  check(c.listas + " listas", d.listas.length, c.listas);
+  check(c.bancas + " bancas", d.bancas, c.bancas);
+  check("voto preferente (la categoría JUN es preferente)", d.modo, "desbloqueada");
+  check("cada lista tiene " + c.bancas + " candidatos",
+    d.listas.map(function (l) { return l.candidatos.length; }), Array(c.listas).fill(c.bancas));
+  check(c.listas * c.bancas + " candidatos en total", cands.length, c.listas * c.bancas);
 
-console.log("\nColores: el oficial se respeta, pero tiene que verse");
+  check("ningún nombre de relleno",
+    cands.filter(function (x) { return /^Candidato\/a \d+$/.test(x.nombre); }).length, 0);
+  check("ningún nombre vacío",
+    cands.filter(function (x) { return !x.nombre || !x.nombre.trim(); }).length, 0);
+  check("todos los votos preferentes arrancan en cero",
+    cands.filter(function (x) { return x.pref !== 0; }).length, 0);
+  check("todos los totales arrancan en cero",
+    d.listas.filter(function (l) { return l.votos !== 0 || l.soloLista !== 0; }).length, 0);
 
-datos.listas.forEach(function (l) {
-  const claro = ajustarParaFondo(l.colorHex, false);
-  const oscuro = ajustarParaFondo(l.colorHex, true);
-  const ok = contraste(claro, FONDO_CLARO) >= CONTRASTE_MINIMO &&
-             contraste(oscuro, FONDO_OSCURO) >= CONTRASTE_MINIMO;
-  if (!ok) fallos++;
-  console.log((ok ? "  ok   " : "  FALLA") + "  " + l.sigla.padEnd(6) + l.colorHex +
-    " → claro " + claro + " (" + contraste(claro, FONDO_CLARO).toFixed(2) + ":1)" +
-    ", oscuro " + oscuro + " (" + contraste(oscuro, FONDO_OSCURO).toFixed(2) + ":1)");
+  check("números de lista de la boleta",
+    d.listas.map(function (l) { return l.numero; }), c.numeros);
+  check("siglas sin repetir",
+    new Set(d.listas.map(function (l) { return l.sigla; })).size, c.listas);
+  check("acredita al TSJE", !!(d.fuente && d.fuente.nombre), true);
+
+  // Se respeta el color de la boleta siempre; lo único exigible es que se vea.
+  check("todas conservan el color oficial de la boleta",
+    d.listas.filter(function (l) { return normalizarHex(l.colorHex) === null; }).length, 0);
+
+  d.listas.forEach(function (l) {
+    const claro = ajustarParaFondo(l.colorHex, false);
+    const oscuro = ajustarParaFondo(l.colorHex, true);
+    const ok = contraste(claro, FONDO_CLARO) >= CONTRASTE_MINIMO &&
+               contraste(oscuro, FONDO_OSCURO) >= CONTRASTE_MINIMO;
+    if (!ok) fallos++;
+    console.log((ok ? "  ok   " : "  FALLA") + "  " + l.sigla.padEnd(6) + l.colorHex +
+      " se ve en los dos fondos → " + claro + " (" + contraste(claro, FONDO_CLARO).toFixed(2) + ":1)" +
+      ", " + oscuro + " (" + contraste(oscuro, FONDO_OSCURO).toFixed(2) + ":1)");
+  });
 });
-
-check("los colores quedan distinguibles entre sí en modo claro",
-  new Set(datos.listas.map(function (l) { return ajustarParaFondo(l.colorHex, false); })).size, 9);
-check("y en modo oscuro",
-  new Set(datos.listas.map(function (l) { return ajustarParaFondo(l.colorHex, true); })).size, 9);
 
 console.log("\nEl script que cargan las páginas dice lo mismo que el JSON");
 

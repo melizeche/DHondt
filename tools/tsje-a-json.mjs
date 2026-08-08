@@ -13,6 +13,10 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const { seDistinguen, distanciaColor, ajustarParaFondo, normalizarHex, PALETA } = require("../js/core.js");
 
 /* --------------------------------------------------------------- opciones */
 function parsearArgs(argv) {
@@ -145,6 +149,34 @@ const listas = [...porLista.entries()]
       candidatos: candidatos.map(function (c) { return { nombre: c.nombre, pref: 0 }; }),
     };
   });
+
+/* ------------------------------------------------------------- colores
+ * Se usan los de la boleta, siempre. Son los que el votante reconoce, y esa
+ * fidelidad vale más que la separación cromática: acá nada se identifica sólo
+ * por color —cada segmento de la cinta va rotulado con su sigla, hay leyenda y
+ * las tablas son de texto—, así que dos listas de colores parecidos se siguen
+ * distinguiendo igual. Lo único que se corrige es el color que no se vería
+ * contra el fondo, y eso pasa al dibujar, sin tocar el dato.
+ *
+ * Si la boleta trae dos colores casi iguales —la de Encarnación tiene tres
+ * amarillos a ΔE 1.8 entre sí— se avisa y nada más: es cómo es la boleta.
+ */
+const parecidos = [];
+for (let i = 0; i < listas.length; i++) {
+  for (let j = i + 1; j < listas.length; j++) {
+    const a = normalizarHex(listas[i].colorHex), b = normalizarHex(listas[j].colorHex);
+    if (a && b && !seDistinguen(a, b)) {
+      parecidos.push(listas[i].sigla + " y " + listas[j].sigla + " (" + a + " / " + b + ", ΔE " +
+        distanciaColor(ajustarParaFondo(a, false), ajustarParaFondo(b, false)).toFixed(1) + ")");
+    }
+  }
+}
+listas.forEach(function (l) { l.colorHex = normalizarHex(l.colorHex); });
+
+if (parecidos.length) {
+  console.error("Aviso: la boleta trae colores casi iguales entre sí (se respetan igual):");
+  parecidos.forEach(function (p) { console.error("  " + p); });
+}
 
 const bancas = args.bancas
   ? Number(args.bancas)

@@ -1,0 +1,487 @@
+{
+  "$schema": "esquema.json",
+  "eleccion": "Elecciones Municipales — Junta Municipal de Ciudad del Este",
+  "fuente": {
+    "nombre": "simulador oficial del TSJE",
+    "url": "https://simuladoroficial.tsje.gov.py/"
+  },
+  "bancas": 12,
+  "umbral": 0,
+  "modo": "desbloqueada",
+  "blancos": 0,
+  "nulos": 0,
+  "listas": [
+    {
+      "numero": 1,
+      "partido": "PARTIDO COLORADO",
+      "sigla": "ANR",
+      "color": 0,
+      "colorHex": "#ff0000",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "SILVIO MOREL",
+          "pref": 0
+        },
+        {
+          "nombre": "ISRA BARRETO",
+          "pref": 0
+        },
+        {
+          "nombre": "ERNESTO POROTO GUERIN",
+          "pref": 0
+        },
+        {
+          "nombre": "FEDERICO GONZALEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "JAVITO OCAMPOS",
+          "pref": 0
+        },
+        {
+          "nombre": "LIC. NUÑEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "DRA. KAREN BARRETO",
+          "pref": 0
+        },
+        {
+          "nombre": "HUGO BARRETO",
+          "pref": 0
+        },
+        {
+          "nombre": "PROF BLAS GUERRERO",
+          "pref": 0
+        },
+        {
+          "nombre": "WILBERTO CABAÑAS",
+          "pref": 0
+        },
+        {
+          "nombre": "ABOG. OSVALDO SANCHEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "OSVALDITO ABADIE",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "partido": "ALIANZA UNIDOS POR CDE",
+      "sigla": "AUCDE",
+      "color": 1,
+      "colorHex": "#ffea15",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "MARCOS ANTONIO ALMEIDA FLORES",
+          "pref": 0
+        },
+        {
+          "nombre": "CRISTIAN JAVIER GALEANO",
+          "pref": 0
+        },
+        {
+          "nombre": "CARLOS PORTILLO",
+          "pref": 0
+        },
+        {
+          "nombre": "EVER ESCALANTE MORINIGO",
+          "pref": 0
+        },
+        {
+          "nombre": "DANI MARTINEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "NERY DANIEL MERCADO CACERES",
+          "pref": 0
+        },
+        {
+          "nombre": "AGUSTIN SOLER",
+          "pref": 0
+        },
+        {
+          "nombre": "CINDY PAOLA LISBOA MORQUILLAS",
+          "pref": 0
+        },
+        {
+          "nombre": "CEFERINO SAMUDIO",
+          "pref": 0
+        },
+        {
+          "nombre": "JOANA GIMENA CARBALLO",
+          "pref": 0
+        },
+        {
+          "nombre": "MIRYAM FLECHA",
+          "pref": 0
+        },
+        {
+          "nombre": "RAUL IGNACIO RODRIGUEZ LLANO",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "partido": "PARTIDO PATRIOTAS INDEPENDIENTES",
+      "sigla": "PPI",
+      "color": 2,
+      "colorHex": "#98add4",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "VIRGINIO ANDRES BENITEZ CANO",
+          "pref": 0
+        },
+        {
+          "nombre": "BUENAVENTURA FARIÑA MARECOS",
+          "pref": 0
+        },
+        {
+          "nombre": "ANDRES OVIDIO SOSA GILL",
+          "pref": 0
+        },
+        {
+          "nombre": "CINTHIA ROCIO VAZQUEZ VAZQUEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "ADA RAMONA GONZALEZ ROJAS",
+          "pref": 0
+        },
+        {
+          "nombre": "JUANA OLMEDO",
+          "pref": 0
+        },
+        {
+          "nombre": "ALFREDO LOPEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "MARIO FABIAN FERNANDEZ AYALA",
+          "pref": 0
+        },
+        {
+          "nombre": "ENRIQUE JAVIER CANO VENEGA",
+          "pref": 0
+        },
+        {
+          "nombre": "ISMAEL CORREA SOARES",
+          "pref": 0
+        },
+        {
+          "nombre": "ADELA ROCIO SOTO ROMERO",
+          "pref": 0
+        },
+        {
+          "nombre": "NIÑO JOSE BENEGAS",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 21,
+      "partido": "PARTIDO DE LA JUVENTUD FUERZA JOVEN",
+      "sigla": "PJFJ",
+      "color": 3,
+      "colorHex": "#d8ff40",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "MICHAEL GILBERTH",
+          "pref": 0
+        },
+        {
+          "nombre": "ROGELIO NUÑEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "DAYHARA SOSA",
+          "pref": 0
+        },
+        {
+          "nombre": "ELVA LOIDA ACOSTA SANABRIA",
+          "pref": 0
+        },
+        {
+          "nombre": "GLORIA ELIZABETH LOPEZ GOMEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "NIDIA DANIELA GONZALEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "FABIO ELISANDER SALINAS ACHAR",
+          "pref": 0
+        },
+        {
+          "nombre": "JULIO CESAR FERREIRA",
+          "pref": 0
+        },
+        {
+          "nombre": "RICARDO BARRIOS",
+          "pref": 0
+        },
+        {
+          "nombre": "LEONARDO RAMIREZ",
+          "pref": 0
+        },
+        {
+          "nombre": "RONALD ALEXIS SAMANIEGO DIAZ",
+          "pref": 0
+        },
+        {
+          "nombre": "EULOGIO MELGAREJO RAMOA",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 44,
+      "partido": "PARTIDO MBORIAH MEMBY",
+      "sigla": "PMM",
+      "color": 4,
+      "colorHex": "#48a14d",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "NICOLAS GUILLEN BOGADO",
+          "pref": 0
+        },
+        {
+          "nombre": "SERGIO FABIAN OJEDA RIVEROS",
+          "pref": 0
+        },
+        {
+          "nombre": "LUZ MARINA ALMADA ESCOBAR",
+          "pref": 0
+        },
+        {
+          "nombre": "MARIO ALBERTO INSFRAN VERA",
+          "pref": 0
+        },
+        {
+          "nombre": "EMILIANO ELVIO MARECOS PIMENTEL",
+          "pref": 0
+        },
+        {
+          "nombre": "CEFERIANA NOEMI ROMERO GOMEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "REINALDO RAUL LEZCANO",
+          "pref": 0
+        },
+        {
+          "nombre": "ALEXIS JAVIER VELAZQUEZ VEGA",
+          "pref": 0
+        },
+        {
+          "nombre": "JOSE OSVALDO VELAZQUEZ GOIRI",
+          "pref": 0
+        },
+        {
+          "nombre": "HUGO RICARDO BAEZ GUILLEN",
+          "pref": 0
+        },
+        {
+          "nombre": "FERNANDO DIOSNEL PINTOS MARTINEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "JOSE DELRROSARIO DELGADO",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 99,
+      "partido": "PARTIDO POPULAR TEKOJOJA",
+      "sigla": "PPT",
+      "color": 5,
+      "colorHex": "#68a366",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "ALFREDO AÑAZCO",
+          "pref": 0
+        },
+        {
+          "nombre": "JULIO CESAR MARTINEZ NUÑEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "CARLOS GABRIEL GONZALEZ PAREDES",
+          "pref": 0
+        },
+        {
+          "nombre": "DARIO RAMON ACOSTA SOSA",
+          "pref": 0
+        },
+        {
+          "nombre": "DIEGO ANTONIO MELGAREJO VERA",
+          "pref": 0
+        },
+        {
+          "nombre": "JORGE RAMON MORA CACERES",
+          "pref": 0
+        },
+        {
+          "nombre": "CRISTIAN DARIO VERA MARTINEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "AVELINO LOPEZ YSASI",
+          "pref": 0
+        },
+        {
+          "nombre": "EUGENIO FARIÑA DUARTE",
+          "pref": 0
+        },
+        {
+          "nombre": "MARIO AYALA",
+          "pref": 0
+        },
+        {
+          "nombre": "MARTA DE JESUS PRIETO VILLANUEVA",
+          "pref": 0
+        },
+        {
+          "nombre": "FELICIANO BARRIOS RUIZ",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 123,
+      "partido": "PARTIDO YO CREO CONCIENCIA DEMOCRATICA NACIONAL",
+      "sigla": "YOCREOCDN",
+      "color": 6,
+      "colorHex": "#ffa760",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "MIGUEL PRIETO",
+          "pref": 0
+        },
+        {
+          "nombre": "RICHARD LOPEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "VICTOR TORALES",
+          "pref": 0
+        },
+        {
+          "nombre": "OSCAR CAFE",
+          "pref": 0
+        },
+        {
+          "nombre": "VALERIA ROMERO",
+          "pref": 0
+        },
+        {
+          "nombre": "MANUEL TRINIDAD",
+          "pref": 0
+        },
+        {
+          "nombre": "SEBA MARTINEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "ALISON ANISIMOFF",
+          "pref": 0
+        },
+        {
+          "nombre": "EULALIO DOMINGO ROMERO RODRIGUEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "GRISELDA FIGUEREDO",
+          "pref": 0
+        },
+        {
+          "nombre": "DYRCE LEDEZMA",
+          "pref": 0
+        },
+        {
+          "nombre": "CARLOS CANTERO",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 300,
+      "partido": "PARTIDO PATRIA SOÑADA",
+      "sigla": "PS",
+      "color": 7,
+      "colorHex": "#b9cdbe",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "CELSO MIRANDA",
+          "pref": 0
+        },
+        {
+          "nombre": "MODESTO ISMAEL LOPEZ RODAS",
+          "pref": 0
+        },
+        {
+          "nombre": "RUBEN MIRANDA VELOTTO",
+          "pref": 0
+        },
+        {
+          "nombre": "GREGORIO CUBA ROJAS",
+          "pref": 0
+        },
+        {
+          "nombre": "RAIMUNDA ROBLES TORRES",
+          "pref": 0
+        },
+        {
+          "nombre": "OSVALDO VILLALBA PEREIRA",
+          "pref": 0
+        },
+        {
+          "nombre": "LUIS ALBERTO LOPEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "LUIS ALBERTO ANASTACIO PALACIOS",
+          "pref": 0
+        },
+        {
+          "nombre": "SONIA RAQUEL AQUINO LOPEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "RAMON DARIO VALLEJOS CABRERA",
+          "pref": 0
+        },
+        {
+          "nombre": "EMILIANO CUBA GONZALEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "LUCAS EVANGELISTA CUBA ROJAS",
+          "pref": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,13 +1,14 @@
-# Calculadora D'Hondt — Junta Municipal de Asunción
+# Calculadora D'Hondt
 
-Sitio estático para repartir las bancas de la Junta Municipal de Asunción por el
-método D'Hondt y ver **qué candidatos resultan electos concejales**.
+Sitio estático para repartir bancas por el método D'Hondt y ver **quiénes
+resultan electos**.
 
 No necesita servidor ni build: abrí `index.html` en el navegador.
 
 Sirve para **cualquier elección proporcional por listas**: las bancas, las
-listas, las nóminas y el modo se cargan desde un JSON. Viene con la Junta
-Municipal de Asunción porque es para lo que se hizo, pero no está atada a ella.
+listas, las nóminas y el modo se cargan desde un JSON. Viene con las Juntas
+Municipales de Asunción, Encarnación y Ciudad del Este, que es para lo que se
+hizo, pero no está atada a ellas.
 
 Son dos páginas sobre los mismos datos, y se puede saltar de una a la otra sin
 perder nada:
@@ -91,12 +92,19 @@ lo que hay no sale del índice.
 
 ## Las candidaturas
 
-Las dos páginas arrancan con las **9 listas y los 216 candidatos** que se
-presentan a la Junta Municipal de Asunción, tomados del
-[simulador oficial del TSJE](https://simuladoroficial.tsje.gov.py/) (datos
-`59.0.0`, que es el código de Asunción). Vienen con el número de lista de la
-boleta, el nombre y la sigla del partido o alianza, el color oficial y la nómina
-completa en su orden.
+Vienen cargadas tres Juntas Municipales, tomadas del
+[simulador oficial del TSJE](https://simuladoroficial.tsje.gov.py/), con el
+número de lista de la boleta, el nombre y la sigla del partido o alianza, el
+color oficial y la nómina completa en su orden:
+
+| Elección | Código | Listas | Candidatos | Bancas |
+|---|---|---|---|---|
+| Junta Municipal de Asunción | `59.0.0` | 9 | 216 | 24 |
+| Junta Municipal de Encarnación | `59.7.0` | 7 | 84 | 12 |
+| Junta Municipal de Ciudad del Este | `59.10.0` | 8 | 96 | 12 |
+
+Asunción es la que traen embebida las páginas; las demás se eligen en el
+desplegable.
 
 Los **votos los pone quien usa la herramienta**: el archivo de datos trae todos
 los totales en cero. Esto no publica ni pronostica resultados, calcula el
@@ -191,6 +199,14 @@ quien vota, salvo que no se distinga del fondo —el Partido Demócrata Cristian
 es blanco— en cuyo caso se le corrige la luminosidad hasta llegar a 3:1,
 conservando el tono. El hex original nunca se pisa: queda en los datos y se
 muestra al editar la lista. Elegir un color de la paleta descarta el oficial.
+
+**Dos listas con colores casi iguales se dejan casi iguales.** Pasa de verdad:
+la boleta de Encarnación trae tres amarillos a ΔE 1,8 entre sí. Cambiarlos por
+colores «más distinguibles» sería perder justamente lo que hace útil al color
+—que el votante lo reconozca—, y no hace falta: acá nada se identifica sólo por
+color. Cada segmento de la cinta va rotulado con su sigla y su cantidad de
+bancas, la leyenda repite sigla por sigla y las tablas son de texto. El
+conversor avisa cuando encuentra colores parecidos, pero no toca nada.
 
 `fuente` es la línea de procedencia que la página muestra arriba. Sólo aparece
 si el archivo la trae: las nóminas que uno cargue no quedan acreditadas a nadie
@@ -300,7 +316,9 @@ datos/indice.json                   qué elecciones ofrece el desplegable
 js/core.js                          estado, cálculo D'Hondt, orden interno, color, formato
 js/datos-asuncion.js                candidaturas que las páginas traen cargadas (generado)
 css/base.css                        estilos compartidos
-datos/asuncion-junta-municipal.json las mismas candidaturas, para importar (generado)
+datos/asuncion-junta-municipal.json candidaturas de Asunción (generado)
+datos/encarnacion-junta-municipal.json   candidaturas de Encarnación (generado)
+datos/ciudad-del-este-junta-municipal.json  candidaturas de Ciudad del Este (generado)
 datos/esquema.json                  JSON Schema del formato
 datos/ejemplo.json                  ejemplo mínimo del formato
 datos/ejemplo-star-wars.json        ejemplo chico: 3 listas, 10 bancas, voto preferente

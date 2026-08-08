@@ -1,0 +1,428 @@
+{
+  "$schema": "esquema.json",
+  "eleccion": "Elecciones Municipales — Junta Municipal de Encarnación",
+  "fuente": {
+    "nombre": "simulador oficial del TSJE",
+    "url": "https://simuladoroficial.tsje.gov.py/"
+  },
+  "bancas": 12,
+  "umbral": 0,
+  "modo": "desbloqueada",
+  "blancos": 0,
+  "nulos": 0,
+  "listas": [
+    {
+      "numero": 1,
+      "partido": "PARTIDO COLORADO",
+      "sigla": "ANR",
+      "color": 0,
+      "colorHex": "#ff0000",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "YONI SCHMALKO",
+          "pref": 0
+        },
+        {
+          "nombre": "CESAR ROJAS",
+          "pref": 0
+        },
+        {
+          "nombre": "EDU REBRUK",
+          "pref": 0
+        },
+        {
+          "nombre": "DENNIS FRAULOB",
+          "pref": 0
+        },
+        {
+          "nombre": "ANDRES MOREL",
+          "pref": 0
+        },
+        {
+          "nombre": "PABLO NOVOSAD",
+          "pref": 0
+        },
+        {
+          "nombre": "FACU GONZALEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "JUANKI RODRIGUEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "DR. CLAUDIO",
+          "pref": 0
+        },
+        {
+          "nombre": "LUIS MARIA GUERRERO",
+          "pref": 0
+        },
+        {
+          "nombre": "JAVIER BENITEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "LUIS DAVALOS",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "partido": "ALIANZA ENCARNACION EN MARCHA",
+      "sigla": "AEEM",
+      "color": 1,
+      "colorHex": "#ffea15",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "KEIJI GUILLERMO ISHIBASHI TORRES",
+          "pref": 0
+        },
+        {
+          "nombre": "CLAUDIA AREVALOS",
+          "pref": 0
+        },
+        {
+          "nombre": "JORGE SERVIAN",
+          "pref": 0
+        },
+        {
+          "nombre": "ORLANDO RENE MIGLIO FERREIRA",
+          "pref": 0
+        },
+        {
+          "nombre": "NATALIA ENCISO DE OREGGIONI",
+          "pref": 0
+        },
+        {
+          "nombre": "CARLOS MARINO",
+          "pref": 0
+        },
+        {
+          "nombre": "FEDE UBEDA",
+          "pref": 0
+        },
+        {
+          "nombre": "NOEMI CANDIA",
+          "pref": 0
+        },
+        {
+          "nombre": "GLORIA ARREGUI",
+          "pref": 0
+        },
+        {
+          "nombre": "RICKY CABRERA",
+          "pref": 0
+        },
+        {
+          "nombre": "NILO RODAS",
+          "pref": 0
+        },
+        {
+          "nombre": "FABIAN SANCHEZ TRINIDAD",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "partido": "PARTIDO DEMOCRATA CRISTIANO",
+      "sigla": "PDC",
+      "color": 2,
+      "colorHex": "#ffffff",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "NERY VIVEROS",
+          "pref": 0
+        },
+        {
+          "nombre": "JOSE EUGENIO RIVAS",
+          "pref": 0
+        },
+        {
+          "nombre": "GUSTAVO RAMON VELAZQUEZ RAMOS",
+          "pref": 0
+        },
+        {
+          "nombre": "ALDO WALTER CRISTALDO RAMIREZ",
+          "pref": 0
+        },
+        {
+          "nombre": "DAVID ROJAS",
+          "pref": 0
+        },
+        {
+          "nombre": "MARINA ENCARNACION BENITEZ DELVALLE",
+          "pref": 0
+        },
+        {
+          "nombre": "ANTONINO AQUINO DUARTE",
+          "pref": 0
+        },
+        {
+          "nombre": "ROLANDO RUBEN HEIL FLEITAS",
+          "pref": 0
+        },
+        {
+          "nombre": "JOSE AUGUSTO GONZALEZ ROA",
+          "pref": 0
+        },
+        {
+          "nombre": "VICTOR JUAN BOGARIN ORTIZ",
+          "pref": 0
+        },
+        {
+          "nombre": "ANTONIO VILLALBA OZUNA",
+          "pref": 0
+        },
+        {
+          "nombre": "ANDREA ULLON CHAVEZ",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "partido": "ALIANZA ACUERDO GUARANI",
+      "sigla": "ACG",
+      "color": 3,
+      "colorHex": "#ffff66",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "MARCELO AYALA",
+          "pref": 0
+        },
+        {
+          "nombre": "HUMBERTO ALGARIN",
+          "pref": 0
+        },
+        {
+          "nombre": "JAVIER VAZQUEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "RICHARD GONZALEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "TANIA ALFONSO",
+          "pref": 0
+        },
+        {
+          "nombre": "FELIPE BERNAL RIVEROS",
+          "pref": 0
+        },
+        {
+          "nombre": "WILMA ESPINOLA SOSA",
+          "pref": 0
+        },
+        {
+          "nombre": "FRANCISCO GARAY",
+          "pref": 0
+        },
+        {
+          "nombre": "MIGUEL ANGEL SANABRIA",
+          "pref": 0
+        },
+        {
+          "nombre": "ALBERTO RAMON FERREIRA",
+          "pref": 0
+        },
+        {
+          "nombre": "RICHARD",
+          "pref": 0
+        },
+        {
+          "nombre": "FRANCISCO GUZI GARCIA",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "partido": "PARTIDO PATRIOTAS INDEPENDIENTES",
+      "sigla": "PPI",
+      "color": 4,
+      "colorHex": "#98add4",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "SERGIO IVAN FERREIRA",
+          "pref": 0
+        },
+        {
+          "nombre": "NICANOR BENITEZ MOREL",
+          "pref": 0
+        },
+        {
+          "nombre": "JORGE DANIEL CAMPUZANO AYALA",
+          "pref": 0
+        },
+        {
+          "nombre": "ENRIQUE RAMIREZ FIGUEREDO",
+          "pref": 0
+        },
+        {
+          "nombre": "LIZ PAOLA CACERES FERREIRA",
+          "pref": 0
+        },
+        {
+          "nombre": "RUBEN ARIEL LUGO",
+          "pref": 0
+        },
+        {
+          "nombre": "FERNANDO ARIEL GONCALVEZ ACOSTA",
+          "pref": 0
+        },
+        {
+          "nombre": "ANAYELI NOEMI CHAVEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "JAVIER VIDAL BENITEZ MOREL",
+          "pref": 0
+        },
+        {
+          "nombre": "FATIMA GISSELLS BENITEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "JUAN RAMON BENITEZ FORNERON",
+          "pref": 0
+        },
+        {
+          "nombre": "FRANCISCO EUDORO CABRERA DUHME",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 21,
+      "partido": "PARTIDO DE LA JUVENTUD FUERZA JOVEN",
+      "sigla": "PJFJ",
+      "color": 5,
+      "colorHex": "#d8ff40",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "ABOG. SILVIA SALINAS",
+          "pref": 0
+        },
+        {
+          "nombre": "RAUL FRANCISCO TARMAN SANABRIA",
+          "pref": 0
+        },
+        {
+          "nombre": "ROBERTO RUTILIO OCAMPO DELVALLE",
+          "pref": 0
+        },
+        {
+          "nombre": "OMAR ESPINOLA",
+          "pref": 0
+        },
+        {
+          "nombre": "MIGUEL SANABRIA",
+          "pref": 0
+        },
+        {
+          "nombre": "OSVALDO CACERES",
+          "pref": 0
+        },
+        {
+          "nombre": "MARCELO MIGUEL SANABRIA",
+          "pref": 0
+        },
+        {
+          "nombre": "JUSTA DIONICIA ALEJO CACERES",
+          "pref": 0
+        },
+        {
+          "nombre": "ALBERTO RIOS DIAZ",
+          "pref": 0
+        },
+        {
+          "nombre": "BRIAN DE LIMA",
+          "pref": 0
+        },
+        {
+          "nombre": "VICTOR RAMIREZ",
+          "pref": 0
+        },
+        {
+          "nombre": "MARLY LUJAN CACERES MOREIRA",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 40,
+      "partido": "ALIANZA FRENTE GUAZU ENCARNACION",
+      "sigla": "AFGE",
+      "color": 6,
+      "colorHex": "#644aaf",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "“CHERA” ESTEBAN CHERAÑUK",
+          "pref": 0
+        },
+        {
+          "nombre": "ELENA MABEL IRALA ROJAS",
+          "pref": 0
+        },
+        {
+          "nombre": "AZUCENA ROLON DE LEE",
+          "pref": 0
+        },
+        {
+          "nombre": "VANESA GASPARINA BENITEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "TATIANA ELENA CHERAÑUK MAZALEWSKI",
+          "pref": 0
+        },
+        {
+          "nombre": "MARCELO FABIAN MIÑO ORREGO",
+          "pref": 0
+        },
+        {
+          "nombre": "SILVINA MORA BRIZUELA",
+          "pref": 0
+        },
+        {
+          "nombre": "AMARU SILVA MORA",
+          "pref": 0
+        },
+        {
+          "nombre": "RUBEN JESUS AMARILLA FERREIRA",
+          "pref": 0
+        },
+        {
+          "nombre": "ANA DELIA FIGUEREDO DE PERALTA",
+          "pref": 0
+        },
+        {
+          "nombre": "BLANCA NIEVE RIOS DE GONZALEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "VICENTE RAUL VIEIRA ALVAREZ",
+          "pref": 0
+        }
+      ]
+    }
+  ]
+}

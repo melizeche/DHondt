@@ -6,6 +6,16 @@
       "detalle": "9 listas · 24 bancas · candidaturas oficiales del TSJE"
     },
     {
+      "archivo": "encarnacion-junta-municipal.json",
+      "nombre": "Junta Municipal de Encarnación",
+      "detalle": "7 listas · 12 bancas · candidaturas oficiales del TSJE"
+    },
+    {
+      "archivo": "ciudad-del-este-junta-municipal.json",
+      "nombre": "Junta Municipal de Ciudad del Este",
+      "detalle": "8 listas · 12 bancas · candidaturas oficiales del TSJE"
+    },
+    {
       "archivo": "ejemplo-star-wars.json",
       "nombre": "Senado Galáctico (ejemplo)",
       "detalle": "3 listas · 10 bancas · voto preferente"

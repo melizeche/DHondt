@@ -283,6 +283,44 @@ function hslAHex(h, s, l) {
   return "#" + hex(r) + hex(g) + hex(b);
 }
 
+/* Distancia perceptual entre dos colores, en OKLab (×100).
+ *
+ * El umbral no pretende que todas las listas se distingan entre sí: con siete
+ * o nueve eso no lo logra ninguna paleta, y por eso nada acá depende sólo del
+ * color —cada segmento de la cinta va rotulado, hay leyenda con siglas y las
+ * tablas son de texto—. Lo que marca es el caso patológico: dos colores tan
+ * parecidos que se leen como el mismo, y hacen ver rota la cinta. La boleta de
+ * Encarnación trae tres amarillos a ΔE 1.8 entre sí. */
+const SEPARACION_MINIMA = 10;
+
+function aOklab(hex) {
+  const lineal = aRgb(hex).map(function (v) {
+    const s = v / 255;
+    return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  });
+  const r = lineal[0], g = lineal[1], b = lineal[2];
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [
+    0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s,
+  ];
+}
+
+function distanciaColor(hexA, hexB) {
+  const a = aOklab(hexA), b = aOklab(hexB);
+  return Math.sqrt(
+    Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2) + Math.pow(a[2] - b[2], 2)) * 100;
+}
+
+/* ¿Se distinguen en los dos modos, ya corregidos contra su fondo? */
+function seDistinguen(hexA, hexB) {
+  return distanciaColor(ajustarParaFondo(hexA, false), ajustarParaFondo(hexB, false)) >= SEPARACION_MINIMA &&
+         distanciaColor(ajustarParaFondo(hexA, true), ajustarParaFondo(hexB, true)) >= SEPARACION_MINIMA;
+}
+
 const cacheColores = new Map();
 
 function ajustarParaFondo(hex, oscuro) {
@@ -755,5 +793,6 @@ if (typeof module !== "undefined" && module.exports) {
     recalcularTotal, reconciliarSoloLista, normalizar, clampInt, clampNum,
     datosPorDefecto, PALETA, normalizarHex, ajustarParaFondo, contraste,
     FONDO_CLARO, FONDO_OSCURO, CONTRASTE_MINIMO,
+    distanciaColor, seDistinguen, SEPARACION_MINIMA,
   };
 }
