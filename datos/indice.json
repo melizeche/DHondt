@@ -16,6 +16,11 @@
       "detalle": "8 listas · 12 bancas · candidaturas oficiales del TSJE"
     },
     {
+      "archivo": "senadores-2023.json",
+      "nombre": "Senadores 2023 (resultados reales)",
+      "detalle": "18 listas · 45 bancas · con los votos ya cargados"
+    },
+    {
       "archivo": "ejemplo-star-wars.json",
       "nombre": "Senado Galáctico (ejemplo)",
       "detalle": "3 listas · 10 bancas · voto preferente"

@@ -6,7 +6,7 @@ import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 
 const require = createRequire(import.meta.url);
-const { normalizar, normalizarHex, ajustarParaFondo, contraste,
+const { normalizar, calcularDHondt, normalizarHex, ajustarParaFondo, contraste,
         FONDO_CLARO, FONDO_OSCURO, CONTRASTE_MINIMO } = require("../js/core.js");
 
 let fallos = 0;
@@ -75,6 +75,51 @@ ciudades.forEach(function (c) {
       ", " + oscuro + " (" + contraste(oscuro, FONDO_OSCURO).toFixed(2) + ":1)");
   });
 });
+
+/* El único conjunto con votos de verdad: sirve para comprobar el cálculo
+ * contra una elección que ya pasó, no sólo contra ejemplos. */
+console.log("\nSenadores 2023 — resultados oficiales");
+{
+  const s = leer("senadores-2023.json");
+  const e = normalizar(s);
+  const cands = s.listas.flatMap(function (l) { return l.candidatos; });
+
+  check("18 listas", s.listas.length, 18);
+  check("45 bancas", s.bancas, 45);
+  check("45 candidatos por lista",
+    s.listas.map(function (l) { return l.candidatos.length; }), Array(18).fill(45));
+  check("810 candidatos", cands.length, 810);
+
+  // Cuadre con el PDF del TSJE: 2.885.656 + 13.706 nulos + 120.825 blancos.
+  const validos = s.listas.reduce(function (a, l) { return a + l.votos; }, 0);
+  check("votos válidos", validos, 2885656);
+  check("emitidos = válidos + blancos + nulos", validos + s.blancos + s.nulos, 3020187);
+  check("cada lista: los preferentes suman su total",
+    s.listas.filter(function (l) {
+      return l.candidatos.reduce(function (a, c) { return a + c.pref; }, 0) !== l.votos;
+    }).length, 0);
+
+  const r = calcularDHondt(e.listas, e.bancas, e.umbral);
+  // Ordenado por sigla: comparar objetos con JSON.stringify depende del orden
+  // en que se insertaron las claves, que acá lo fija el reparto.
+  const bancas = e.listas
+    .filter(function (l) { return r.ganadas.get(l.id) > 0; })
+    .map(function (l) { return [l.sigla, r.ganadas.get(l.id)]; })
+    .sort(function (a, b) { return a[0].localeCompare(b[0]); });
+  // Coincide con la composición proclamada del Senado 2023-2028: ANR 23,
+  // Alianza Senadores por la Patria 12, Cruzada Nacional 5, Encuentro Nacional
+  // 2, y una banca para Patria Querida, Frente Guasu y Yo Creo.
+  check("reparto de las 45 bancas", bancas, [
+    ["Alianza", 12], ["ANR", 23], ["Frente Guasu", 1], ["PCN", 5],
+    ["PEN", 2], ["PPQ", 1], ["Yo Creo", 1],
+  ]);
+  check("las 45 bancas se reparten enteras",
+    bancas.reduce(function (a, x) { return a + x[1]; }, 0), 45);
+  check("sin sorteos", r.empates.length, 0);
+  // La banca 45 se define por poco más de mil votos.
+  check("la última banca fue para Yo Creo", Math.round(r.ultima.cociente), 56386);
+  check("y la primera afuera fue el sexto cociente del PCN", Math.round(r.siguiente.cociente), 55324);
+}
 
 console.log("\nEl script que cargan las páginas dice lo mismo que el JSON");
 

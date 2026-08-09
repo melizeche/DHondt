@@ -154,6 +154,41 @@ Con ese código se bajan los tres archivos de
 igual. Ojo con `--bancas`: cada Junta Municipal tiene la suya, y por defecto el
 conversor usa el largo de la nómina más larga.
 
+## Resultados de una elección que ya pasó
+
+Además de las candidaturas, viene cargado el resultado real de los
+**Senadores 2023** (`datos/senadores-2023.json`): 18 listas, 45 bancas, 810
+candidatos y **los votos ya puestos**, tomados del PDF de resultados oficiales
+del TSJE. Es el único conjunto que no arranca en cero, y sirve para lo que
+ningún ejemplo puede: comprobar la calculadora contra una elección de verdad.
+
+El reparto que da es **ANR 23, Alianza 12, Cruzada Nacional 5, Encuentro
+Nacional 2, y una banca para Patria Querida, Frente Guasu y Yo Creo**: los
+mismos números de la composición proclamada para el período 2023-2028. La banca
+45 se definió por poco: Yo Creo entró con un cociente de 56.386 y el sexto del
+Cruzada Nacional quedó afuera con 55.324, mil votos más abajo.
+
+Que salga igual no es decorativo. Es la única comprobación de la herramienta
+contra un resultado oficial completo: 2,9 millones de votos, 18 listas y 45
+bancas, partiendo sólo de los totales del PDF. El test lo deja fijado, así que
+si algún cambio en el cálculo rompiera esa coincidencia, se nota.
+
+El PDF se convierte con:
+
+```sh
+pip install pdfplumber
+python3 tools/pdf-resultados-a-json.py SENADORES_2023.pdf \
+  --bancas 45 \
+  --eleccion "Elecciones Generales 2023 — Senadores (resultados oficiales)" \
+  --salida datos/senadores-2023.json
+```
+
+El script no escribe nada si las cuentas no cierran: los votos preferentes de
+cada lista tienen que sumar exactamente su total, las opciones ir de 1 a N sin
+huecos, y la suma de listas más blancos y nulos dar el total que declara el PDF
+(2.885.656 + 120.825 + 13.706 = 3.020.187). Las siglas las recorta del nombre
+del partido y conviene repasarlas a mano, que es lo único que se editó acá.
+
 ## Formato del JSON
 
 `Exportar JSON` genera este formato y `Importar JSON` lo acepta. También acepta
@@ -319,10 +354,12 @@ css/base.css                        estilos compartidos
 datos/asuncion-junta-municipal.json candidaturas de Asunción (generado)
 datos/encarnacion-junta-municipal.json   candidaturas de Encarnación (generado)
 datos/ciudad-del-este-junta-municipal.json  candidaturas de Ciudad del Este (generado)
+datos/senadores-2023.json           resultados reales de los Senadores 2023 (generado)
 datos/esquema.json                  JSON Schema del formato
 datos/ejemplo.json                  ejemplo mínimo del formato
 datos/ejemplo-star-wars.json        ejemplo chico: 3 listas, 10 bancas, voto preferente
-tools/tsje-a-json.mjs               conversor de los datos del TSJE
+tools/tsje-a-json.mjs               conversor de las candidaturas del TSJE
+tools/pdf-resultados-a-json.py      conversor de los PDF de resultados oficiales
 tests/dhondt.test.mjs               cálculo
 tests/datos.test.mjs                datos generados
 tests/esquema.test.mjs              los datos contra el esquema
