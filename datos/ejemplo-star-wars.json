@@ -1,5 +1,5 @@
 {
-  "$schema": "esquema.json",
+  "$schema": "schema.json",
   "eleccion": "Senado Galáctico — ejemplo de prueba",
   "bancas": 10,
   "umbral": 0,

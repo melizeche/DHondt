@@ -1,5 +1,5 @@
-/* Valida los archivos de datos contra datos/esquema.json:
- *   node tests/esquema.test.mjs
+/* Valida los archivos de datos contra datos/schema.json:
+ *   node tests/schema.test.mjs
  *
  * Trae un validador propio en vez de una dependencia, porque el resto de los
  * tests tampoco tiene ninguna. Cubre sólo lo que el esquema usa —type, enum,
@@ -10,7 +10,7 @@
  */
 import { readFileSync } from "node:fs";
 
-const esquema = JSON.parse(readFileSync(new URL("../datos/esquema.json", import.meta.url), "utf8"));
+const esquema = JSON.parse(readFileSync(new URL("../datos/schema.json", import.meta.url), "utf8"));
 
 const CLAVES_SOPORTADAS = new Set([
   "$schema", "$defs", "$ref", "title", "description", "default", "examples", "format",

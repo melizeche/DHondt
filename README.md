@@ -249,9 +249,9 @@ por defecto.
 
 ### Esquema
 
-El formato está descrito en [`datos/esquema.json`](datos/esquema.json)
+El formato está descrito en [`datos/schema.json`](datos/schema.json)
 (JSON Schema, draft 2020-12). Los archivos de `datos/` lo referencian con
-`"$schema": "esquema.json"`, así que un editor con soporte de JSON Schema
+`"$schema": "schema.json"`, así que un editor con soporte de JSON Schema
 —VS Code y varios más— autocompleta los campos y marca los errores mientras se
 escribe.
 
@@ -355,14 +355,14 @@ datos/asuncion-junta-municipal.json candidaturas de Asunción (generado)
 datos/encarnacion-junta-municipal.json   candidaturas de Encarnación (generado)
 datos/ciudad-del-este-junta-municipal.json  candidaturas de Ciudad del Este (generado)
 datos/senadores-2023.json           resultados reales de los Senadores 2023 (generado)
-datos/esquema.json                  JSON Schema del formato
+datos/schema.json                   JSON Schema del formato
 datos/ejemplo.json                  ejemplo mínimo del formato
 datos/ejemplo-star-wars.json        ejemplo chico: 3 listas, 10 bancas, voto preferente
 tools/tsje-a-json.mjs               conversor de las candidaturas del TSJE
 tools/pdf-resultados-a-json.py      conversor de los PDF de resultados oficiales
 tests/dhondt.test.mjs               cálculo
 tests/datos.test.mjs                datos generados
-tests/esquema.test.mjs              los datos contra el esquema
+tests/schema.test.mjs               los datos contra el esquema
 ```
 
 Las dos páginas comparten `js/core.js`, así que el cálculo está escrito una sola
@@ -376,7 +376,7 @@ Sin dependencias: cargan `js/core.js` tal cual lo usa el navegador.
 ```sh
 node tests/dhondt.test.mjs
 node tests/datos.test.mjs
-node tests/esquema.test.mjs
+node tests/schema.test.mjs
 ```
 
 `dhondt.test.mjs` verifica el reparto contra el ejemplo canónico del método,
@@ -391,7 +391,7 @@ números de lista y las siglas no se repitan, que el JSON y el script embebido
 digan lo mismo, y que los 9 colores oficiales lleguen a 3:1 contra el fondo y
 sigan siendo distinguibles entre sí en los dos modos.
 
-`esquema.test.mjs` valida los tres archivos de `datos/` contra el esquema y
+`schema.test.mjs` valida contra el esquema todos los archivos del índice y
 prueba una veintena de casos que tiene que rechazar, para que el esquema no
 termine aceptando cualquier cosa. Trae un validador propio que cubre sólo las
 palabras clave que el esquema usa —hay una prueba que falla si aparece alguna

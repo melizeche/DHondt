@@ -129,7 +129,7 @@ const embebido = JSON.parse(js.slice(js.indexOf("{"), js.lastIndexOf("}") + 1));
 const sinSchema = Object.assign({}, datos);
 delete sinSchema.$schema;
 check("mismo contenido que datos/asuncion-junta-municipal.json", embebido, sinSchema);
-check("el JSON referencia el esquema", datos.$schema, "esquema.json");
+check("el JSON referencia el esquema", datos.$schema, "schema.json");
 check("el script embebido no arrastra esa referencia", "$schema" in embebido, false);
 
 console.log("\nLa app los lee sin perder nada");

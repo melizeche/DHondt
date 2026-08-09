@@ -137,7 +137,7 @@ def main():
     rango = {l["numero"]: i for i, l in enumerate(sorted(listas, key=lambda x: -x["votos"]))}
 
     salida = {
-        "$schema": "esquema.json",
+        "$schema": "schema.json",
         "eleccion": args.eleccion,
         "fuente": {"nombre": args.fuente},
         "bancas": args.bancas,

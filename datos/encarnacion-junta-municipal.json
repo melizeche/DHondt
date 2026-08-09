@@ -1,5 +1,5 @@
 {
-  "$schema": "esquema.json",
+  "$schema": "schema.json",
   "eleccion": "Elecciones Municipales — Junta Municipal de Encarnación",
   "fuente": {
     "nombre": "simulador oficial del TSJE",
