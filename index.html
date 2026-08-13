@@ -58,7 +58,7 @@
       marcando qué candidatos resultan electos.</p>
   </div>
   <div class="toolbar no-print">
-    <button id="btn-ejemplo">Votos de ejemplo</button>
+    <button id="btn-azar">Votos al azar</button>
     <button id="btn-importar">Importar JSON</button>
     <button id="btn-exportar">Exportar JSON</button>
     <button id="btn-imprimir">Imprimir</button>
@@ -93,7 +93,18 @@
     <div class="field">
       <label for="cfg-umbral">Umbral (% de votos válidos)</label>
       <input type="number" id="cfg-umbral" min="0" max="20" step="0.1">
-      <div class="note">Sin umbral legal: dejalo en 0.</div>
+      <details class="ayuda">
+        <summary>En Paraguay no hay: dejalo en 0</summary>
+        <div>
+          <p>El Artículo 258 reparte entre todas las listas que sacaron votos: no hay
+            un mínimo que superar para entrar al reparto.</p>
+          <p>Otros países que usan D'Hondt sí lo tienen —España pide 3 % de los votos
+            válidos de la circunscripción, Argentina 3 % del padrón del distrito,
+            Polonia 5 %—. El campo está para probar qué pasaría acá con una barrera
+            así: subilo y mirá adónde van a parar las bancas de las listas que quedan
+            afuera.</p>
+        </div>
+      </details>
     </div>
     <div class="field">
       <label for="cfg-modo">Tipo de lista</label>
@@ -255,7 +266,6 @@
 
 <input type="file" id="file-input" accept="application/json,.json" hidden>
 
-<script src="js/datos-asuncion.js"></script>
 <script src="js/core.js"></script>
 <script>
 "use strict";
@@ -693,7 +703,7 @@ function enlazarConfig(id, aplicar) {
     render();
   });
 }
-enlazarConfig("cfg-bancas", function (v) { estado.bancas = clampInt(v, 1, 99, BANCAS_ASUNCION); });
+enlazarConfig("cfg-bancas", function (v) { estado.bancas = clampInt(v, 1, 99, BANCAS_POR_DEFECTO); });
 enlazarConfig("cfg-umbral", function (v) { estado.umbral = clampNum(v, 0, 20, 0); });
 enlazarConfig("cfg-modo", function (v) { estado.modo = v === "desbloqueada" ? "desbloqueada" : "bloqueada"; });
 enlazarConfig("cfg-blancos", function (v) { estado.blancos = clampInt(v, 0, 1e12, 0); });
@@ -716,13 +726,10 @@ document.getElementById("btn-agregar").addEventListener("click", function () {
   render();
 });
 
-document.getElementById("btn-ejemplo").addEventListener("click", function () {
-  estado.listas.forEach(function (l, i) {
-    l.votos = VOTOS_EJEMPLO[i] !== undefined ? VOTOS_EJEMPLO[i] : 0;
-    reconciliarSoloLista(l);
-  });
-  estado.blancos = 4200;
-  estado.nulos = 3100;
+document.getElementById("btn-azar").addEventListener("click", function () {
+  if (!confirmarSorteo()) return;
+  sortearVotos(estado);
+  votosSorteados = true;
   guardar();
   render();
 });
@@ -730,6 +737,7 @@ document.getElementById("btn-ejemplo").addEventListener("click", function () {
 document.getElementById("btn-reset").addEventListener("click", function () {
   if (!confirm("Se borran los votos, las nóminas y los cambios de listas. ¿Continuar?")) return;
   estado = datosPorDefecto();
+  votosSorteados = false;
   guardar();
   render();
 });
@@ -744,6 +752,7 @@ document.getElementById("btn-mas-filas").addEventListener("click", function () {
 });
 
 conectarSelectorElecciones("cfg-eleccion", render);
+conectarAyudas();
 inicializarTema(render);
 render();
 </script>

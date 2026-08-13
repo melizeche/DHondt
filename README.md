@@ -28,9 +28,13 @@ perder nada:
 - **Empates señalados, no resueltos.** Cuando dos listas comparten el cociente de
   la última banca en disputa, la página lo avisa: el Código Electoral resuelve
   esos casos por sorteo, así que la herramienta no puede decidirlo.
-- **Bancas configurables** (24 por defecto, que es como se integra la Junta de
-  Asunción) y **umbral opcional** (en 0, que es lo que corresponde: no hay
-  barrera legal para el reparto municipal).
+- **Bancas configurables** y **umbral opcional**. En Paraguay va en 0, que es lo que
+  corresponde: el Artículo 258 reparte entre todas las listas que sacaron
+  votos, sin mínimo que superar. El campo está para el «¿y si hubiera una
+  barrera?» —otros países que usan D'Hondt la tienen: España pide 3 % de los
+  votos válidos de la circunscripción, Argentina 3 % del padrón del distrito,
+  Polonia 5 %— y la página lo aclara ahí mismo, para que nadie lo lea como si
+  acá existiera.
 - **Votos en blanco y nulos** para las estadísticas, sin entrar al reparto.
 
 ## Página por candidato (`candidatos.html`)
@@ -81,10 +85,10 @@ El desplegable **Elección** lista los conjuntos de datos de `datos/`, según
 Un detalle de cómo funciona: el desplegable trae los archivos con `fetch`, que
 es del mismo origen y no necesita nada del otro lado… pero sí necesita **un**
 servidor. Abriendo el HTML con doble clic (`file://`) el navegador bloquea esos
-pedidos por CORS, así que ahí el desplegable no aparece: se ve la elección que
-viene embebida en `js/datos-asuncion.js` y se puede cambiar con «Importar JSON»,
-que lee del disco y funciona siempre. Servido —Cloudflare Pages, GitHub Pages,
-`python3 -m http.server`— aparece y anda.
+pedidos por CORS, así que ahí el desplegable no aparece: queda la elección de
+ejemplo y se cambia con «Importar JSON», que lee del disco y funciona siempre.
+Servido —Cloudflare Pages, GitHub Pages, `python3 -m http.server`— aparece y
+anda.
 
 Cuál quedó elegida se recuerda en el navegador y vale para las dos páginas.
 Importar un archivo suelto deja el desplegable en «— datos cargados —», porque
@@ -103,12 +107,27 @@ color oficial y la nómina completa en su orden:
 | Junta Municipal de Encarnación | `59.7.0` | 7 | 84 | 12 |
 | Junta Municipal de Ciudad del Este | `59.10.0` | 8 | 96 | 12 |
 
-Asunción es la que traen embebida las páginas; las demás se eligen en el
-desplegable.
+Las tres se eligen en el desplegable. Ninguna viene cargada de entrada: la
+página se abre con una **elección de ejemplo** —seis listas llamadas A, B, C…,
+12 bancas, todo en cero— y no con una elección de verdad. Antes se abría con
+Asunción, que era lo que correspondía cuando la herramienta calculaba esa
+elección y ninguna otra; ahora que calcula cualquiera y trae seis conjuntos de
+datos, abrir siempre en una ciudad —y encima en la capital— dejaba de ser un
+valor por defecto para pasar a ser una afirmación.
 
 Los **votos los pone quien usa la herramienta**: el archivo de datos trae todos
 los totales en cero. Esto no publica ni pronostica resultados, calcula el
 reparto de los números que uno cargue.
+
+Para tener algo que repartir sin cargar nada, «Votos al azar» sortea un
+resultado y se puede volver a tirar las veces que uno quiera. Los números son
+inventados, pero la forma no: se sortea un electorado desparejo —una o dos
+listas grandes y una cola larga—, porque con totales parejos D'Hondt se vería
+proporcional, que es justo lo que no hace. Tirando varias veces se ve siempre
+lo mismo: la lista más votada se lleva un porcentaje de bancas mayor que su
+porcentaje de votos, la cola queda afuera y la última banca se define por poco.
+Si lo que hay cargado no salió de un sorteo —los resultados reales de 2023, o
+votos puestos a mano— pregunta antes de pisarlos.
 
 Todo es editable igual: «Editar lista» cambia número, nombre, sigla y color;
 «Editar candidatos» (o «Pegar votos» en la página por candidato) reemplaza la
@@ -127,13 +146,11 @@ sitio del TSJE no siempre responde a `curl`— y se convierten con:
 
 node tools/tsje-a-json.mjs --datos ./descargas \
   --eleccion "Elecciones Municipales — Junta Municipal de Asunción" \
-  --salida datos/asuncion-junta-municipal.json \
-  --js js/datos-asuncion.js
+  --salida datos/asuncion-junta-municipal.json
 ```
 
-`--salida` escribe el JSON importable y `--js` el script que las páginas cargan
-de entrada; conviene generar los dos juntos para que no se desincronicen (hay un
-test que lo comprueba).
+Sin `--salida` el JSON sale por la salida estándar. El archivo va a `datos/` y
+se agrega al índice; desde ahí lo toma el desplegable.
 
 El conversor toma la categoría `JUN` (Junta Municipal) por defecto; con
 `--categoria INT` saca la de intendente. Descarta las entradas especiales de
@@ -349,7 +366,6 @@ og.png                              imagen de la vista previa al compartir (gene
 _headers                            cabeceras de seguridad para Cloudflare Pages
 datos/indice.json                   qué elecciones ofrece el desplegable
 js/core.js                          estado, cálculo D'Hondt, orden interno, color, formato
-js/datos-asuncion.js                candidaturas que las páginas traen cargadas (generado)
 css/base.css                        estilos compartidos
 datos/asuncion-junta-municipal.json candidaturas de Asunción (generado)
 datos/encarnacion-junta-municipal.json   candidaturas de Encarnación (generado)
@@ -384,12 +400,18 @@ contra una implementación por fuerza bruta de los mayores cocientes y en unos
 cuantos miles de casos aleatorios (que la suma de bancas cierre, que más votos
 nunca den menos bancas), además del umbral, los empates, el reordenamiento por
 voto preferente, la ida y vuelta entre las dos vistas y la lectura de JSON.
+Del sorteo de «Votos al azar» comprueba lo que tiene que valer en las 300
+tiradas: que ninguna lista quede en cero sea cual sea la cantidad, que las
+sumas cierren, que el resultado salga desparejo, que la ganadora caiga en
+cualquier posición de la boleta y que el voto preferente reordene siempre algo.
 
 `datos.test.mjs` comprueba las candidaturas generadas: que estén las 9 listas
 con sus 24 candidatos, sin nombres de relleno ni votos precargados, que los
-números de lista y las siglas no se repitan, que el JSON y el script embebido
-digan lo mismo, y que los 9 colores oficiales lleguen a 3:1 contra el fondo y
-sigan siendo distinguibles entre sí en los dos modos.
+números de lista y las siglas no se repitan, y que los 9 colores oficiales
+lleguen a 3:1 contra el fondo y sigan siendo distinguibles entre sí en los dos
+modos. También revisa la elección con la que se abre la página: que esté toda
+en cero, que no acredite ninguna fuente y que ninguna lista ni candidato pueda
+confundirse con algo real.
 
 `schema.test.mjs` valida contra el esquema todos los archivos del índice y
 prueba una veintena de casos que tiene que rechazar, para que el esquema no

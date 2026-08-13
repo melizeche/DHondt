@@ -159,8 +159,35 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-app
 .paso { font-family: var(--mono); font-size: .75rem; font-weight: 650; color: var(--accent-ink); letter-spacing: .06em; text-transform: uppercase; }
 
 .config { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.field { position: relative; }
 .field label { display: block; font-size: .78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; }
 .field .note { font-size: .72rem; color: var(--text-muted); margin-top: 4px; }
+
+/* Nota que se despliega. Es un <details> y no un title=, que en el teléfono
+ * no se puede abrir y con el teclado no se alcanza. El panel se sale de la
+ * celda —las columnas miden 150px y el texto no entra— así que va flotando
+ * por encima de lo que sigue, como cualquier globo de ayuda. */
+.field .ayuda { font-size: .72rem; color: var(--text-muted); margin-top: 4px; }
+.field .ayuda > summary { cursor: pointer; list-style: none; }
+.field .ayuda > summary::-webkit-details-marker { display: none; }
+.field .ayuda > summary::after {
+  content: "?";
+  display: inline-grid; place-items: center;
+  width: 13px; height: 13px; margin-left: 5px; vertical-align: -2px;
+  border: 1px solid var(--border-strong); border-radius: 50%;
+  font-size: .62rem; font-weight: 700; line-height: 1;
+}
+.field .ayuda > summary:hover, .field .ayuda[open] > summary { color: var(--text-secondary); }
+.field .ayuda > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.field .ayuda > div {
+  position: absolute; z-index: 20; left: 0; top: 100%; margin-top: 6px;
+  width: max(100%, 280px); max-width: 92vw;
+  background: var(--surface-1); border: 1px solid var(--border-strong);
+  border-radius: 10px; box-shadow: var(--shadow);
+  padding: 10px 12px; font-size: .76rem; line-height: 1.5; color: var(--text-secondary);
+}
+.field .ayuda > div p { margin: 0; }
+.field .ayuda > div p + p { margin-top: 8px; }
 
 /* ----------------------------------------------------------- stat tiles */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 12px; }
@@ -264,4 +291,7 @@ dialog .dlg-foot { display: flex; gap: 8px; justify-content: flex-end; padding: 
   body { background: #fff; }
   .no-print { display: none !important; }
   .card { box-shadow: none; break-inside: avoid; }
+  /* En papel no hay nada que desplegar: queda la línea, no el globo. */
+  .field .ayuda > summary::after { display: none; }
+  .field .ayuda > div { display: none; }
 }

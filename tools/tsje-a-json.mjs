@@ -45,8 +45,6 @@ Opciones:
   --bancas <n>         bancas a repartir (por defecto, el largo de la nómina más larga)
   --eleccion <texto>   nombre de la elección para el archivo de salida
   --salida <archivo>   dónde escribir el JSON (por defecto, la salida estándar)
-  --js <archivo>       además, escribe el mismo dato como script para que las
-                       páginas lo traigan cargado de entrada (js/datos-asuncion.js)
   --ciudades <archivo> lista los municipios de ubicaciones.json con su código`);
   process.exit(mensaje ? 1 : 0);
 }
@@ -200,30 +198,15 @@ const salida = {
   listas: listas,
 };
 
-// El JSON lleva la referencia al esquema para que el editor lo valide; el
-// script embebido no, porque ahí no es un documento JSON que nadie valide.
-const salidaJson = Object.assign({ "$schema": "schema.json" }, salida);
-
-const texto = JSON.stringify(salidaJson, null, 2) + "\n";
+// La referencia al esquema va primera para que el editor la encuentre al abrir
+// el archivo.
+const texto = JSON.stringify(Object.assign({ "$schema": "schema.json" }, salida), null, 2) + "\n";
 const totalCandidatos = listas.reduce(function (s, l) { return s + l.candidatos.length; }, 0);
 const resumen = `${listas.length} listas, ${totalCandidatos} candidatos, ${bancas} bancas`;
 
 if (typeof args.salida === "string") {
   writeFileSync(args.salida, texto);
   console.error(resumen + " → " + args.salida);
-} else if (typeof args.js !== "string") {
+} else {
   process.stdout.write(texto);
-}
-
-if (typeof args.js === "string") {
-  // Script clásico, no módulo: así las páginas siguen funcionando con file://,
-  // donde un import ES sería bloqueado por CORS.
-  writeFileSync(args.js,
-    "/* Generado por tools/tsje-a-json.mjs a partir de los datos del simulador\n" +
-    " * oficial del TSJE. No editar a mano: volvé a correr el conversor.\n" +
-    " *\n" +
-    " * " + resumen + "\n" +
-    " */\n" +
-    "var DATOS_ASUNCION = " + JSON.stringify(salida, null, 2) + ";\n");
-  console.error(resumen + " → " + args.js);
 }

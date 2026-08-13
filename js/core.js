@@ -20,23 +20,11 @@ const PALETA = [
   { nombre: "violeta",  claro: "#4a3aa7", oscuro: "#9085e9" },
 ];
 
-const BANCAS_ASUNCION = 24;
-
-/* Partidos realmente inscriptos ante la Justicia Electoral. Los números de
- * lista y las nóminas son de relleno y se editan desde la página. */
-const PARTIDOS_BASE = [
-  { numero: 1, partido: "Asociación Nacional Republicana – Partido Colorado", sigla: "ANR",     color: 0 },
-  { numero: 2, partido: "Partido Liberal Radical Auténtico",                  sigla: "PLRA",    color: 1 },
-  { numero: 3, partido: "Partido Patria Querida",                             sigla: "PPQ",     color: 2 },
-  { numero: 4, partido: "Partido Encuentro Nacional",                         sigla: "PEN",     color: 3 },
-  { numero: 5, partido: "Partido Hagamos",                                    sigla: "Hagamos", color: 4 },
-  { numero: 6, partido: "Partido Cruzada Nacional",                           sigla: "PCN",     color: 5 },
-  { numero: 7, partido: "Partido Democrático Progresista",                    sigla: "PDP",     color: 6 },
-  { numero: 8, partido: "Partido Yo Creo",                                    sigla: "Yo Creo", color: 7 },
-];
+const BANCAS_POR_DEFECTO = 12;
+const LISTAS_POR_DEFECTO = 6;
 
 /* Las claves ya no llevan «asuncion»: la herramienta sirve para cualquier
- * elección y la de Asunción es sólo la que viene cargada. */
+ * elección y la de Asunción es una más de las que se pueden elegir. */
 const CLAVE_ALMACEN = "dhondt-datos-v1";
 const CLAVE_TEMA = "dhondt-tema";
 const CLAVE_ELECCION = "dhondt-eleccion";
@@ -66,47 +54,201 @@ function nominaPorDefecto(cantidad) {
   return out;
 }
 
-/* Las páginas cargan js/datos-asuncion.js antes que este archivo, así que
- * arrancan con las candidaturas oficiales. Sin ese archivo — por ejemplo al
- * correr los tests con node — se cae a nóminas de relleno editables. */
-function datosPorDefecto() {
-  if (typeof DATOS_ASUNCION !== "undefined") {
-    try {
-      return normalizar(DATOS_ASUNCION);
-    } catch (e) { /* dato inservible: seguimos con el relleno */ }
-  }
-  return datosDeRelleno();
+/* Nómina de la elección de ejemplo. A propósito no dice «Candidato/a 1»: ese
+ * patrón es el que la página busca para avisar que una nómina quedó sin
+ * llenar (ver RE_RELLENO), y acá no hay nada a medio llenar. */
+function nominaDeEjemplo(cantidad, letra) {
+  const out = [];
+  for (let i = 1; i <= cantidad; i++) out.push(nuevoCandidato("Nº " + i + " de la Lista " + letra));
+  return out;
 }
 
-function datosDeRelleno() {
+/* Con qué se abre cuando no hay nada guardado ni nada importado: una elección
+ * inventada, con todo en cero.
+ *
+ * Antes acá venían las candidaturas de la Junta Municipal de Asunción, que era
+ * lo que correspondía cuando la herramienta calculaba esa elección y ninguna
+ * otra. Ahora calcula cualquiera y trae seis conjuntos de datos, así que abrir
+ * siempre en una ciudad —y encima en la capital— dejaba de ser un valor por
+ * defecto para pasar a ser una afirmación. Asunción sigue estando, en el
+ * desplegable, al lado de las demás.
+ *
+ * Las listas se llaman A, B y C: así la calculadora no dice nada de nadie
+ * hasta que alguien carga los votos. Para ver el reparto funcionando sin
+ * inventar números a mano está «Votos al azar». */
+function datosPorDefecto() {
   proximoId = 1;
+  const listas = [];
+  for (let i = 0; i < LISTAS_POR_DEFECTO; i++) {
+    const letra = String.fromCharCode(65 + i);
+    listas.push({
+      id: proximoId++,
+      numero: i + 1,
+      partido: "Lista " + letra,
+      sigla: letra,
+      color: i % PALETA.length,
+      colorHex: null,
+      votos: 0,
+      soloLista: 0,
+      abierta: false,
+      candidatos: nominaDeEjemplo(BANCAS_POR_DEFECTO, letra),
+    });
+  }
   return {
-    eleccion: "Elecciones Municipales — Asunción",
-    bancas: BANCAS_ASUNCION,
+    eleccion: "Elección de ejemplo",
+    fuente: null,
+    bancas: BANCAS_POR_DEFECTO,
     umbral: 0,
-    modo: "bloqueada",
+    // Es como se vota hoy en Paraguay desde la Ley 6318/2019, y deja ver de
+    // entrada lo que hace la página por candidato.
+    modo: "desbloqueada",
     blancos: 0,
     nulos: 0,
-    listas: PARTIDOS_BASE.map(function (p) {
-      return {
-        id: proximoId++,
-        numero: p.numero,
-        partido: p.partido,
-        sigla: p.sigla,
-        color: p.color,
-        votos: 0,
-        soloLista: 0,
-        abierta: false,
-        candidatos: nominaPorDefecto(BANCAS_ASUNCION),
-      };
-    }),
+    listas: listas,
   };
 }
 
-/* Votos ilustrativos para probar la herramienta. No son resultados reales ni
- * pronósticos: son números inventados para que el reparto tenga algo que
- * repartir. Se aplican por posición a las listas que estén cargadas. */
-const VOTOS_EJEMPLO = [95000, 62000, 41000, 3000, 5000, 12000, 2000, 1500, 900];
+/* ============================================================ votos al azar
+ * Sortea un resultado para tener algo que repartir. No son datos reales ni un
+ * pronóstico: son números inventados.
+ *
+ * Lo que importa no son los números sino la forma. Con totales parejos todas
+ * las listas saldrían parecidas y el reparto se vería proporcional, que es
+ * justo lo que D'Hondt no hace; la gracia de volver a tirar es ver una y otra
+ * vez lo mismo: que la lista grande se lleva más bancas que votos, que la
+ * cola queda afuera y que la última banca se define por poco. Un electorado
+ * real es desparejo, así que los totales salen de un perfil que cae de una
+ * lista a la siguiente y recién después se reparte al azar entre ellas, para
+ * que no gane siempre la primera de la boleta.
+ * ================================================================== */
+
+/* Cuánto conserva cada escalón del anterior. Entre listas la caída es fuerte
+ * —de la primera a la segunda puede haber menos de la mitad—; entre los
+ * candidatos de una misma lista es suave, para que el voto preferente no se
+ * concentre en dos nombres y el resto de la nómina quede en cero. */
+const CAIDA_LISTAS = [0.45, 0.85];
+const CAIDA_PREFERENTES = [0.70, 0.95];
+/* Votos válidos por banca en juego: Asunción reparte 24 con unos 250.000. */
+const VOTOS_POR_BANCA = [6000, 18000];
+/* Parte del total de una lista que la votó sin nombrar a ningún candidato. */
+const CUOTA_SOLO_LISTA = [0.30, 0.60];
+/* Blancos y nulos sobre los válidos. En el Senado 2023 fueron 4,2 % y 0,5 %. */
+const CUOTA_BLANCOS = [0.015, 0.045];
+const CUOTA_NULOS = [0.003, 0.012];
+/* Dónde deja de caer la cola, como fracción de la lista más votada. Sin este
+ * piso, con 18 listas la última queda en cero; con un piso fijo, las últimas
+ * quedan todas en el mismo número, que se nota inventado. Por eso el piso se
+ * sortea para cada una. */
+const PISO_DE_LA_COLA = [0.0005, 0.004];
+
+function azarEntre(rango, azar) {
+  return rango[0] + azar() * (rango[1] - rango[0]);
+}
+
+function mezclar(arreglo, azar) {
+  for (let i = arreglo.length - 1; i > 0; i--) {
+    const j = Math.floor(azar() * (i + 1));
+    const t = arreglo[i]; arreglo[i] = arreglo[j]; arreglo[j] = t;
+  }
+  return arreglo;
+}
+
+/* Pesos que caen de uno al siguiente y quedan mezclados: el perfil es
+ * desparejo, pero a quién le toca cada lugar lo decide el sorteo. */
+function perfilDesparejo(cantidad, caida, piso, azar) {
+  const pesos = [];
+  let peso = 1;
+  for (let i = 0; i < cantidad; i++) {
+    pesos.push(piso ? Math.max(peso, azarEntre(piso, azar)) : peso);
+    peso *= azarEntre(caida, azar);
+  }
+  return mezclar(pesos, azar);
+}
+
+function repartirPorPesos(total, pesos, piso) {
+  const suma = pesos.reduce(function (a, b) { return a + b; }, 0);
+  return pesos.map(function (p) {
+    return Math.max(piso || 0, Math.round((total * p) / suma));
+  });
+}
+
+/* El voto preferente sólo se nota si el orden cambia. Si el más votado cayera
+ * justo en el primero de la nómina no habría reordenamiento que mostrar, así
+ * que en ese caso los dos primeros se permutan entre sí, y el perfil sorteado
+ * queda igual salvo por ese cambio de lugar. La comparación es >= porque un
+ * empate de preferentes lo resuelve la nómina (ver ordenInterno), y ahí el
+ * primero volvería a ganar. */
+function destronarAlPrimero(candidatos, azar) {
+  if (candidatos.length < 2) return;
+  let mayor = 1;
+  for (let i = 2; i < candidatos.length; i++) {
+    if (candidatos[i].pref > candidatos[mayor].pref) mayor = i;
+  }
+  if (candidatos[mayor].pref === 0) return;          // nadie recibió preferentes
+  if (candidatos[0].pref < candidatos[mayor].pref) return;
+  const t = candidatos[0].pref;
+  candidatos[0].pref = candidatos[mayor].pref;
+  candidatos[mayor].pref = t;
+  // Quedaron iguales: hace falta un voto de diferencia para romper el empate.
+  if (candidatos[mayor].pref === candidatos[0].pref) candidatos[mayor].pref++;
+}
+
+/* Reparte el total de una lista entre voto de sola lista y preferentes. Con la
+ * lista bloqueada no hay preferentes que sortear: todo es voto de lista. */
+function sortearLista(lista, total, desbloqueada, azar) {
+  const cant = lista.candidatos.length;
+  if (!desbloqueada || !cant) {
+    lista.candidatos.forEach(function (c) { c.pref = 0; });
+    lista.soloLista = total;
+    return recalcularTotal(lista);
+  }
+
+  const aRepartir = Math.round(total * (1 - azarEntre(CUOTA_SOLO_LISTA, azar)));
+  // Sin piso: que el final de la nómina no saque ni un voto preferente es
+  // exactamente lo que pasa en una elección de verdad.
+  const pesos = perfilDesparejo(cant, CAIDA_PREFERENTES, null, azar);
+  const votos = repartirPorPesos(aRepartir, pesos, 0);
+  lista.candidatos.forEach(function (c, j) { c.pref = votos[j]; });
+  destronarAlPrimero(lista.candidatos, azar);
+
+  // El total sorteado es una intención: lo que manda es la suma, así que el
+  // resto —lo que no fue a ningún candidato— se cuenta como voto de lista.
+  lista.soloLista = Math.max(0, total - sumaPreferentes(lista));
+  return recalcularTotal(lista);
+}
+
+/* Sortea votos para todas las listas de un estado, en su lugar. `azar` existe
+ * para las pruebas: con un generador propio el sorteo es repetible. */
+function sortearVotos(destino, azar) {
+  azar = azar || Math.random;
+  const listas = destino.listas || [];
+  if (!listas.length) return destino;
+
+  const validos = Math.round(destino.bancas * azarEntre(VOTOS_POR_BANCA, azar));
+  const pesos = perfilDesparejo(listas.length, CAIDA_LISTAS, PISO_DE_LA_COLA, azar);
+  const totales = repartirPorPesos(validos, pesos, 1);
+  const desbloqueada = destino.modo === "desbloqueada";
+
+  listas.forEach(function (lista, i) { sortearLista(lista, totales[i], desbloqueada, azar); });
+
+  const suma = listas.reduce(function (s, l) { return s + l.votos; }, 0);
+  destino.blancos = Math.round(suma * azarEntre(CUOTA_BLANCOS, azar));
+  destino.nulos = Math.round(suma * azarEntre(CUOTA_NULOS, azar));
+  return destino;
+}
+
+/* ¿Los votos que hay en pantalla salen de un sorteo? Volver a tirar es la
+ * gracia del botón, así que no se pregunta dos veces; pisar los votos que
+ * vinieron con la elección —los reales de 2023, por ejemplo— o los que cargó
+ * alguien a mano sí tiene que costar un clic más. No se guarda en el
+ * navegador: después de recargar se vuelve a preguntar una vez, que es el
+ * lado seguro de equivocarse. */
+let votosSorteados = false;
+
+function confirmarSorteo() {
+  if (votosSorteados || !hayVotosCargados()) return true;
+  return confirm("Se reemplazan los votos cargados por un sorteo. ¿Continuar?");
+}
 
 /* ================================================================== estado */
 let estado = null;
@@ -143,7 +285,7 @@ function normalizar(bruto) {
   if (!listasBrutas.length) throw new Error("el archivo no contiene listas");
 
   proximoId = 1;
-  const bancas = clampInt(bruto.bancas, 1, 99, BANCAS_ASUNCION);
+  const bancas = clampInt(bruto.bancas, 1, 99, BANCAS_POR_DEFECTO);
 
   const listas = listasBrutas.map(function (l, i) {
     const crudos = Array.isArray(l.candidatos) ? l.candidatos : [];
@@ -508,6 +650,21 @@ function colorDe(lista) {
   return modoOscuro() ? p.oscuro : p.claro;
 }
 
+/* Las notas desplegables se cierran al tocar afuera o con Escape, como
+ * cualquier globo de ayuda: son un <details> y no un `title=` porque en el
+ * teléfono el title no se puede abrir y con el teclado no se alcanza. */
+function conectarAyudas() {
+  function cerrar(salvo) {
+    document.querySelectorAll("details.ayuda[open]").forEach(function (d) {
+      if (!salvo || !d.contains(salvo)) d.open = false;
+    });
+  }
+  document.addEventListener("click", function (ev) { cerrar(ev.target); });
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape") cerrar(null);
+  });
+}
+
 /* Conecta el botón de tema y avisa a la página cuando cambia, porque los
  * colores de las listas se calculan en JS y hay que volver a dibujarlos. */
 function inicializarTema(alCambiar) {
@@ -755,6 +912,7 @@ function cargarEleccion(archivo) {
     })
     .then(function (bruto) {
       estado = normalizar(bruto);
+      votosSorteados = false;   // lo que traiga el archivo no es un sorteo
       recordarEleccion(archivo);
       guardar();
     });
@@ -772,6 +930,7 @@ function conectarImportacion(idBoton, idInput, alImportar) {
     lector.onload = function () {
       try {
         estado = normalizar(JSON.parse(String(lector.result)));
+        votosSorteados = false;
         recordarEleccion(null);   // ya no corresponde a ningún archivo del índice
         const sel = document.getElementById("cfg-eleccion");
         if (sel) sel.value = VALOR_SIN_ARCHIVO;
@@ -791,7 +950,7 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     calcularDHondt, ordenInterno, detalleOrden, sumaPreferentes,
     recalcularTotal, reconciliarSoloLista, normalizar, clampInt, clampNum,
-    datosPorDefecto, PALETA, normalizarHex, ajustarParaFondo, contraste,
+    datosPorDefecto, sortearVotos, PALETA, normalizarHex, ajustarParaFondo, contraste,
     FONDO_CLARO, FONDO_OSCURO, CONTRASTE_MINIMO,
     distanciaColor, seDistinguen, SEPARACION_MINIMA,
   };

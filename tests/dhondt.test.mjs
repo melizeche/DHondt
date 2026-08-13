@@ -5,7 +5,7 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const {
   calcularDHondt, ordenInterno, detalleOrden, sumaPreferentes,
-  recalcularTotal, reconciliarSoloLista, normalizar,
+  recalcularTotal, reconciliarSoloLista, normalizar, sortearVotos,
 } = require("../js/core.js");
 
 let fallos = 0;
@@ -279,7 +279,7 @@ console.log("\nLectura de archivos JSON");
   check("candidatos como texto", e.listas[0].candidatos.map(function (c) { return c.nombre; }), ["Ana", "Bruno"]);
   check("preferentes por defecto en cero", e.listas[0].candidatos[0].pref, 0);
   check("sin «soloLista» se deduce del total", e.listas[0].soloLista, 900);
-  check("bancas por defecto: las 24 de Asunción", e.bancas, 24);
+  check("sin «bancas» se usa el valor por defecto", e.bancas, 12);
 }
 {
   const e = normalizar({
@@ -301,6 +301,134 @@ console.log("\nLectura de archivos JSON");
   let error = null;
   try { normalizar({ listas: [] }); } catch (e) { error = e.message; }
   check("un archivo sin listas se rechaza", error !== null, true);
+}
+
+/* ====================================================== sorteo de votos
+ * El sorteo se recorre con un generador propio en lugar de Math.random: así
+ * cada tirada es repetible y un fallo se puede volver a producir con su
+ * semilla. Las propiedades se prueban sobre muchas tiradas, porque lo que
+ * tiene que valer no es un número sino que valga siempre. */
+console.log("\nSorteo de votos");
+
+function generador(semilla) {
+  // mulberry32: alcanza de sobra para sortear votos y cabe en cinco líneas.
+  let a = semilla >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function estadoDe(listas, bancas, modo) {
+  return normalizar({
+    bancas: bancas, umbral: 0, modo: modo || "desbloqueada",
+    listas: Array.from({ length: listas }, function (_, i) {
+      return {
+        partido: "Lista " + (i + 1), sigla: "L" + (i + 1),
+        candidatos: Array.from({ length: bancas }, function (_, j) { return "Candidato " + (j + 1); }),
+      };
+    }),
+  });
+}
+
+const TIRADAS = 300;
+
+/* Recorre TIRADAS sorteos y cuenta en cuántos falla la propiedad. */
+function enTodas(nombre, armar, propiedad) {
+  let malas = 0, primera = null;
+  for (let s = 1; s <= TIRADAS; s++) {
+    const e = armar();
+    sortearVotos(e, generador(s));
+    if (!propiedad(e)) { malas++; if (primera === null) primera = s; }
+  }
+  check(nombre + (primera === null ? "" : ` (falla con la semilla ${primera})`), malas, 0);
+}
+
+// El arreglo fijo de antes tenía nueve valores y se aplicaba por posición: con
+// las 18 listas del Senado, la mitad se quedaba en cero.
+[3, 9, 18, 40].forEach(function (cuantas) {
+  enTodas(cuantas + " listas: ninguna queda sin votos",
+    function () { return estadoDe(cuantas, 24); },
+    function (e) { return e.listas.every(function (l) { return l.votos > 0; }); });
+});
+
+enTodas("la suma cierra: sola lista + preferentes = total de la lista",
+  function () { return estadoDe(9, 24); },
+  function (e) {
+    return e.listas.every(function (l) { return l.soloLista + sumaPreferentes(l) === l.votos; });
+  });
+
+/* Lo que hace didáctico al sorteo: que el electorado salga desparejo. Con
+ * nueve listas y una caída de 0,85 como techo, la más chica no puede pasar del
+ * 27 % de la más grande; se exige bastante menos que eso para no atarse a la
+ * constante. */
+enTodas("el resultado sale desparejo: la más votada saca 3 veces la última",
+  function () { return estadoDe(9, 24); },
+  function (e) {
+    const votos = e.listas.map(function (l) { return l.votos; });
+    return Math.max.apply(null, votos) >= 3 * Math.min.apply(null, votos);
+  });
+
+{
+  // Que no gane siempre la primera de la boleta no se puede pedir tirada por
+  // tirada —alguna vez le toca—, así que se mira el conjunto.
+  const ganadoras = new Set();
+  for (let s = 1; s <= TIRADAS; s++) {
+    const e = estadoDe(9, 24);
+    sortearVotos(e, generador(s));
+    let mejor = 0;
+    e.listas.forEach(function (l, i) { if (l.votos > e.listas[mejor].votos) mejor = i; });
+    ganadoras.add(mejor);
+  }
+  check("la lista más votada cae en cualquier posición de la boleta", ganadoras.size, 9);
+}
+
+enTodas("el voto preferente reordena: el más votado no es el primero de la nómina",
+  function () { return estadoDe(9, 24); },
+  function (e) {
+    return e.listas.every(function (l) {
+      return ordenInterno(l, "desbloqueada")[0] !== 0;
+    });
+  });
+
+enTodas("con la lista bloqueada no se sortean preferentes",
+  function () { return estadoDe(9, 24, "bloqueada"); },
+  function (e) {
+    return e.listas.every(function (l) { return sumaPreferentes(l) === 0 && l.soloLista === l.votos; });
+  });
+
+enTodas("blancos y nulos quedan en proporciones creíbles",
+  function () { return estadoDe(9, 24); },
+  function (e) {
+    const validos = e.listas.reduce(function (s, l) { return s + l.votos; }, 0);
+    return e.nulos < e.blancos && e.blancos < validos * 0.05 && e.nulos > 0;
+  });
+
+enTodas("el reparto sobre un sorteo entrega todas las bancas",
+  function () { return estadoDe(9, 24); },
+  function (e) {
+    const r = calcularDHondt(e.listas, e.bancas, e.umbral);
+    let dadas = 0;
+    r.ganadas.forEach(function (v) { dadas += v; });
+    return dadas === e.bancas;
+  });
+
+{
+  // Lo mismo dos veces con la misma semilla tiene que dar lo mismo: si no, hay
+  // un Math.random escondido y las pruebas de arriba no prueban nada.
+  const a = estadoDe(9, 24), b = estadoDe(9, 24);
+  sortearVotos(a, generador(7));
+  sortearVotos(b, generador(7));
+  check("misma semilla, mismo sorteo",
+    a.listas.map(function (l) { return l.votos; }),
+    b.listas.map(function (l) { return l.votos; }));
+  const c = estadoDe(9, 24);
+  sortearVotos(c, generador(8));
+  check("otra semilla, otro sorteo",
+    JSON.stringify(a.listas.map(function (l) { return l.votos; })) !==
+    JSON.stringify(c.listas.map(function (l) { return l.votos; })), true);
 }
 
 console.log(fallos === 0 ? "\nTodo en orden.\n" : `\n${fallos} fallo(s).\n`);

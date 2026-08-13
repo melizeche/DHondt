@@ -1,13 +1,14 @@
 /* Verifica los datos generados desde el simulador del TSJE:
  *   node tests/datos.test.mjs
- * Comprueba que el JSON importable y el script que las páginas cargan de
- * entrada digan lo mismo, y que las nóminas estén completas y sin relleno. */
+ * Comprueba que las nóminas estén completas y sin relleno, que el reparto de
+ * una elección real dé lo que dio, y que la elección con la que se abre la
+ * página no diga nada de ninguna elección de verdad. */
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 
 const require = createRequire(import.meta.url);
-const { normalizar, calcularDHondt, normalizarHex, ajustarParaFondo, contraste,
-        FONDO_CLARO, FONDO_OSCURO, CONTRASTE_MINIMO } = require("../js/core.js");
+const { normalizar, calcularDHondt, datosPorDefecto, normalizarHex, ajustarParaFondo,
+        contraste, FONDO_CLARO, FONDO_OSCURO, CONTRASTE_MINIMO } = require("../js/core.js");
 
 let fallos = 0;
 function check(nombre, obtenido, esperado) {
@@ -121,19 +122,41 @@ console.log("\nSenadores 2023 — resultados oficiales");
   check("y la primera afuera fue el sexto cociente del PCN", Math.round(r.siguiente.cociente), 55324);
 }
 
-console.log("\nEl script que cargan las páginas dice lo mismo que el JSON");
+/* Con qué se abre la página en una ventana nueva, sin nada guardado. Es una
+ * elección inventada y en cero a propósito: la herramienta no arranca diciendo
+ * nada de ninguna elección real ni de ninguna ciudad en particular. */
+console.log("\nLa elección con la que se abre");
+{
+  const d = datosPorDefecto();
+  const cands = d.listas.flatMap(function (l) { return l.candidatos; });
 
-const js = readFileSync(new URL("../js/datos-asuncion.js", import.meta.url), "utf8");
-const embebido = JSON.parse(js.slice(js.indexOf("{"), js.lastIndexOf("}") + 1));
-// El JSON lleva `$schema` para el editor; el script embebido no lo necesita.
-const sinSchema = Object.assign({}, datos);
-delete sinSchema.$schema;
-check("mismo contenido que datos/asuncion-junta-municipal.json", embebido, sinSchema);
-check("el JSON referencia el esquema", datos.$schema, "schema.json");
-check("el script embebido no arrastra esa referencia", "$schema" in embebido, false);
+  check("6 listas", d.listas.length, 6);
+  check("12 bancas", d.bancas, 12);
+  check("nóminas completas", cands.length, 72);
+  check("todo en cero",
+    d.listas.filter(function (l) { return l.votos !== 0 || l.soloLista !== 0; }).length +
+    cands.filter(function (c) { return c.pref !== 0; }).length + d.blancos + d.nulos, 0);
+
+  // Ninguna lista, sigla ni candidato puede coincidir con algo de verdad.
+  check("listas sin nombre de partido real",
+    d.listas.map(function (l) { return l.partido; }),
+    ["Lista A", "Lista B", "Lista C", "Lista D", "Lista E", "Lista F"]);
+  check("no acredita ninguna fuente", d.fuente, null);
+  check("no dice ser ninguna elección real", d.eleccion, "Elección de ejemplo");
+  check("no usa el color oficial de ninguna boleta",
+    d.listas.filter(function (l) { return l.colorHex !== null; }).length, 0);
+
+  // El aviso de nóminas de relleno es para las que quedaron sin llenar, no
+  // para ésta, que es de ejemplo entera y a la vista.
+  check("no dispara el aviso de nombres de relleno",
+    cands.filter(function (c) { return /^Candidato\/a \d+$/.test(c.nombre); }).length, 0);
+
+  check("normalizar la deja igual", normalizar(d).listas.length, d.listas.length);
+}
 
 console.log("\nLa app los lee sin perder nada");
 
+check("el JSON referencia el esquema", datos.$schema, "schema.json");
 const estado = normalizar(datos);
 check("normalizar conserva las 9 listas", estado.listas.length, 9);
 check("normalizar conserva el color oficial",
