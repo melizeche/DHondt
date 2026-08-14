@@ -1,4 +1,11 @@
-/* Núcleo compartido por index.html y candidatos.html: paleta, estado, cálculo
+/* Calculadora D'Hondt — reparto de bancas por el método D'Hondt.
+ * Copyright (C) 2026 melizeche
+ *
+ * Software libre bajo la Licencia Pública General Affero de GNU, versión 3 o
+ * posterior, sin ninguna garantía. El texto completo está en LICENSE y en
+ * <https://www.gnu.org/licenses/>.
+ *
+ * Núcleo compartido por index.html y candidatos.html: paleta, estado, cálculo
  * D'Hondt y utilidades de formato. Se carga como script clásico (sin módulos)
  * para que las páginas también funcionen abiertas con file://. */
 "use strict";

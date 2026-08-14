@@ -362,6 +362,7 @@ index.html                          página por lista
 candidatos.html                     página por candidato
 favicon.svg                         ícono
 og.png                              imagen de la vista previa al compartir (generada)
+LICENSE                             GNU AGPL versión 3
 .nojekyll                           que GitHub Pages publique los archivos tal cual
 _headers                            cabeceras de seguridad para Cloudflare Pages
 datos/indice.json                   qué elecciones ofrece el desplegable
@@ -507,6 +508,27 @@ Cualquier hosting estático sirve igual, sin cambios: Netlify, Vercel, Firebase
 Hosting o un bucket de Cloud Storage o S3. Nada de esto tiene servidor: los
 datos que se cargan quedan en el `localStorage` del navegador y no se envían a
 ningún lado.
+
+## Licencia
+
+Copyright (C) 2026 melizeche.
+
+Software libre bajo la [Licencia Pública General Affero de GNU, versión 3](LICENSE)
+o posterior (AGPL-3.0-or-later), sin ninguna garantía. Se puede usar, estudiar,
+copiar y modificar; lo que se distribuya a partir de esto tiene que quedar
+también bajo la AGPL, con su código disponible.
+
+Lo que agrega la AGPL sobre la GPL común es la **sección 13**: si alguien corre
+una versión modificada como sitio web, tiene que ofrecerles el código a las
+personas que la usan, aunque nunca les entregue un archivo. Un calculador
+electoral se usa por la red y casi nunca se descarga, así que es justamente el
+caso que esa cláusula cubre: cualquiera que lo publique cambiado le debe el
+código a quien lo abra. Por eso las dos páginas llevan al pie un enlace al
+repositorio, que es la forma que la propia licencia sugiere de cumplirlo.
+
+Las candidaturas y los resultados de `datos/` son información pública del
+[TSJE](https://tsje.gov.py/) y no son obra de este proyecto: la licencia cubre
+el programa, no los datos oficiales que convierte.
 
 ---
 
