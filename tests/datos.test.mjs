@@ -7,8 +7,8 @@ import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 
 const require = createRequire(import.meta.url);
-const { normalizar, calcularDHondt, datosPorDefecto, normalizarHex, ajustarParaFondo,
-        contraste, FONDO_CLARO, FONDO_OSCURO, CONTRASTE_MINIMO } = require("../js/core.js");
+const { normalizar, calcularDHondt, detalleOrden, datosPorDefecto, normalizarHex,
+        ajustarParaFondo, contraste, FONDO_CLARO, FONDO_OSCURO, CONTRASTE_MINIMO } = require("../js/core.js");
 
 let fallos = 0;
 function check(nombre, obtenido, esperado) {
@@ -120,6 +120,41 @@ console.log("\nSenadores 2023 — resultados oficiales");
   // La banca 45 se define por poco más de mil votos.
   check("la última banca fue para Yo Creo", Math.round(r.ultima.cociente), 56386);
   check("y la primera afuera fue el sexto cociente del PCN", Math.round(r.siguiente.cociente), 55324);
+}
+
+/* El ejemplo de Star Wars está armado para mostrar una cosa concreta: que las
+ * bancas las gana la lista y no el candidato, así que con la lista bien votada
+ * entran candidatos con un solo voto preferente. Si el cálculo cambiara y eso
+ * dejara de pasar, el ejemplo dejaría de enseñar lo que el README dice que
+ * enseña, y nadie lo notaría mirando el archivo. */
+console.log("\nSenado Galáctico — electos con un solo voto");
+{
+  const g = leer("ejemplo-star-wars.json");
+  const e = normalizar(g);
+  const r = calcularDHondt(e.listas, e.bancas, e.umbral);
+  const imperio = e.listas.find(function (l) { return l.sigla === "Imperio"; });
+  const ganadas = r.ganadas.get(imperio.id);
+  const orden = detalleOrden(imperio, "desbloqueada", ganadas);
+  const electos = orden.filter(function (d) { return d.electo; });
+
+  check("cada lista: los preferentes suman su total",
+    e.listas.filter(function (l) {
+      return l.soloLista + l.candidatos.reduce(function (a, c) { return a + c.pref; }, 0) !== l.votos;
+    }).length, 0);
+  check("el Imperio gana 5 bancas con 452.000 votos", [imperio.votos, ganadas], [452000, 5]);
+  check("los 5 electos", electos.map(function (d) { return d.nombre; }), [
+    "Darth Vader", "Sheev Palpatine",
+    "Stormtrooper TK-421", "Stormtrooper TK-422", "Stormtrooper TD-110",
+  ]);
+  // Lo que hace el ejemplo: tres bancas para candidatos con un voto.
+  check("tres de esas bancas se llenan con un voto preferente cada una",
+    electos.filter(function (d) { return d.pref === 1; }).length, 3);
+  check("y el voto preferente igual da vuelta a los dos primeros",
+    [electos[0].posOriginal, electos[1].posOriginal], [2, 1]);
+  // Los stormtroopers empatan en 1: el Artículo 258 resuelve a favor del orden
+  // que propuso el partido, así que entran los tres primeros de la nómina.
+  check("entre los que empatan en un voto, manda el orden de la nómina",
+    electos.slice(2).map(function (d) { return d.posOriginal; }), [3, 4, 5]);
 }
 
 /* Con qué se abre la página en una ventana nueva, sin nada guardado. Es una

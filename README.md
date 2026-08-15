@@ -286,12 +286,23 @@ Hay dos ejemplos para importar:
 
 - [`datos/ejemplo.json`](datos/ejemplo.json) — mínimo, para ver el formato.
 - [`datos/ejemplo-star-wars.json`](datos/ejemplo-star-wars.json) — 3 listas,
-  10 bancas y voto preferente. Sirve para probar la herramienta con algo chico:
-  el Imperio saca 5 bancas, la Rebelión 4 y los Separatistas 1, y el voto
-  preferente da vuelta las dos listas grandes (Vader pasa a Palpatine, Luke a
-  Leia) sin que ninguno de los cuatro se quede afuera. Mon Mothma cae del
-  segundo lugar al cuarto y entra por la última banca; Jyn Erso queda primera
-  suplente.
+  10 bancas y voto preferente. El Imperio saca 5 bancas, la Rebelión 4 y los
+  Separatistas 1.
+
+  Está armado para mostrar lo que más cuesta creer del voto preferente: **las
+  bancas las gana la lista, no el candidato**. En el Imperio sólo dos nombres
+  juntaron votos —Vader 96.000 y Palpatine 63.000, y Vader pasa a Palpatine
+  aunque el partido lo puso segundo—; los otros diez son stormtroopers con **un
+  voto cada uno**. Pero los 452.000 votos de la lista alcanzan para 5 bancas, y
+  después de Vader y Palpatine quedan tres para llenar: entran TK-421, TK-422 y
+  TD-110, con un voto cada uno. Como empatan entre sí, el orden lo decide la
+  nómina del partido, que es lo que manda el Artículo 258 para los empates de
+  preferencias.
+
+  La Rebelión queda de contraste, con votos repartidos como en una lista
+  normal: ahí el voto preferente sí reordena de verdad —Luke pasa a Leia, Mon
+  Mothma cae del segundo lugar al cuarto y entra por la última banca, Jyn Erso
+  queda primera suplente—.
 
 ## Cómo se calcula
 
@@ -374,7 +385,7 @@ datos/ciudad-del-este-junta-municipal.json  candidaturas de Ciudad del Este (gen
 datos/senadores-2023.json           resultados reales de los Senadores 2023 (generado)
 datos/schema.json                   JSON Schema del formato
 datos/ejemplo.json                  ejemplo mínimo del formato
-datos/ejemplo-star-wars.json        ejemplo chico: 3 listas, 10 bancas, voto preferente
+datos/ejemplo-star-wars.json        ejemplo chico: electos con un solo voto preferente
 tools/tsje-a-json.mjs               conversor de las candidaturas del TSJE
 tools/pdf-resultados-a-json.py      conversor de los PDF de resultados oficiales
 tests/dhondt.test.mjs               cálculo

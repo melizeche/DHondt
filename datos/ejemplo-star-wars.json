@@ -37,20 +37,20 @@
       "color": 1,
       "colorHex": "#2a78d6",
       "votos": 452000,
-      "soloLista": 292000,
+      "soloLista": 292990,
       "candidatos": [
-        { "nombre": "Sheev Palpatine", "pref": 52000 },
-        { "nombre": "Darth Vader", "pref": 61500 },
-        { "nombre": "Wilhuff Tarkin", "pref": 18300 },
-        { "nombre": "Gran Almirante Thrawn", "pref": 14200 },
-        { "nombre": "Orson Krennic", "pref": 4100 },
-        { "nombre": "Almirante Piett", "pref": 3300 },
-        { "nombre": "General Veers", "pref": 2200 },
-        { "nombre": "Almirante Ozzel", "pref": 900 },
-        { "nombre": "Moff Jerjerrod", "pref": 1100 },
-        { "nombre": "Almirante Motti", "pref": 800 },
-        { "nombre": "Mas Amedda", "pref": 1000 },
-        { "nombre": "Ysanne Isard", "pref": 600 }
+        { "nombre": "Sheev Palpatine", "pref": 63000 },
+        { "nombre": "Darth Vader", "pref": 96000 },
+        { "nombre": "Stormtrooper TK-421", "pref": 1 },
+        { "nombre": "Stormtrooper TK-422", "pref": 1 },
+        { "nombre": "Stormtrooper TD-110", "pref": 1 },
+        { "nombre": "Stormtrooper FN-2187", "pref": 1 },
+        { "nombre": "Stormtrooper FN-2199", "pref": 1 },
+        { "nombre": "Stormtrooper TK-819", "pref": 1 },
+        { "nombre": "Stormtrooper TD-4445", "pref": 1 },
+        { "nombre": "Stormtrooper FN-2003", "pref": 1 },
+        { "nombre": "Stormtrooper TK-1147", "pref": 1 },
+        { "nombre": "Stormtrooper TD-9091", "pref": 1 }
       ]
     },
     {

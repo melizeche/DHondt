@@ -23,7 +23,7 @@
     {
       "archivo": "ejemplo-star-wars.json",
       "nombre": "Senado Galáctico (ejemplo)",
-      "detalle": "3 listas · 10 bancas · voto preferente"
+      "detalle": "3 listas · 10 bancas · candidatos electos con un solo voto preferente"
     },
     {
       "archivo": "ejemplo.json",
