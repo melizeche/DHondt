@@ -7,3 +7,10 @@
   # SAMEORIGIN y no DENY: así la calculadora se puede embeber en un iframe
   # desde el mismo sitio si alguna vez hace falta.
   X-Frame-Options: SAMEORIGIN
+  # Cloudflare agrega «Access-Control-Allow-Origin: *» por su cuenta. Sacarlo
+  # no esconde nada —CORS es cosa del navegador, y con curl estos archivos se
+  # bajan igual—, pero es un permiso que no pedimos: la página trae todo de su
+  # mismo origen y ahí esta cabecera ni se consulta. Quien quiera los datos
+  # tiene el repositorio. Limitarla al propio dominio, en cambio, sería puro
+  # gesto: una petición del mismo origen no la mira.
+  ! Access-Control-Allow-Origin

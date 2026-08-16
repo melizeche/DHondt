@@ -485,6 +485,21 @@ abierto.
 `_headers` es de Cloudflare (Netlify usa el mismo formato) y agrega unas
 cabeceras de seguridad. GitHub Pages lo ignora, así que no molesta.
 
+También saca una que Cloudflare pone sola: `Access-Control-Allow-Origin: *`, que
+deja a cualquier sitio leer estos archivos desde su propio JavaScript. Quitarla
+no esconde nada —CORS lo hace cumplir el navegador, y con `curl` los archivos se
+bajan igual—, pero es un permiso que el sitio no necesita: las dos páginas traen
+todo de su mismo origen, y una petición del mismo origen ni consulta esa
+cabecera. Por eso mismo no tendría sentido «restringirla» al propio dominio: no
+cambiaría nada para nadie. Los datos siguen disponibles donde corresponde, que
+es este repositorio.
+
+Se puede comprobar cómo quedó desplegado:
+
+```sh
+curl -sSI https://bancas.melizeche.com/datos/indice.json
+```
+
 ### Vista previa al compartir
 
 Las dos páginas traen etiquetas Open Graph y Twitter Card, así que un enlace
