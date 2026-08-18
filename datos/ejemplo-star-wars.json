@@ -12,7 +12,7 @@
       "partido": "Alianza para Restaurar la República",
       "sigla": "Rebelión",
       "color": 2,
-      "colorHex": "#eb6834",
+      "colorHex": "#2a78d6",
       "votos": 318000,
       "soloLista": 198000,
       "candidatos": [
@@ -35,7 +35,7 @@
       "partido": "Imperio Galáctico",
       "sigla": "Imperio",
       "color": 1,
-      "colorHex": "#2a78d6",
+      "colorHex": "#eb6834",
       "votos": 452000,
       "soloLista": 292990,
       "candidatos": [
