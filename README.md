@@ -374,6 +374,7 @@ candidatos.html                     página por candidato
 favicon.svg                         ícono
 og.png                              imagen de la vista previa al compartir (generada)
 LICENSE                             GNU AGPL versión 3
+CLAUDE.md                           lo que conviene saber antes de tocar el código
 .nojekyll                           que GitHub Pages publique los archivos tal cual
 _headers                            cabeceras de seguridad para Cloudflare Pages
 datos/indice.json                   qué elecciones ofrece el desplegable
@@ -388,6 +389,7 @@ datos/ejemplo.json                  ejemplo mínimo del formato
 datos/ejemplo-star-wars.json        ejemplo chico: electos con un solo voto preferente
 tools/tsje-a-json.mjs               conversor de las candidaturas del TSJE
 tools/pdf-resultados-a-json.py      conversor de los PDF de resultados oficiales
+tools/og.mjs                        genera og.png con un navegador headless
 tests/dhondt.test.mjs               cálculo
 tests/datos.test.mjs                datos generados
 tests/schema.test.mjs               los datos contra el esquema
