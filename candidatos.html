@@ -117,11 +117,11 @@
         <div>
           <p>El Artículo 258 reparte entre todas las listas que sacaron votos: no hay
             un mínimo que superar para entrar al reparto.</p>
-          <p>Otros países que usan D'Hondt sí lo tienen —España pide 3 % de los votos
+          <p>Otros países que usan D'Hondt sí lo tienen: España pide 3 % de los votos
             válidos de la circunscripción, Argentina 3 % del padrón del distrito,
-            Polonia 5 %—. El campo está para probar qué pasaría acá con una barrera
-            así: subilo y mirá adónde van a parar las bancas de las listas que quedan
-            afuera.</p>
+            Polonia 5 %. El campo está para probar qué pasaría acá con una barrera
+            así. Subilo y mirá adónde van a parar las bancas de las listas que
+            quedan afuera.</p>
         </div>
       </details>
     </div>
@@ -415,7 +415,7 @@ function renderListas(res) {
         el("span", { class: "desglose", text: n(lista.soloLista) + " sola lista + " + n(pref) + " preferentes" }),
       ]),
       el("div", { class: "lista-bancas" }, [
-        el("span", { class: "bancas-badge" + (gan > 0 ? " win" : ""), text: String(gan), title: gan + " banca(s)" }),
+        el("span", { class: "bancas-badge" + (gan > 0 ? " win" : ""), text: String(gan), title: nBancas(gan) }),
         el("button", {
           class: "ghost tiny no-print",
           text: lista.abierta ? "▲" : "▼",
@@ -616,7 +616,7 @@ function renderReparto(res) {
       document.createTextNode(
         e.listas.map(function (l) { return l.sigla; }).join(", ") +
         " comparten el cociente " + fmtCociente.format(e.cociente) + " y la misma cantidad de votos, " +
-        "con " + e.enDisputa + " banca(s) en disputa. El Artículo 258 del Código Electoral manda que, a igual " +
+        "con " + nBancas(e.enDisputa) + " en disputa. El Artículo 258 del Código Electoral manda que, a igual " +
         "cociente, la banca vaya a la lista con más votos; como acá también empatan en votos, se define por " +
         "sorteo. La banca se muestra adjudicada a la primera por orden de lista, pero esa parte no la decide " +
         "el cálculo."),
@@ -639,7 +639,7 @@ function renderReparto(res) {
       ribbon.appendChild(el("div", {
         class: "ribbon-seg",
         style: "flex:" + b + " 1 0; background:" + colorDe(l),
-        title: l.sigla + ": " + b + " banca(s)",
+        title: l.sigla + ": " + nBancas(b),
       }, [el("span", { text: b / totalAdj >= 0.09 ? l.sigla + " " + b : String(b) })]));
     });
     ribbon.setAttribute("aria-label", "Distribución: " +
@@ -768,7 +768,9 @@ function renderReordenamiento(res) {
       el("span", { class: "chip", style: "width:12px;height:12px;border-radius:3px;display:inline-block;background:" + colorDe(lista) }),
       el("strong", { text: lista.numero + " · " + lista.partido }),
       el("span", { style: "color:var(--text-muted); font-size:.85rem",
-        text: gan > 0 ? "— " + gan + " banca(s): entran los " + gan + " primeros" : "— sin bancas" }),
+        text: gan > 0
+          ? "— " + nBancas(gan) + ": " + (gan === 1 ? "entra el primero" : "entran los " + gan + " primeros")
+          : "— sin bancas" }),
     ]);
 
     cont.appendChild(encabezado);

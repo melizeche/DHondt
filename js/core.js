@@ -639,6 +639,12 @@ const fmtCociente = new Intl.NumberFormat("es-PY", { maximumFractionDigits: 1 })
 
 function n(valor) { return fmtEntero.format(Math.round(valor)); }
 
+/* «1 banca» y no «1 banca(s)». El paréntesis es una forma de no elegir, y acá
+ * el número siempre se sabe antes de escribir la frase. */
+function nBancas(cantidad) {
+  return cantidad + (cantidad === 1 ? " banca" : " bancas");
+}
+
 function pct(parte, total) {
   return total > 0 ? fmtDecimal.format((parte / total) * 100) + " %" : "—";
 }

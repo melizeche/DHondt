@@ -2,7 +2,7 @@
 
 **`README.md` is the documentation**: what this is, how D'Hondt works, the JSON
 data format, what the converters do. Read it first. This file only records what
-is easy to get confidently wrong — most of it is "don't do the obvious thing".
+is easy to get confidently wrong. Most of it is "don't do the obvious thing".
 
 (In English, like the commit messages. Everything the project ships to readers
 is in Spanish.)
@@ -18,7 +18,7 @@ node tests/schema.test.mjs     # todos los datos contra datos/schema.json
 Run all three after any change. No runner, no watch mode, no CI.
 
 To look at the site: `python3 -m http.server`. Opening `index.html` from disk
-also has to keep working — see below.
+also has to keep working (see below).
 
 ## No build, no dependencies
 
@@ -40,8 +40,8 @@ same way instead of leaving a broken page.
 
 ## Language
 
-- **Spanish** — UI text, code comments, identifiers, README, data files.
-- **English** — commit messages, PR titles and bodies, this file.
+- **Spanish**: UI text, code comments, identifiers, README, data files.
+- **English**: commit messages, PR titles and bodies, this file.
 - `datos/schema.json` is the one deliberately English filename, because editors
   resolve JSON Schema by that name. The vocabulary in the code still says
   *esquema*.
@@ -61,7 +61,7 @@ listed in `datos/indice.json`.
 ## Tests that are the point
 
 A few assertions exist to catch reality drifting, not to describe the code. If
-one of these fails, the calculation changed and that is the news — do not
+one of these fails, the calculation changed and that is the news. Do not
 "fix a brittle test":
 
 - the 2023 Senate allocation (ANR 23, Alianza 12, PCN 5, PEN 2, one each for
@@ -79,13 +79,13 @@ one of these fails, the calculation changed and that is the news — do not
 - **Ties are signalled, never resolved.** Article 258 sends a real tie to a
   sorteo, so the pages mark it and stop. Do not implement a tiebreak.
 - **Official ballot colours are kept as they are**, even when two are nearly
-  identical — Encarnación ships three yellows at ΔE 1.8. Only luminosity is
+  identical. Encarnación ships three yellows at ΔE 1.8. Only luminosity is
   adjusted, at draw time, only to clear 3:1 against the background. Nothing in
   the UI identifies a list by colour alone, so near-identical colours are
   survivable and fidelity to the ballot wins.
 - **`Candidato/a N` is a reserved pattern.** `RE_RELLENO` matches it to raise the
-  incomplete-nómina warning. Placeholder names not meant to trigger it — the
-  default election's, for instance — must be worded differently.
+  incomplete-nómina warning. Placeholder names not meant to trigger it, like
+  the default election's, must be worded differently.
 - **The tool never predicts.** Generated data ships with zero votes, the default
   election is invented, and «Votos al azar» says it is a draw. Nothing should
   present computed numbers as a forecast.

@@ -15,8 +15,8 @@ perder nada:
 
 | Página | Se carga | Sirve para |
 |---|---|---|
-| `index.html` — **votos por lista** | el total de cada lista | el escenario rápido: cuántas bancas saca cada partido |
-| `candidatos.html` — **votos por candidato** | los votos de cada candidato | el cálculo completo, incluido el orden interno de cada lista |
+| `index.html`: **votos por lista** | el total de cada lista | el escenario rápido: cuántas bancas saca cada partido |
+| `candidatos.html`: **votos por candidato** | los votos de cada candidato | el cálculo completo, incluido el orden interno de cada lista |
 
 ## Página por lista (`index.html`)
 
@@ -31,10 +31,10 @@ perder nada:
 - **Bancas configurables** y **umbral opcional**. En Paraguay va en 0, que es lo que
   corresponde: el Artículo 258 reparte entre todas las listas que sacaron
   votos, sin mínimo que superar. El campo está para el «¿y si hubiera una
-  barrera?» —otros países que usan D'Hondt la tienen: España pide 3 % de los
+  barrera?». Otros países que usan D'Hondt la tienen: España pide 3 % de los
   votos válidos de la circunscripción, Argentina 3 % del padrón del distrito,
-  Polonia 5 %— y la página lo aclara ahí mismo, para que nadie lo lea como si
-  acá existiera.
+  Polonia 5 %. La página lo aclara ahí mismo, para que nadie lo lea como si acá
+  existiera.
 - **Votos en blanco y nulos** para las estadísticas, sin entrar al reparto.
 
 ## Página por candidato (`candidatos.html`)
@@ -42,16 +42,16 @@ perder nada:
 Acá se carga voto por voto de cada candidato y el total de la lista sale solo.
 La página muestra el cálculo entero, en cuatro pasos:
 
-1. **Total de votos de cada lista** — votos de sola lista + votos preferentes de
+1. **Total de votos de cada lista**: votos de sola lista + votos preferentes de
    sus candidatos, con el desglose a la vista.
-2. **Reparto D'Hondt entre listas** — la misma tabla de cocientes, con la banca
+2. **Reparto D'Hondt entre listas**: la misma tabla de cocientes, con la banca
    que ganó cada celda.
-3. **Orden interno de cada lista** — la nómina reordenada por voto preferente,
+3. **Orden interno de cada lista**: la nómina reordenada por voto preferente,
    mostrando para cada candidato sus votos, su porcentaje dentro de la lista, la
    posición en la que quedó, de qué posición venía y cuántos lugares subió o
    bajó. Arranca mostrando a los que entran más los tres siguientes; con
    «Mostrar nóminas completas» se ve todo.
-4. **Concejales electos** — los electos en el orden en que se adjudicó cada
+4. **Concejales electos**: los electos en el orden en que se adjudicó cada
    banca, con sus votos propios y su posición original.
 
 Además: **«Pegar votos»** carga una lista entera de una vez (acepta
