@@ -127,7 +127,7 @@ console.log("\nSenadores 2023 — resultados oficiales");
  * entran candidatos con un solo voto preferente. Si el cálculo cambiara y eso
  * dejara de pasar, el ejemplo dejaría de enseñar lo que el README dice que
  * enseña, y nadie lo notaría mirando el archivo. */
-console.log("\nSenado Galáctico — electos con un solo voto");
+console.log("\nSenado Galáctico — electos con uno o dos votos");
 {
   const g = leer("ejemplo-star-wars.json");
   const e = normalizar(g);
@@ -144,17 +144,23 @@ console.log("\nSenado Galáctico — electos con un solo voto");
   check("el Imperio gana 5 bancas con 452.000 votos", [imperio.votos, ganadas], [452000, 5]);
   check("los 5 electos", electos.map(function (d) { return d.nombre; }), [
     "Darth Vader", "Sheev Palpatine",
-    "Stormtrooper TK-421", "Stormtrooper TK-422", "Stormtrooper TD-110",
+    "Stormtrooper TD-9091", "Stormtrooper TK-421", "Stormtrooper TK-422",
   ]);
-  // Lo que hace el ejemplo: tres bancas para candidatos con un voto.
-  check("tres de esas bancas se llenan con un voto preferente cada una",
-    electos.filter(function (d) { return d.pref === 1; }).length, 3);
+  // Lo que hace el ejemplo: bancas para candidatos con un voto propio.
+  check("dos de esas bancas se llenan con un voto preferente cada una",
+    electos.filter(function (d) { return d.pref === 1; }).length, 2);
   check("y el voto preferente igual da vuelta a los dos primeros",
     [electos[0].posOriginal, electos[1].posOriginal], [2, 1]);
-  // Los stormtroopers empatan en 1: el Artículo 258 resuelve a favor del orden
-  // que propuso el partido, así que entran los tres primeros de la nómina.
+  // TD-9091 iba último de doce y tiene un voto más que el resto de la tropa:
+  // con esa diferencia se salta nueve lugares y entra.
+  const td = electos[2];
+  check("el último de la nómina entra con dos votos",
+    [td.nombre, td.pref, td.posOriginal, td.posFinal],
+    ["Stormtrooper TD-9091", 2, 12, 3]);
+  // Los demás stormtroopers empatan en 1: el Artículo 258 resuelve a favor del
+  // orden que propuso el partido, así que entran los primeros de la nómina.
   check("entre los que empatan en un voto, manda el orden de la nómina",
-    electos.slice(2).map(function (d) { return d.posOriginal; }), [3, 4, 5]);
+    electos.slice(3).map(function (d) { return d.posOriginal; }), [3, 4]);
 }
 
 /* Con qué se abre la página en una ventana nueva, sin nada guardado. Es una

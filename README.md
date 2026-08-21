@@ -291,13 +291,16 @@ Hay dos ejemplos para importar:
 
   Está armado para mostrar lo que más cuesta creer del voto preferente: **las
   bancas las gana la lista, no el candidato**. En el Imperio sólo dos nombres
-  juntaron votos —Vader 96.000 y Palpatine 63.000, y Vader pasa a Palpatine
-  aunque el partido lo puso segundo—; los otros diez son stormtroopers con **un
-  voto cada uno**. Pero los 452.000 votos de la lista alcanzan para 5 bancas, y
-  después de Vader y Palpatine quedan tres para llenar: entran TK-421, TK-422 y
-  TD-110, con un voto cada uno. Como empatan entre sí, el orden lo decide la
-  nómina del partido, que es lo que manda el Artículo 258 para los empates de
-  preferencias.
+  juntaron votos de verdad: Vader 96.000 y Palpatine 63.000, y Vader pasa a
+  Palpatine aunque el partido lo puso segundo. Los otros diez son stormtroopers
+  con **un voto cada uno**, salvo TD-9091, que tiene dos.
+
+  Los 452.000 votos de la lista alcanzan para 5 bancas, así que después de Vader
+  y Palpatine quedan tres para llenar. La tercera se la lleva **TD-9091, que iba
+  último de los doce**: con un voto más que el resto de la tropa sube nueve
+  lugares y entra. Las otras dos van a TK-421 y TK-422, con un voto cada uno;
+  como empatan entre sí, el orden lo decide la nómina del partido, que es lo que
+  manda el Artículo 258 para los empates de preferencias.
 
   La Rebelión queda de contraste, con votos repartidos como en una lista
   normal: ahí el voto preferente sí reordena de verdad —Luke pasa a Leia, Mon
