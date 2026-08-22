@@ -201,9 +201,9 @@ Con ese código se bajan los tres archivos de
 igual. Ojo con `--bancas`: cada Junta Municipal tiene la suya, y por defecto el
 conversor usa el largo de la nómina más larga.
 
-## Resultados de una elección que ya pasó
+## Resultados de elecciones que ya pasaron
 
-Además de las candidaturas, viene cargado el resultado real de los
+Vienen cargados dos resultados reales. El primero es el de los
 **Senadores 2023** (`datos/senadores-2023.json`): 18 listas, 45 bancas, 810
 candidatos y **los votos ya puestos**, tomados del PDF de resultados oficiales
 del TSJE. Es el único conjunto que no arranca en cero, y sirve para lo que
@@ -235,6 +235,44 @@ cada lista tienen que sumar exactamente su total, las opciones ir de 1 a N sin
 huecos, y la suma de listas más blancos y nulos dar el total que declara el PDF
 (2.885.656 + 120.825 + 13.706 = 3.020.187). Las siglas las recorta del nombre
 del partido y conviene repasarlas a mano, que es lo único que se editó acá.
+
+### Junta Municipal de Asunción 2021
+
+El segundo es municipal y más exigente: `datos/asuncion-junta-municipal-2021.json`
+trae las Municipales 2021 de Asunción con **los votos preferentes de cada uno de
+los 552 candidatos**, no sólo el total de cada lista. 23 listas, 24 bancas,
+246.844 votos válidos.
+
+El reparto da **ANR 15, PLRA 5, Patria Querida 3 y Encuentro Ciudadano 1**, que
+es la Junta que asumió. Pero lo que hace valioso a este conjunto es lo otro: con
+los votos de cada candidato se puede comprobar **quiénes** ocuparon esas bancas,
+y no sólo cuántas sacó cada lista. Los 24 nombres que calcula la herramienta son
+los 24 concejales que asumieron, en el orden en que el voto preferente los dejó.
+Es la única prueba del orden interno contra un resultado oficial completo.
+
+La planilla sale de [datos.gov.py](https://www.datos.gov.py/) y trae las 261
+Juntas Municipales del país, así que sirve para cualquier ciudad:
+
+```sh
+# qué código tiene cada ciudad
+python3 tools/xlsx-preferentes-a-json.py 1VotosPref_Dep_Distrito_JuMu2021_da.xlsx --listar
+
+python3 tools/xlsx-preferentes-a-json.py 1VotosPref_Dep_Distrito_JuMu2021_da.xlsx \
+  --departamento 0 --distrito 0 --bancas 24 \
+  --eleccion "Elecciones Municipales 2021 · Junta Municipal de Asunción" \
+  --salida datos/asuncion-junta-municipal-2021.json
+```
+
+No necesita instalar nada: un `.xlsx` es un zip de XML y el conversor lo abre
+con `zipfile` y `xml.etree`, que vienen con Python. Sin `--bancas` toma las
+bancas de la cantidad de filas marcadas `ELECTO` en la planilla, y no escribe
+nada si el `ORDEN_LISTA` de alguna lista tiene huecos o si las filas `ELECTO` no
+coinciden con las bancas pedidas.
+
+Una advertencia sobre este conjunto: la planilla es sólo de votos preferentes y
+**no trae los votos en blanco ni los nulos**, así que quedan en cero. Los
+totales por lista son votos válidos y el reparto no los usa, pero las
+estadísticas de «emitidos» van a quedar cortas.
 
 ## Formato del JSON
 
@@ -424,11 +462,13 @@ datos/asuncion-junta-municipal.json candidaturas de Asunción (generado)
 datos/encarnacion-junta-municipal.json   candidaturas de Encarnación (generado)
 datos/ciudad-del-este-junta-municipal.json  candidaturas de Ciudad del Este (generado)
 datos/senadores-2023.json           resultados reales de los Senadores 2023 (generado)
+datos/asuncion-junta-municipal-2021.json  resultados reales de Asunción 2021 (generado)
 datos/schema.json                   JSON Schema del formato
 datos/ejemplo.json                  ejemplo mínimo del formato
 datos/ejemplo-star-wars.json        ejemplo chico: electos con un solo voto preferente
 tools/tsje-a-json.mjs               conversor de las candidaturas del TSJE
 tools/pdf-resultados-a-json.py      conversor de los PDF de resultados oficiales
+tools/xlsx-preferentes-a-json.py    conversor de la planilla de preferentes 2021
 tools/og.mjs                        genera og.png con un navegador headless
 tests/dhondt.test.mjs               cálculo
 tests/datos.test.mjs                datos generados
@@ -463,10 +503,17 @@ cualquier posición de la boleta y que el voto preferente reordene siempre algo.
 uno verifica la cantidad esperada de listas, bancas y candidatos; que las
 nóminas estén completas, sin nombres de relleno ni votos precargados; que los
 números de lista y las siglas no se repitan; y que cada color oficial alcance
-3:1 contra el fondo en los dos modos. También comprueba el resultado oficial
-del Senado de 2023, el ejemplo de Star Wars y la elección con la que se abre la
-página: que esté toda en cero, que no acredite ninguna fuente y que ninguna
-lista ni candidato pueda confundirse con algo real.
+3:1 contra el fondo en los dos modos. También comprueba los dos resultados
+oficiales, el ejemplo de Star Wars y la elección con la que se abre la página:
+que esté toda en cero, que no acredite ninguna fuente y que ninguna lista ni
+candidato pueda confundirse con algo real.
+
+De los dos resultados oficiales, el de Asunción 2021 es el que más aprieta: con
+los votos preferentes de los 552 candidatos se verifica no sólo el reparto entre
+listas sino los 24 nombres que ocuparon las bancas, uno por uno. Es lo único que
+prueba el orden interno de cada lista contra una elección de verdad, y por eso
+también fija que el voto preferente movió de lugar a buena parte de las nóminas:
+si eso diera cero, el caso pasaría sin probar nada.
 
 `schema.test.mjs` valida contra el esquema todos los archivos del índice y
 prueba una veintena de casos que tiene que rechazar, para que el esquema no

@@ -122,6 +122,78 @@ console.log("\nSenadores 2023: resultados oficiales");
   check("y la primera afuera fue el sexto cociente del PCN", Math.round(r.siguiente.cociente), 55324);
 }
 
+/* La segunda comprobación contra una elección real, y la más exigente: la
+ * planilla de datos.gov.py trae los votos preferentes de cada candidato de las
+ * Municipales 2021, así que acá no se verifica sólo cuántas bancas sacó cada
+ * lista sino quiénes las ocuparon. Es lo único que prueba el orden interno
+ * —ordenInterno y su desempate— contra un resultado oficial completo. */
+console.log("\nJunta Municipal de Asunción 2021: resultados oficiales");
+{
+  const a = leer("asuncion-junta-municipal-2021.json");
+  const e = normalizar(a);
+  const cands = a.listas.flatMap(function (l) { return l.candidatos; });
+
+  check("23 listas", a.listas.length, 23);
+  check("24 bancas", a.bancas, 24);
+  check("552 candidatos, 24 por lista", [cands.length, new Set(a.listas.map(function (l) {
+    return l.candidatos.length; })).size], [552, 1]);
+  check("246.844 votos válidos",
+    a.listas.reduce(function (s, l) { return s + l.votos; }, 0), 246844);
+  check("cada lista: los preferentes suman su total",
+    a.listas.filter(function (l) {
+      return l.candidatos.reduce(function (s, c) { return s + c.pref; }, 0) !== l.votos;
+    }).length, 0);
+  // La planilla es de votos preferentes y no trae blancos ni nulos.
+  check("sin blancos ni nulos", [a.blancos, a.nulos], [0, 0]);
+
+  const r = calcularDHondt(e.listas, e.bancas, e.umbral);
+  const bancas = e.listas
+    .filter(function (l) { return r.ganadas.get(l.id) > 0; })
+    .map(function (l) { return [l.sigla, r.ganadas.get(l.id)]; })
+    .sort(function (x, y) { return x[0].localeCompare(y[0]); });
+  // Composición proclamada de la Junta de Asunción 2021-2026.
+  check("reparto de las 24 bancas", bancas,
+    [["ANR", 15], ["EC", 1], ["PLRA", 5], ["PPQ", 3]]);
+  check("sin sorteos", r.empates.length, 0);
+
+  /* Y los nombres. El voto preferente reordenó las cuatro nóminas que sacaron
+   * banca, así que esta lista no es la que presentaron los partidos: es la que
+   * salió de las urnas, y es la que la herramienta tiene que reproducir. */
+  const electosDe = function (sigla) {
+    const l = e.listas.find(function (x) { return x.sigla === sigla; });
+    return detalleOrden(l, "desbloqueada", r.ganadas.get(l.id))
+      .filter(function (d) { return d.electo; })
+      .map(function (d) { return d.nombre; });
+  };
+  check("los 15 concejales de la ANR", electosDe("ANR"), [
+    "LUIS FERNANDO BERNAL MAZO", "JORGE SALVADOR CAPPELLO BERNAL",
+    "ENRIQUE JAVIER BERNI BRITEZ", "JUAN CARLOS OZORIO ADMEN",
+    "CESAR EDUARDO ESCOBAR GUBO", "MARCELO FAUSTINO CENTURION VELILLA",
+    "ROSANNA LUCIA ROLON VICIOSO", "CERVANTE JESUS MARIA LARA CESPEDES",
+    "NASSER ESGAIB ORTEGA", "ARTURO RAMON ALMIRON CHAMORRO",
+    "MARIANO ARIEL CACERES", "JOSE CLAUDIO MAXIMILIANO ALVARENGA BONZI",
+    "JUAN JOSE ARNOLD GARCIA", "MIGUEL SOSA CABAÑAS", "RENE GABRIEL CALONGA ACEVEDO",
+  ]);
+  check("los 5 del PLRA", electosDe("PLRA"), [
+    "AUGUSTO ISIDRO CONCEPCION WAGNER LEZCANO", "VICTOR RAMON ORTIZ ROMERO",
+    "FELIX MANUEL AYALA RUIZ DIAZ", "HUMBERTO BLASCO GAVILAN",
+    "FIORELLA MARIA FORESTIERI DE BUZARQUIS",
+  ]);
+  check("los 3 de Patria Querida", electosDe("PPQ"), [
+    "PABLO MANUEL CALLIZO BEDOYA", "PAULINA BEATRIZ MARIA SERRANO GUSTAFSON",
+    "ALVARO MATIAS GRAU MARTINEZ",
+  ]);
+  check("la banca de Encuentro Ciudadano", electosDe("EC"), ["JAZMIN MARIA GALEANO SAPENA"]);
+
+  // El voto preferente movió gente de verdad: si esto diera 0, la nómina y el
+  // resultado coincidirían y el caso no probaría el reordenamiento.
+  const movidos = e.listas.reduce(function (s, l) {
+    return s + detalleOrden(l, "desbloqueada", r.ganadas.get(l.id))
+      .filter(function (d) { return d.movimiento !== 0; }).length;
+  }, 0);
+  check("el voto preferente reordenó buena parte de las nóminas", movidos > 400, true);
+}
+
 /* El ejemplo de Star Wars está armado para mostrar una cosa concreta: que las
  * bancas las gana la lista y no el candidato, así que con la lista bien votada
  * entran candidatos con un solo voto preferente. Si el cálculo cambiara y eso
