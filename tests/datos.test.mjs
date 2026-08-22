@@ -79,7 +79,7 @@ ciudades.forEach(function (c) {
 
 /* El único conjunto con votos de verdad: sirve para comprobar el cálculo
  * contra una elección que ya pasó, no sólo contra ejemplos. */
-console.log("\nSenadores 2023 — resultados oficiales");
+console.log("\nSenadores 2023: resultados oficiales");
 {
   const s = leer("senadores-2023.json");
   const e = normalizar(s);
@@ -127,7 +127,7 @@ console.log("\nSenadores 2023 — resultados oficiales");
  * entran candidatos con un solo voto preferente. Si el cálculo cambiara y eso
  * dejara de pasar, el ejemplo dejaría de enseñar lo que el README dice que
  * enseña, y nadie lo notaría mirando el archivo. */
-console.log("\nSenado Galáctico — electos con uno o dos votos");
+console.log("\nSenado Galáctico: electos con uno o dos votos");
 {
   const g = leer("ejemplo-star-wars.json");
   const e = normalizar(g);

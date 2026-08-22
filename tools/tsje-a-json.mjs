@@ -97,7 +97,7 @@ if (!categoria) {
 
 /* ------------------------------------------------------------- conversión
  * Candidaturas trae, además de los candidatos, tres entradas especiales por
- * categoría — voto en blanco, nulos y no computados — que se distinguen por
+ * categoría (voto en blanco, nulos y no computados) que se distinguen por
  * `clase` y no tienen cod_lista. No son candidatos y quedan afuera.
  */
 const deLaCategoria = candidaturas.filter(function (c) {
@@ -151,13 +151,13 @@ const listas = [...porLista.entries()]
 /* ------------------------------------------------------------- colores
  * Se usan los de la boleta, siempre. Son los que el votante reconoce, y esa
  * fidelidad vale más que la separación cromática: acá nada se identifica sólo
- * por color —cada segmento de la cinta va rotulado con su sigla, hay leyenda y
- * las tablas son de texto—, así que dos listas de colores parecidos se siguen
+ * por color (cada segmento de la cinta va rotulado con su sigla, hay leyenda y
+ * las tablas son de texto), así que dos listas de colores parecidos se siguen
  * distinguiendo igual. Lo único que se corrige es el color que no se vería
  * contra el fondo, y eso pasa al dibujar, sin tocar el dato.
  *
- * Si la boleta trae dos colores casi iguales —la de Encarnación tiene tres
- * amarillos a ΔE 1.8 entre sí— se avisa y nada más: es cómo es la boleta.
+ * Si la boleta trae dos colores casi iguales (la de Encarnación tiene tres
+ * amarillos a ΔE 1.8 entre sí) se avisa y nada más: es cómo es la boleta.
  */
 const parecidos = [];
 for (let i = 0; i < listas.length; i++) {

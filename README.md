@@ -87,11 +87,11 @@ es del mismo origen y no necesita nada del otro lado… pero sí necesita **un**
 servidor. Abriendo el HTML con doble clic (`file://`) el navegador bloquea esos
 pedidos por CORS, así que ahí el desplegable no aparece: queda la elección de
 ejemplo y se cambia con «Importar JSON», que lee del disco y funciona siempre.
-Servido —Cloudflare Pages, GitHub Pages, `python3 -m http.server`— aparece y
+Servido (Cloudflare Pages, GitHub Pages, `python3 -m http.server`) aparece y
 anda.
 
 Cuál quedó elegida se recuerda en el navegador y vale para las dos páginas.
-Importar un archivo suelto deja el desplegable en «— datos cargados —», porque
+Importar un archivo suelto deja el desplegable en «(datos cargados)», porque
 lo que hay no sale del índice.
 
 ## Las candidaturas
@@ -108,11 +108,11 @@ color oficial y la nómina completa en su orden:
 | Junta Municipal de Ciudad del Este | `59.10.0` | 8 | 96 | 12 |
 
 Las tres se eligen en el desplegable. Ninguna viene cargada de entrada: la
-página se abre con una **elección de ejemplo** —seis listas llamadas A, B, C…,
-12 bancas, todo en cero— y no con una elección de verdad. Antes se abría con
+página se abre con una **elección de ejemplo** (seis listas llamadas A, B, C…,
+12 bancas, todo en cero) y no con una elección de verdad. Antes se abría con
 Asunción, que era lo que correspondía cuando la herramienta calculaba esa
 elección y ninguna otra; ahora que calcula cualquiera y trae seis conjuntos de
-datos, abrir siempre en una ciudad —y encima en la capital— dejaba de ser un
+datos, abrir siempre en una ciudad (y encima en la capital) dejaba de ser un
 valor por defecto para pasar a ser una afirmación.
 
 Los **votos los pone quien usa la herramienta**: el archivo de datos trae todos
@@ -121,13 +121,13 @@ reparto de los números que uno cargue.
 
 Para tener algo que repartir sin cargar nada, «Votos al azar» sortea un
 resultado y se puede volver a tirar las veces que uno quiera. Los números son
-inventados, pero la forma no: se sortea un electorado desparejo —una o dos
-listas grandes y una cola larga—, porque con totales parejos D'Hondt se vería
+inventados, pero la forma no: se sortea un electorado desparejo (una o dos
+listas grandes y una cola larga), porque con totales parejos D'Hondt se vería
 proporcional, que es justo lo que no hace. Tirando varias veces se ve siempre
 lo mismo: la lista más votada se lleva un porcentaje de bancas mayor que su
 porcentaje de votos, la cola queda afuera y la última banca se define por poco.
-Si lo que hay cargado no salió de un sorteo —los resultados reales de 2023, o
-votos puestos a mano— pregunta antes de pisarlos.
+Si lo que hay cargado no salió de un sorteo (los resultados reales de 2023, o
+votos puestos a mano) pregunta antes de pisarlos.
 
 Todo es editable igual: «Editar lista» cambia número, nombre, sigla y color;
 «Editar candidatos» (o «Pegar votos» en la página por candidato) reemplaza la
@@ -136,8 +136,8 @@ nombres de relleno («Candidato/a 1»…), la página lo avisa arriba.
 
 ### Regenerar los datos
 
-Los datos vienen de tres archivos del simulador. Se bajan del navegador —el
-sitio del TSJE no siempre responde a `curl`— y se convierten con:
+Los datos vienen de tres archivos del simulador. Se bajan del navegador (el
+sitio del TSJE no siempre responde a `curl`) y se convierten con:
 
 ```sh
 # los tres archivos van en una carpeta:
@@ -145,7 +145,7 @@ sitio del TSJE no siempre responde a `curl`— y se convierten con:
 # de https://simuladoroficial.tsje.gov.py/datos/59.0.0/
 
 node tools/tsje-a-json.mjs --datos ./descargas \
-  --eleccion "Elecciones Municipales — Junta Municipal de Asunción" \
+  --eleccion "Elecciones Municipales · Junta Municipal de Asunción" \
   --salida datos/asuncion-junta-municipal.json
 ```
 
@@ -154,7 +154,7 @@ se agrega al índice; desde ahí lo toma el desplegable.
 
 El conversor toma la categoría `JUN` (Junta Municipal) por defecto; con
 `--categoria INT` saca la de intendente. Descarta las entradas especiales de
-`Candidaturas.json` —voto en blanco, nulos y no computados— que no son
+`Candidaturas.json` (voto en blanco, nulos y no computados) que no son
 candidatos, y avisa si alguna nómina tiene huecos en su numeración.
 
 ### Otras ciudades
@@ -196,7 +196,7 @@ El PDF se convierte con:
 pip install pdfplumber
 python3 tools/pdf-resultados-a-json.py SENADORES_2023.pdf \
   --bancas 45 \
-  --eleccion "Elecciones Generales 2023 — Senadores (resultados oficiales)" \
+  --eleccion "Elecciones Generales 2023 · Senadores (resultados oficiales)" \
   --salida datos/senadores-2023.json
 ```
 
@@ -214,7 +214,7 @@ en lugar de objetos, y todo lo que falte toma su valor por defecto.
 
 ```jsonc
 {
-  "eleccion": "Elecciones Municipales — Asunción",
+  "eleccion": "Elecciones Municipales · Asunción",
   "fuente": {                     // opcional: de dónde salieron las nóminas
     "nombre": "simulador oficial del TSJE",
     "url": "https://simuladoroficial.tsje.gov.py/"
@@ -247,15 +247,15 @@ preferentes, así un archivo escrito para la página por lista también abre bie
 en la de candidatos.
 
 Sobre `colorHex`: se usa el color oficial de la boleta, que es el que reconoce
-quien vota, salvo que no se distinga del fondo —el Partido Demócrata Cristiano
-es blanco— en cuyo caso se le corrige la luminosidad hasta llegar a 3:1,
+quien vota, salvo que no se distinga del fondo (el Partido Demócrata Cristiano
+es blanco), en cuyo caso se le corrige la luminosidad hasta llegar a 3:1,
 conservando el tono. El hex original nunca se pisa: queda en los datos y se
 muestra al editar la lista. Elegir un color de la paleta descarta el oficial.
 
 **Dos listas con colores casi iguales se dejan casi iguales.** Pasa de verdad:
 la boleta de Encarnación trae tres amarillos a ΔE 1,8 entre sí. Cambiarlos por
 colores «más distinguibles» sería perder justamente lo que hace útil al color
-—que el votante lo reconozca—, y no hace falta: acá nada se identifica sólo por
+(que el votante lo reconozca), y no hace falta: acá nada se identifica sólo por
 color. Cada segmento de la cinta va rotulado con su sigla y su cantidad de
 bancas, la leyenda repite sigla por sigla y las tablas son de texto. El
 conversor avisa cuando encuentra colores parecidos, pero no toca nada.
@@ -269,7 +269,7 @@ por defecto.
 El formato está descrito en [`datos/schema.json`](datos/schema.json)
 (JSON Schema, draft 2020-12). Los archivos de `datos/` lo referencian con
 `"$schema": "schema.json"`, así que un editor con soporte de JSON Schema
-—VS Code y varios más— autocompleta los campos y marca los errores mientras se
+(VS Code y varios más) autocompleta los campos y marca los errores mientras se
 escribe.
 
 Lo único obligatorio es `listas` con al menos una lista; todo lo demás tiene
@@ -284,8 +284,8 @@ validarlos, se los mueve al lado del esquema o se le pasa la ruta al validador.
 
 Hay dos ejemplos para importar:
 
-- [`datos/ejemplo.json`](datos/ejemplo.json) — mínimo, para ver el formato.
-- [`datos/ejemplo-star-wars.json`](datos/ejemplo-star-wars.json) — 3 listas,
+- [`datos/ejemplo.json`](datos/ejemplo.json): mínimo, para ver el formato.
+- [`datos/ejemplo-star-wars.json`](datos/ejemplo-star-wars.json): 3 listas,
   10 bancas y voto preferente. El Imperio saca 5 bancas, la Rebelión 4 y los
   Separatistas 1.
 
@@ -303,9 +303,9 @@ Hay dos ejemplos para importar:
   manda el Artículo 258 para los empates de preferencias.
 
   La Rebelión queda de contraste, con votos repartidos como en una lista
-  normal: ahí el voto preferente sí reordena de verdad —Luke pasa a Leia, Mon
+  normal: ahí el voto preferente sí reordena de verdad (Luke pasa a Leia, Mon
   Mothma cae del segundo lugar al cuarto y entra por la última banca, Jyn Erso
-  queda primera suplente—.
+  queda primera suplente).
 
 ## Cómo se calcula
 
@@ -351,8 +351,8 @@ la cantidad de escaños. Bajo esa lectura estricta cada voto va a un candidato y
 el total de la lista es la suma de sus preferentes: para eso, se deja
 `soloLista` en 0 y la herramienta hace exactamente eso.
 
-Se admite igual un voto de sola lista —el que elige la lista sin nombrar
-candidato— porque el total de la lista puede venir informado aparte del detalle
+Se admite igual un voto de sola lista (el que elige la lista sin nombrar
+candidato) porque el total de la lista puede venir informado aparte del detalle
 por candidato. Es un supuesto más general: si no existen esos votos, queda en 0
 y no cambia nada.
 
@@ -438,8 +438,8 @@ confundirse con algo real.
 `schema.test.mjs` valida contra el esquema todos los archivos del índice y
 prueba una veintena de casos que tiene que rechazar, para que el esquema no
 termine aceptando cualquier cosa. Trae un validador propio que cubre sólo las
-palabras clave que el esquema usa —hay una prueba que falla si aparece alguna
-sin implementar—; el esquema además se verificó aparte con
+palabras clave que el esquema usa (hay una prueba que falla si aparece alguna
+sin implementar); el esquema además se verificó aparte con
 [ajv](https://ajv.js.org/) en modo estricto, que coincidió en todos los casos.
 
 ## Publicar
@@ -497,8 +497,8 @@ cabeceras de seguridad. GitHub Pages lo ignora, así que no molesta.
 
 También saca una que Cloudflare pone sola: `Access-Control-Allow-Origin: *`, que
 deja a cualquier sitio leer estos archivos desde su propio JavaScript. Quitarla
-no esconde nada —CORS lo hace cumplir el navegador, y con `curl` los archivos se
-bajan igual—, pero es un permiso que el sitio no necesita: las dos páginas traen
+no esconde nada (CORS lo hace cumplir el navegador, y con `curl` los archivos se
+bajan igual), pero es un permiso que el sitio no necesita: las dos páginas traen
 todo de su mismo origen, y una petición del mismo origen ni consulta esa
 cabecera. Por eso mismo no tendría sentido «restringirla» al propio dominio: no
 cambiaría nada para nadie. Los datos siguen disponibles donde corresponde, que
@@ -528,8 +528,8 @@ dominios.
 
 `og.png` se genera con `tools/og.mjs`: arma la cinta de bancas en HTML y la
 fotografía con un navegador headless. Necesita Playwright, que no es dependencia
-del proyecto —es para regenerar la imagen si cambia el diseño, no para usar el
-sitio— y acepta `CHROMIUM=<ruta>` para usar un navegador ya instalado.
+del proyecto (es para regenerar la imagen si cambia el diseño, no para usar el
+sitio) y acepta `CHROMIUM=<ruta>` para usar un navegador ya instalado.
 
 Dibuja **el ejemplo de `datos/ejemplo.json`, no una elección real**: listas A, B
 y C con los colores de la paleta. La herramienta sirve para cualquier elección,

@@ -4,19 +4,19 @@
     pip install pdfplumber
     python3 tools/pdf-resultados-a-json.py SENADORES_2023.pdf \
         --bancas 45 \
-        --eleccion "Elecciones Generales 2023 — Senadores (resultados oficiales)" \
+        --eleccion "Elecciones Generales 2023 · Senadores (resultados oficiales)" \
         --salida datos/senadores-2023.json
 
 pdfplumber no es dependencia del proyecto: esto se corre a mano cuando hay un
 PDF nuevo que convertir, no para usar el sitio.
 
-El PDF tiene dos partes. La primera página es el resumen —una fila por lista con
-su total, más nulos, blancos y el total general—. Las siguientes traen los votos
+El PDF tiene dos partes. La primera página es el resumen (una fila por lista con
+su total, más nulos, blancos y el total general). Las siguientes traen los votos
 preferentes de cada candidato, en tres columnas por página, ordenados de mayor a
 menor voto; la columna «Opcion» es el lugar que ocupaba en la nómina.
 
 Como el JSON de la calculadora espera los candidatos en el orden de la nómina
-—el voto preferente los reordena después—, acá se los devuelve ordenados por
+(el voto preferente los reordena después), acá se los devuelve ordenados por
 «Opcion», no por votos.
 
 El script no escribe nada si las cuentas no cierran: los preferentes de cada
@@ -131,8 +131,8 @@ def main():
         sys.exit(1)
 
     # El PDF no trae los colores de la boleta. Los índices de paleta se reparten
-    # por caudal de votos, así las listas que sacan bancas —las que se ven en la
-    # cinta— quedan con colores distintos entre sí, y las que repiten color son
+    # por caudal de votos, así las listas que sacan bancas (las que se ven en
+    # la cinta) quedan con colores distintos entre sí, y las que repiten color son
     # las que no sacaron ninguna.
     rango = {l["numero"]: i for i, l in enumerate(sorted(listas, key=lambda x: -x["votos"]))}
 

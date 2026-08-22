@@ -582,7 +582,7 @@ function renderElectos(res) {
 
     tbody.appendChild(el("tr", null, [
       el("td", { class: "num", text: String(r.ronda) }),
-      el("td", { class: "nombre", text: cand ? cand.nombre : "— sin candidato en la nómina —" }),
+      el("td", { class: "nombre", text: cand ? cand.nombre : "(sin candidato en la nómina)" }),
       el("td", null, [
         el("span", { class: "chip", style: "background:" + colorDe(lista) }),
         document.createTextNode(lista.numero + " · " + lista.sigla),
@@ -701,7 +701,7 @@ document.getElementById("dlg-lista").addEventListener("close", function (e) {
 
 function abrirDialogoCandidatos(lista) {
   listaEnEdicion = lista;
-  document.getElementById("dc-titulo").textContent = "Candidatos — " + lista.numero + " · " + lista.partido;
+  document.getElementById("dc-titulo").textContent = "Candidatos · " + lista.numero + " · " + lista.partido;
   document.getElementById("dc-texto").value = lista.candidatos.map(function (c) { return c.nombre; }).join("\n");
   document.getElementById("dlg-cand").showModal();
 }

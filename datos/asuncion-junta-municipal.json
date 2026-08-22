@@ -1,6 +1,6 @@
 {
   "$schema": "schema.json",
-  "eleccion": "Elecciones Municipales — Junta Municipal de Asunción",
+  "eleccion": "Elecciones Municipales · Junta Municipal de Asunción",
   "fuente": {
     "nombre": "simulador oficial del TSJE",
     "url": "https://simuladoroficial.tsje.gov.py/"

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Datos de una elección para la calculadora D'Hondt",
-  "description": "Formato que importan y exportan index.html y candidatos.html. Lo único imprescindible es `listas` con al menos una lista: todo lo demás tiene valor por defecto. El cargador es más tolerante que este esquema —ignora las propiedades que no conoce—, pero acá no se admiten para que un nombre mal escrito se note en vez de perderse en silencio.",
+  "description": "Formato que importan y exportan index.html y candidatos.html. Lo único imprescindible es `listas` con al menos una lista: todo lo demás tiene valor por defecto. El cargador es más tolerante que este esquema (ignora las propiedades que no conoce), pero acá no se admiten para que un nombre mal escrito se note en vez de perderse en silencio.",
   "type": "object",
   "required": ["listas"],
   "additionalProperties": false,
@@ -14,7 +14,7 @@
       "type": "string",
       "description": "Nombre de la elección. Se muestra arriba de la página.",
       "default": "Elección sin nombre",
-      "examples": ["Elecciones Municipales — Junta Municipal de Asunción"]
+      "examples": ["Elecciones Municipales · Junta Municipal de Asunción"]
     },
     "fuente": {
       "type": "object",

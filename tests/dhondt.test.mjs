@@ -374,7 +374,7 @@ enTodas("el resultado sale desparejo: la más votada saca 3 veces la última",
 
 {
   // Que no gane siempre la primera de la boleta no se puede pedir tirada por
-  // tirada —alguna vez le toca—, así que se mira el conjunto.
+  // tirada (alguna vez le toca), así que se mira el conjunto.
   const ganadoras = new Set();
   for (let s = 1; s <= TIRADAS; s++) {
     const e = estadoDe(9, 24);

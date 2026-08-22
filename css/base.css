@@ -165,7 +165,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-app
 
 /* Nota que se despliega. Es un <details> y no un title=, que en el teléfono
  * no se puede abrir y con el teclado no se alcanza. El panel se sale de la
- * celda —las columnas miden 150px y el texto no entra— así que va flotando
+ * celda (las columnas miden 150px y el texto no entra) así que va flotando
  * por encima de lo que sigue, como cualquier globo de ayuda. */
 .field .ayuda { font-size: .72rem; color: var(--text-muted); margin-top: 4px; }
 .field .ayuda > summary { cursor: pointer; list-style: none; }

@@ -1,6 +1,6 @@
 {
   "$schema": "schema.json",
-  "eleccion": "Ejemplo de carga — Junta Municipal de Asunción",
+  "eleccion": "Ejemplo de carga · Junta Municipal de Asunción",
   "bancas": 12,
   "umbral": 0,
   "modo": "bloqueada",

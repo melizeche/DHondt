@@ -1,6 +1,6 @@
 {
   "$schema": "schema.json",
-  "eleccion": "Elecciones Municipales — Junta Municipal de Ciudad del Este",
+  "eleccion": "Elecciones Municipales · Junta Municipal de Ciudad del Este",
   "fuente": {
     "nombre": "simulador oficial del TSJE",
     "url": "https://simuladoroficial.tsje.gov.py/"

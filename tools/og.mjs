@@ -6,7 +6,7 @@
  * cambia el diseño. Con CHROMIUM=<ruta> se le indica un navegador ya
  * instalado en vez del que baja Playwright.
  *
- * Dibuja el ejemplo de datos/ejemplo.json —listas A, B y C— y no una elección
+ * Dibuja el ejemplo de datos/ejemplo.json (listas A, B y C) y no una elección
  * real: la herramienta sirve para cualquiera, así que la vista previa no tiene
  * por qué mostrar partidos concretos con sus colores. El reparto que se ve es
  * el que calcula el propio js/core.js con esos votos, no números inventados.

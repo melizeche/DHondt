@@ -1,6 +1,6 @@
 {
   "$schema": "schema.json",
-  "eleccion": "Elecciones Municipales — Junta Municipal de Encarnación",
+  "eleccion": "Elecciones Municipales · Junta Municipal de Encarnación",
   "fuente": {
     "nombre": "simulador oficial del TSJE",
     "url": "https://simuladoroficial.tsje.gov.py/"

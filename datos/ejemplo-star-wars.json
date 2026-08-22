@@ -1,6 +1,6 @@
 {
   "$schema": "schema.json",
-  "eleccion": "Senado Galáctico — ejemplo de prueba",
+  "eleccion": "Senado Galáctico (ejemplo de prueba)",
   "bancas": 10,
   "umbral": 0,
   "modo": "desbloqueada",

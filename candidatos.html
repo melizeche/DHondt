@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Votos por candidato — Calculadora D'Hondt</title>
+<title>Votos por candidato · Calculadora D'Hondt</title>
 <meta name="description" content="Cargá los votos de cada candidato y mirá el cálculo completo: el total de cada lista, el reparto D'Hondt, cómo queda el orden interno de cada lista y quiénes resultan electos.">
 
 <!-- Cloudflare Pages sirve lo mismo en <proyecto>.pages.dev; esto le dice
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Calculadora D'Hondt">
 <meta property="og:locale" content="es_PY">
-<meta property="og:title" content="Calculadora D'Hondt — votos por candidato">
+<meta property="og:title" content="Calculadora D'Hondt · votos por candidato">
 <meta property="og:description" content="Cargá los votos de cada candidato y mirá el cálculo completo: totales, reparto D'Hondt, orden interno de cada lista y electos.">
 <meta property="og:url" content="https://bancas.melizeche.com/candidatos.html">
 <meta property="og:image" content="https://bancas.melizeche.com/og.png">
@@ -24,7 +24,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Calculadora D'Hondt: reparto de bancas entre listas">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Calculadora D'Hondt — votos por candidato">
+<meta name="twitter:title" content="Calculadora D'Hondt · votos por candidato">
 <meta name="twitter:description" content="Cargá los votos de cada candidato y mirá el cálculo completo: totales, reparto D'Hondt, orden interno de cada lista y electos.">
 <meta name="twitter:image" content="https://bancas.melizeche.com/og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -358,7 +358,7 @@ if (estado.modo !== "desbloqueada") {
 /* En la primera visita se abre la primera lista, así la página llega con
  * campos donde cargar votos en vez de nueve filas cerradas. Sólo en la
  * primera: si el estado viene del navegador, manda lo que el usuario dejó
- * —incluido haber cerrado todas. */
+ * (incluido haber cerrado todas). */
 function abrirPrimeraLista() {
   if (estado.listas.length) estado.listas[0].abierta = true;
 }
@@ -769,8 +769,8 @@ function renderReordenamiento(res) {
       el("strong", { text: lista.numero + " · " + lista.partido }),
       el("span", { style: "color:var(--text-muted); font-size:.85rem",
         text: gan > 0
-          ? "— " + nBancas(gan) + ": " + (gan === 1 ? "entra el primero" : "entran los " + gan + " primeros")
-          : "— sin bancas" }),
+          ? nBancas(gan) + ": " + (gan === 1 ? "entra el primero" : "entran los " + gan + " primeros")
+          : "sin bancas" }),
     ]);
 
     cont.appendChild(encabezado);
@@ -825,7 +825,7 @@ function renderElectos(res) {
 
     tbody.appendChild(el("tr", null, [
       el("td", { class: "num", text: String(r.ronda) }),
-      el("td", { class: "nombre", text: f ? f.nombre : "— sin candidato en la nómina —" }),
+      el("td", { class: "nombre", text: f ? f.nombre : "(sin candidato en la nómina)" }),
       el("td", null, [
         el("span", { class: "chip", style: "background:" + colorDe(lista) }),
         document.createTextNode(lista.numero + " · " + lista.sigla),
@@ -903,7 +903,7 @@ let listaEnEdicion = null;
 
 function abrirDialogoPegar(lista) {
   listaEnEdicion = lista;
-  document.getElementById("dp-titulo").textContent = "Pegar votos — " + lista.numero + " · " + lista.partido;
+  document.getElementById("dp-titulo").textContent = "Pegar votos · " + lista.numero + " · " + lista.partido;
   document.getElementById("dp-texto").value = lista.candidatos.map(function (c) {
     return c.pref > 0 ? c.nombre + "\t" + c.pref : c.nombre;
   }).join("\n");

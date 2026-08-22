@@ -2,9 +2,9 @@
  *   node tests/schema.test.mjs
  *
  * Trae un validador propio en vez de una dependencia, porque el resto de los
- * tests tampoco tiene ninguna. Cubre sólo lo que el esquema usa —type, enum,
+ * tests tampoco tiene ninguna. Cubre sólo lo que el esquema usa (type, enum,
  * minimum, maximum, minItems, pattern, required, properties,
- * additionalProperties, items, oneOf y $ref— y no pretende ser un validador
+ * additionalProperties, items, oneOf y $ref) y no pretende ser un validador
  * de JSON Schema completo. Si el esquema crece, esto tiene que crecer con él:
  * la última prueba se asegura de que no queden palabras clave sin implementar.
  */

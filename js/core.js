@@ -1,4 +1,4 @@
-/* Calculadora D'Hondt — reparto de bancas por el método D'Hondt.
+/* Calculadora D'Hondt: reparto de bancas por el método D'Hondt.
  * Copyright (C) 2026 melizeche
  *
  * Software libre bajo la Licencia Pública General Affero de GNU, versión 3 o
@@ -76,7 +76,7 @@ function nominaDeEjemplo(cantidad, letra) {
  * Antes acá venían las candidaturas de la Junta Municipal de Asunción, que era
  * lo que correspondía cuando la herramienta calculaba esa elección y ninguna
  * otra. Ahora calcula cualquiera y trae seis conjuntos de datos, así que abrir
- * siempre en una ciudad —y encima en la capital— dejaba de ser un valor por
+ * siempre en una ciudad (y encima en la capital) dejaba de ser un valor por
  * defecto para pasar a ser una afirmación. Asunción sigue estando, en el
  * desplegable, al lado de las demás.
  *
@@ -130,7 +130,7 @@ function datosPorDefecto() {
  * ================================================================== */
 
 /* Cuánto conserva cada escalón del anterior. Entre listas la caída es fuerte
- * —de la primera a la segunda puede haber menos de la mitad—; entre los
+ * (de la primera a la segunda puede haber menos de la mitad); entre los
  * candidatos de una misma lista es suave, para que el voto preferente no se
  * concentre en dos nombres y el resto de la nómina quede en cero. */
 const CAIDA_LISTAS = [0.45, 0.85];
@@ -219,7 +219,7 @@ function sortearLista(lista, total, desbloqueada, azar) {
   destronarAlPrimero(lista.candidatos, azar);
 
   // El total sorteado es una intención: lo que manda es la suma, así que el
-  // resto —lo que no fue a ningún candidato— se cuenta como voto de lista.
+  // resto (lo que no fue a ningún candidato) se cuenta como voto de lista.
   lista.soloLista = Math.max(0, total - sumaPreferentes(lista));
   return recalcularTotal(lista);
 }
@@ -246,7 +246,7 @@ function sortearVotos(destino, azar) {
 
 /* ¿Los votos que hay en pantalla salen de un sorteo? Volver a tirar es la
  * gracia del botón, así que no se pregunta dos veces; pisar los votos que
- * vinieron con la elección —los reales de 2023, por ejemplo— o los que cargó
+ * vinieron con la elección (los reales de 2023, por ejemplo) o los que cargó
  * alguien a mano sí tiene que costar un clic más. No se guarda en el
  * navegador: después de recargar se vuelve a preguntar una vez, que es el
  * lado seguro de equivocarse. */
@@ -370,7 +370,7 @@ function normalizarHex(valor) {
  * boleta. Se usan esos, porque son los que el votante reconoce, pero algunos
  * no se ven contra el fondo (el PDC es blanco): a esos se les corrige la
  * luminosidad, conservando el tono, hasta que se distingan. El hex original
- * nunca se pisa — sigue en los datos y se muestra al editar la lista.
+ * nunca se pisa: sigue en los datos y se muestra al editar la lista.
  * ================================================================== */
 const FONDO_CLARO = "#fcfcfb";
 const FONDO_OSCURO = "#1a1a19";
@@ -436,8 +436,8 @@ function hslAHex(h, s, l) {
  *
  * El umbral no pretende que todas las listas se distingan entre sí: con siete
  * o nueve eso no lo logra ninguna paleta, y por eso nada acá depende sólo del
- * color —cada segmento de la cinta va rotulado, hay leyenda con siglas y las
- * tablas son de texto—. Lo que marca es el caso patológico: dos colores tan
+ * color (cada segmento de la cinta va rotulado, hay leyenda con siglas y las
+ * tablas son de texto). Lo que marca es el caso patológico: dos colores tan
  * parecidos que se leen como el mismo, y hacen ver rota la cinta. La boleta de
  * Encarnación trae tres amarillos a ΔE 1.8 entre sí. */
 const SEPARACION_MINIMA = 10;
@@ -744,7 +744,7 @@ function renderProcedencia() {
   const listas = estado.listas.length;
   const candidatos = estado.listas.reduce(function (s, l) { return s + l.candidatos.length; }, 0);
   origen.appendChild(document.createTextNode(
-    estado.eleccion + " — " + listas + " listas, " + candidatos + " candidatos."));
+    estado.eleccion + " · " + listas + " listas, " + candidatos + " candidatos."));
 
   // La atribución sólo sale si el archivo dice de dónde salieron las nóminas:
   // no se le puede colgar el crédito de unos datos cualesquiera al TSJE.
@@ -889,7 +889,7 @@ function conectarSelectorElecciones(idSelect, alCambiar) {
       sel.textContent = "";
       // Marcador para cuando lo cargado no sale de un archivo del índice:
       // los datos embebidos, o algo que el usuario importó.
-      sel.appendChild(el("option", { value: VALOR_SIN_ARCHIVO, text: "— datos cargados —" }));
+      sel.appendChild(el("option", { value: VALOR_SIN_ARCHIVO, text: "(datos cargados)" }));
       elecciones.forEach(function (e) {
         sel.appendChild(el("option", {
           value: e.archivo,
@@ -921,7 +921,7 @@ function conectarSelectorElecciones(idSelect, alCambiar) {
       campo.hidden = false;
     })
     .catch(function () {
-      /* Sin índice —file://, o el archivo no está— el selector no aparece y
+      /* Sin índice (file://, o el archivo no está) el selector no aparece y
          se sigue con los datos embebidos. Importar JSON sigue disponible. */
     });
 }
