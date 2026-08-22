@@ -449,6 +449,7 @@ no cambia ningún total.
 ```
 index.html                          página por lista
 candidatos.html                     página por candidato
+ayuda.html                          guía breve para usar la calculadora
 favicon.svg                         ícono
 og.png                              imagen de la vista previa al compartir (generada)
 LICENSE                             GNU AGPL versión 3

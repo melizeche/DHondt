@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="es-PY">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de uso · Calculadora D'Hondt</title>
+<meta name="description" content="Guía breve para cargar votos, entender el reparto D'Hondt y leer los resultados de la Calculadora D'Hondt.">
+
+<!-- Cloudflare Pages sirve lo mismo en <proyecto>.pages.dev; esto le dice
+     a los buscadores cuál es la dirección buena. -->
+<link rel="canonical" href="https://bancas.melizeche.com/ayuda.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Calculadora D'Hondt">
+<meta property="og:locale" content="es_PY">
+<meta property="og:title" content="Guía de uso · Calculadora D'Hondt">
+<meta property="og:description" content="Cómo cargar votos, entender el reparto D'Hondt y leer los resultados.">
+<meta property="og:url" content="https://bancas.melizeche.com/ayuda.html">
+<meta property="og:image" content="https://bancas.melizeche.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Calculadora D'Hondt: reparto de bancas entre listas">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Guía de uso · Calculadora D'Hondt">
+<meta name="twitter:description" content="Cómo cargar votos, entender el reparto D'Hondt y leer los resultados.">
+<meta name="twitter:image" content="https://bancas.melizeche.com/og.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/base.css">
+<style>
+.guia-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.guia-grid .card { margin: 0; }
+.guia-grid h3 { margin-bottom: 6px; }
+.guia-grid p, .card > p { color: var(--text-secondary); }
+.guia-grid p + p, .card > p + p { margin-top: 10px; }
+.pasos { margin: 0; padding-left: 22px; color: var(--text-secondary); }
+.pasos li + li { margin-top: 8px; }
+.ejemplo { margin-top: 12px; }
+.ejemplo td, .ejemplo th { text-align: right; }
+.ejemplo th:first-child, .ejemplo td:first-child { text-align: left; }
+.ejemplo td.gana { background: color-mix(in srgb, var(--accent) 16%, transparent); font-weight: 650; }
+.ejemplo .resultado td { font-weight: 650; border-top: 2px solid var(--border-strong); }
+.turnos th:nth-child(2), .turnos td:nth-child(2), .turnos th:last-child, .turnos td:last-child { text-align: left; }
+.nota-final { margin-top: 12px; font-size: .85rem; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="nav no-print" aria-label="Páginas de la calculadora">
+  <a href="index.html">Votos por lista <span class="desc">un número por lista</span></a>
+  <a href="candidatos.html">Votos por candidato <span class="desc">cálculo completo</span></a>
+  <a href="ayuda.html" aria-current="page">Guía <span class="desc">cómo usarla</span></a>
+</nav>
+
+<div class="top">
+  <div>
+    <h1>Cómo usar la calculadora</h1>
+    <p class="sub">Una guía corta para cargar votos, entender el reparto D'Hondt y leer quiénes resultan electos.</p>
+  </div>
+  <div class="toolbar no-print">
+    <button id="btn-tema" class="ghost" title="Cambiar tema">◐</button>
+  </div>
+</div>
+
+<div class="callout">
+  <strong>La calculadora no predice resultados.</strong> Reparte las bancas de los votos que se cargan. «Votos al azar» inventa números sólo para mostrar cómo funciona el método.
+</div>
+
+<section class="card">
+  <header>
+    <div>
+      <div class="paso">Paso 1</div>
+      <h2>Elegí cómo cargar los votos</h2>
+    </div>
+  </header>
+  <div class="guia-grid">
+    <div class="card">
+      <h3><a href="index.html">Votos por lista</a></h3>
+      <p>Escribí un total por partido, movimiento o alianza. Sirve para ver rápido cuántas bancas gana cada lista.</p>
+      <p>Si la elección tiene voto preferente, esta página muestra la nómina en su orden original: para reordenarla hacen falta los votos de cada candidato.</p>
+    </div>
+    <div class="card">
+      <h3><a href="candidatos.html">Votos por candidato</a></h3>
+      <p>Escribí el voto preferente de cada candidato. La suma forma el total de su lista y también decide el orden interno de quienes ocupan las bancas.</p>
+      <p>Es la vista indicada para calcular una elección paraguaya con listas desbloqueadas.</p>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <header>
+    <div>
+      <div class="paso">Paso 2</div>
+      <h2>Cargá o armá la elección</h2>
+    </div>
+  </header>
+  <ol class="pasos">
+    <li>En <strong>Elección</strong>, elegí uno de los conjuntos que vienen cargados, o importá un JSON propio.</li>
+    <li>Revisá la cantidad de <strong>bancas</strong> y el tipo de lista. En Paraguay, el umbral legal es 0: se deja así salvo que quieras probar otro escenario.</li>
+    <li>Cargá los votos. Podés editar el nombre, el número, la sigla, el color y la nómina de cada lista.</li>
+    <li>Leé el resumen, el reparto, los electos y la tabla de cocientes. Todo se recalcula al escribir.</li>
+  </ol>
+</section>
+
+<section class="card">
+  <header>
+    <div>
+      <div class="paso">Paso 3</div>
+      <h2>D'Hondt, banca por banca</h2>
+    </div>
+    <span class="hint">La lista ganadora pierde fuerza sólo para la banca siguiente.</span>
+  </header>
+  <p>Pensalo como un puntaje que compite por la próxima banca. Al principio, el puntaje de cada lista es igual a sus votos. La banca va siempre al puntaje más alto.</p>
+  <ol class="pasos" style="margin-top:12px">
+    <li>Compará los puntajes de todas las listas.</li>
+    <li>La lista con el puntaje más alto gana una banca.</li>
+    <li>Para su próxima oportunidad, dividí <strong>sus votos originales</strong> por la cantidad de bancas que acaba de ganar. Repetí hasta repartir todas.</li>
+  </ol>
+  <p class="nota-final"><strong>Los votos no cambian ni se gastan.</strong> El puntaje sólo sirve para que una lista que ya ganó una banca no compita por la siguiente con la misma ventaja.</p>
+  <p style="margin-top:14px">Ejemplo: A tiene 100.000 votos, B 80.000 y C 30.000. Hay 5 bancas.</p>
+  <div class="table-scroll ejemplo turnos">
+    <table>
+      <thead>
+        <tr>
+          <th>Banca</th>
+          <th>Puntajes que compiten</th>
+          <th>La gana</th>
+          <th>Su próximo puntaje</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1.ª</td><td>A 100.000 · B 80.000 · C 30.000</td><td class="gana">A</td><td>A 50.000 (100.000 ÷ 2)</td>
+        </tr>
+        <tr>
+          <td>2.ª</td><td>A 50.000 · B 80.000 · C 30.000</td><td class="gana">B</td><td>B 40.000 (80.000 ÷ 2)</td>
+        </tr>
+        <tr>
+          <td>3.ª</td><td>A 50.000 · B 40.000 · C 30.000</td><td class="gana">A</td><td>A 33.333 (100.000 ÷ 3)</td>
+        </tr>
+        <tr class="resultado">
+          <td>4.ª</td><td>A 33.333 · B 40.000 · C 30.000</td><td class="gana">B</td><td>B 26.667 (80.000 ÷ 3)</td>
+        </tr>
+        <tr>
+          <td>5.ª</td><td>A 33.333 · B 26.667 · C 30.000</td><td class="gana">A</td><td>A 25.000 (100.000 ÷ 4)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="nota-final">El resultado es A 3 bancas y B 2. C no pierde sus 30.000 votos: con sólo 5 bancas, su puntaje nunca fue el más alto. Si hubiera una sexta, C ganaría esa banca con 30.000. La tabla de cocientes de la calculadora muestra estas mismas cuentas completas: cada celda es un puntaje posible de una lista para su próxima banca.</p>
+</section>
+
+<section class="card">
+  <header>
+    <div>
+      <div class="paso">Paso 4</div>
+      <h2>Entendé el voto preferente</h2>
+    </div>
+  </header>
+  <p><strong>Las bancas las gana la lista, no el candidato.</strong> Una vez que D'Hondt decide cuántas le tocan a cada lista, sus candidatos se ordenan por voto preferente, de mayor a menor.</p>
+  <p>Si faltan bancas por llenar después de quienes recibieron votos preferentes, entran los candidatos sin votos por el orden original de la nómina. Si dos candidatos empatan en votos preferentes, prevalece ese orden original.</p>
+</section>
+
+<p class="footer">
+  Para la referencia completa del formato JSON, los datos y la norma electoral, véase el
+  <a href="https://github.com/melizeche/DHondt#readme" target="_blank" rel="noopener">README del proyecto</a>.
+  Herramienta de cálculo no oficial, sin relación con el TSJE ni con ningún partido.
+</p>
+
+<p class="footer">
+  Software libre bajo la
+  <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">Licencia Pública General Affero de GNU, versión 3</a>.
+  <a href="https://github.com/melizeche/DHondt" target="_blank" rel="noopener">Código fuente</a>.
+</p>
+
+</div>
+
+<script src="js/core.js"></script>
+<script>
+inicializarTema(function () {});
+</script>
+</body>
+</html>
