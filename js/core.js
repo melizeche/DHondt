@@ -331,7 +331,7 @@ function normalizar(bruto) {
     : null;
 
   return {
-    eleccion: String(bruto.eleccion || "Elecciones Municipales — Asunción"),
+    eleccion: String(bruto.eleccion || "Elección sin nombre"),
     fuente: fuente,
     bancas: bancas,
     umbral: clampNum(bruto.umbral, 0, 20, 0),
@@ -820,12 +820,21 @@ function renderSelectorColor(contenedor, lista) {
 }
 
 /* ============================================== importar / exportar JSON */
+
+/* Nombre de archivo a partir del nombre de la elección, para que lo que se
+ * baja describa lo que hay cargado y no una elección fija. */
+function nombreDeArchivo(texto) {
+  const limpio = (texto || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  return limpio || "eleccion";
+}
+
 function exportarJSON(nombreArchivo) {
   const copia = JSON.parse(JSON.stringify(estado));
   copia.listas.forEach(function (l) { delete l.id; delete l.abierta; });
   const blob = new Blob([JSON.stringify(copia, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
-  const a = el("a", { href: url, download: nombreArchivo || "dhondt-asuncion.json" });
+  const a = el("a", { href: url, download: nombreArchivo || nombreDeArchivo(estado.eleccion) + ".json" });
   document.body.appendChild(a);
   a.click();
   a.remove();

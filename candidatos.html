@@ -1026,7 +1026,7 @@ document.getElementById("btn-reset").addEventListener("click", function () {
 });
 
 document.getElementById("btn-imprimir").addEventListener("click", function () { window.print(); });
-document.getElementById("btn-exportar").addEventListener("click", function () { exportarJSON("dhondt-asuncion-candidatos.json"); });
+document.getElementById("btn-exportar").addEventListener("click", function () { exportarJSON(); });
 conectarImportacion("btn-importar", "file-input", function () {
   estado.listas.forEach(recalcularTotal);
   render();

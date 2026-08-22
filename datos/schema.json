@@ -13,7 +13,7 @@
     "eleccion": {
       "type": "string",
       "description": "Nombre de la elección. Se muestra arriba de la página.",
-      "default": "Elecciones Municipales — Asunción",
+      "default": "Elección sin nombre",
       "examples": ["Elecciones Municipales — Junta Municipal de Asunción"]
     },
     "fuente": {
@@ -35,10 +35,10 @@
     },
     "bancas": {
       "type": "integer",
-      "description": "Bancas a repartir. La Junta Municipal de Asunción se integra con 24 concejales.",
+      "description": "Bancas a repartir.",
       "minimum": 1,
       "maximum": 99,
-      "default": 24
+      "default": 12
     },
     "umbral": {
       "type": "number",
@@ -102,10 +102,9 @@
         },
         "color": {
           "type": "integer",
-          "description": "Índice en la paleta de la app. Se usa sólo si no hay `colorHex`.",
+          "description": "Índice en la paleta de la app. Se usa sólo si no hay `colorHex`. Si falta, la app asigna uno según la posición de la lista.",
           "minimum": 0,
-          "maximum": 7,
-          "default": 0
+          "maximum": 7
         },
         "colorHex": {
           "type": ["string", "null"],

@@ -280,6 +280,7 @@ console.log("\nLectura de archivos JSON");
   check("preferentes por defecto en cero", e.listas[0].candidatos[0].pref, 0);
   check("sin «soloLista» se deduce del total", e.listas[0].soloLista, 900);
   check("sin «bancas» se usa el valor por defecto", e.bancas, 12);
+  check("sin «eleccion» no dice ser ninguna elección real", e.eleccion, "Elección sin nombre");
 }
 {
   const e = normalizar({
