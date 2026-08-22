@@ -74,6 +74,12 @@
   funciona igual con cualquier nómina.
 </div>
 
+<div class="callout no-print" id="aviso-preferente" hidden>
+  <strong>Esto reparte bancas entre listas, no adentro de cada una.</strong>
+  Con voto preferente, quiénes ocupan las bancas lo deciden los votos de cada candidato.
+  Para eso está la <a href="candidatos.html">página de votos por candidato</a>.
+</div>
+
 <p class="footer no-print" id="origen-datos" style="margin:-8px 0 20px"></p>
 
 <section class="card no-print">
@@ -287,11 +293,20 @@ function render() {
   const res = calcularDHondt(estado.listas, estado.bancas, estado.umbral);
   renderConfig();
   renderProcedencia();
+  renderAvisoPreferente();
   renderListas(res);
   renderStats(res);
   renderReparto(res);
   renderElectos(res);
   renderCocientes(res);
+}
+
+/* Con voto preferente el total por lista no alcanza para saber quiénes entran:
+ * eso lo hace candidatos.html. Se avisa sólo cuando hace falta —hay modo y
+ * votos que de verdad se podrían reordenar—, para no molestar en el resto. */
+function renderAvisoPreferente() {
+  document.getElementById("aviso-preferente").hidden =
+    estado.modo !== "desbloqueada" || !hayVotosCargados();
 }
 
 function renderConfig() {
