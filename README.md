@@ -10,6 +10,32 @@ listas, las nóminas y el modo se cargan desde un JSON. Viene con las Juntas
 Municipales de Asunción, Encarnación y Ciudad del Este, que es para lo que se
 hizo, pero no está atada a ellas.
 
+## Contenido
+
+- [Usar ahora](#usar-ahora)
+- [Página por lista](#página-por-lista-indexhtml) y [página por candidato](#página-por-candidato-candidatoshtml)
+- [Elegir otra elección](#elegir-otra-elección)
+  - [Regenerar los datos](#regenerar-los-datos)
+- [Resultados de una elección que ya pasó](#resultados-de-una-elección-que-ya-pasó)
+- [Formato del JSON](#formato-del-json)
+- [Cómo se calcula](#cómo-se-calcula)
+- [Estructura](#estructura), [tests](#tests) y [publicar](#publicar)
+- [Licencia](#licencia)
+
+## Usar ahora
+
+La versión publicada está en [bancas.melizeche.com](https://bancas.melizeche.com).
+
+- Con doble clic en `index.html`, funcionan la calculadora y «Importar JSON»;
+  el selector **Elección** queda oculto.
+- Con un servidor local también funciona el selector:
+
+  ```sh
+  python3 -m http.server
+  ```
+
+  Después se abre [localhost:8000](http://localhost:8000).
+
 Son dos páginas sobre los mismos datos, y se puede saltar de una a la otra sin
 perder nada:
 
@@ -67,8 +93,12 @@ en JSON, guardado automático en el navegador e impresión.
 ## Elegir otra elección
 
 El desplegable **Elección** lista los conjuntos de datos de `datos/`, según
-[`datos/indice.json`](datos/indice.json). Para agregar uno: se deja el JSON en
-`datos/` y se le suma una entrada al índice.
+[`datos/indice.json`](datos/indice.json). Para agregar una elección:
+
+1. Generá o importá su JSON.
+2. Dejalo en `datos/`.
+3. Sumale una entrada a `datos/indice.json`.
+4. Corré `node tests/schema.test.mjs`.
 
 ```jsonc
 {
@@ -211,6 +241,8 @@ del partido y conviene repasarlas a mano, que es lo único que se editó acá.
 `Exportar JSON` genera este formato y `Importar JSON` lo acepta. También acepta
 una versión abreviada escrita a mano: `candidatos` puede ser una lista de textos
 en lugar de objetos, y todo lo que falte toma su valor por defecto.
+
+Los comentarios son explicativos: un archivo para importar debe quitarlos.
 
 ```jsonc
 {
@@ -427,13 +459,14 @@ tiradas: que ninguna lista quede en cero sea cual sea la cantidad, que las
 sumas cierren, que el resultado salga desparejo, que la ganadora caiga en
 cualquier posición de la boleta y que el voto preferente reordene siempre algo.
 
-`datos.test.mjs` comprueba las candidaturas generadas: que estén las 9 listas
-con sus 24 candidatos, sin nombres de relleno ni votos precargados, que los
-números de lista y las siglas no se repitan, y que los 9 colores oficiales
-lleguen a 3:1 contra el fondo y sigan siendo distinguibles entre sí en los dos
-modos. También revisa la elección con la que se abre la página: que esté toda
-en cero, que no acredite ninguna fuente y que ninguna lista ni candidato pueda
-confundirse con algo real.
+`datos.test.mjs` comprueba los tres conjuntos municipales generados. En cada
+uno verifica la cantidad esperada de listas, bancas y candidatos; que las
+nóminas estén completas, sin nombres de relleno ni votos precargados; que los
+números de lista y las siglas no se repitan; y que cada color oficial alcance
+3:1 contra el fondo en los dos modos. También comprueba el resultado oficial
+del Senado de 2023, el ejemplo de Star Wars y la elección con la que se abre la
+página: que esté toda en cero, que no acredite ninguna fuente y que ninguna
+lista ni candidato pueda confundirse con algo real.
 
 `schema.test.mjs` valida contra el esquema todos los archivos del índice y
 prueba una veintena de casos que tiene que rechazar, para que el esquema no
@@ -445,7 +478,8 @@ sin implementar); el esquema además se verificó aparte con
 ## Publicar
 
 Es un sitio estático sin build: HTML, CSS, JS y JSON servidos tal cual. Anda en
-cualquier hosting estático y también abriendo `index.html` con doble clic.
+cualquier hosting estático; para usarlo desde el disco, véase
+[Usar ahora](#usar-ahora).
 
 ### GitHub Pages
 
@@ -456,59 +490,24 @@ No hace falta ningún workflow. Una vez que esto esté en la rama principal:
 3. **Branch**: la rama principal, carpeta `/ (root)` → *Save*
 
 Queda en `https://<usuario>.github.io/DHondt/`. El sitio está pensado para
-funcionar bajo ese subdirectorio: todas las rutas son relativas, no hay ninguna
-que arranque con `/`, y no se usa `fetch`, así que no hay nada que romper ni
-ninguna base URL que configurar.
+funcionar bajo ese subdirectorio: todas las rutas son relativas; el `fetch` del
+selector funciona también bajo el subdirectorio del proyecto.
 
 El `.nojekyll` de la raíz le dice a Pages que publique los archivos tal cual en
 vez de pasarlos por Jekyll. Con este contenido Jekyll no rompería nada, pero
 saltearlo es más rápido y evita sorpresas si mañana se agrega algún archivo que
 empiece con guion bajo.
 
-### Cloudflare Pages (sirve con el repositorio privado)
+### Cloudflare Pages 
 
-GitHub Pages sólo publica desde repositorios privados en los planes pagos.
-Cloudflare Pages lo hace en el plan gratuito, así que es la opción si el
-repositorio tiene que seguir privado.
+Seguí la [guía actual de HTML estático de Cloudflare](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/): elegí el repositorio y el directorio raíz que contiene estos archivos. No hay build ni directorio generado; la guía hoy recomienda `exit 0` como comando de build, mientras que la [configuración general](https://developers.cloudflare.com/pages/configuration/build-configuration/) también documenta dejarlo vacío en proyectos sin framework. El panel puede cambiar: seguí la alternativa que ofrezca la guía al crear el proyecto.
 
-En el panel de Cloudflare: *Workers & Pages → Create → Pages → Connect to Git*,
-se elige el repositorio y:
-
-| Ajuste | Valor |
-|---|---|
-| Framework preset | None |
-| Build command | *(vacío)* |
-| Build output directory | `/` |
-| Root directory | *(vacío)* |
-
-No hay build: se publican los archivos tal cual. Queda en
-`https://<proyecto>.pages.dev`, y cada push a la rama elegida vuelve a
+Queda en `https://<proyecto>.pages.dev`, y cada push a la rama elegida vuelve a
 desplegar.
-
-**Repositorio privado no es lo mismo que sitio privado.** El código queda
-privado, pero lo publicado en `pages.dev` es visible para cualquiera que tenga
-el enlace. Si lo que hace falta es que el sitio tampoco sea público, se le pone
-adelante **Cloudflare Access** (Zero Trust, gratis hasta 50 usuarios): se
-protege con una política por correo o dominio y recién ahí el sitio deja de ser
-abierto.
 
 `_headers` es de Cloudflare (Netlify usa el mismo formato) y agrega unas
 cabeceras de seguridad. GitHub Pages lo ignora, así que no molesta.
 
-También saca una que Cloudflare pone sola: `Access-Control-Allow-Origin: *`, que
-deja a cualquier sitio leer estos archivos desde su propio JavaScript. Quitarla
-no esconde nada (CORS lo hace cumplir el navegador, y con `curl` los archivos se
-bajan igual), pero es un permiso que el sitio no necesita: las dos páginas traen
-todo de su mismo origen, y una petición del mismo origen ni consulta esa
-cabecera. Por eso mismo no tendría sentido «restringirla» al propio dominio: no
-cambiaría nada para nadie. Los datos siguen disponibles donde corresponde, que
-es este repositorio.
-
-Se puede comprobar cómo quedó desplegado:
-
-```sh
-curl -sSI https://bancas.melizeche.com/datos/indice.json
-```
 
 ### Vista previa al compartir
 
@@ -547,7 +546,7 @@ ningún lado.
 
 ## Licencia
 
-Copyright (C) 2026 melizeche.
+Copyright (C) 2026 Marcelo Elizeche Landó.
 
 Software libre bajo la [Licencia Pública General Affero de GNU, versión 3](LICENSE)
 o posterior (AGPL-3.0-or-later), sin ninguna garantía. Se puede usar, estudiar,
@@ -569,4 +568,4 @@ el programa, no los datos oficiales que convierte.
 ---
 
 Herramienta de cálculo no oficial, sin relación con el TSJE ni con ningún
-partido. Los datos que se cargan quedan solamente en el navegador.
+partido.
