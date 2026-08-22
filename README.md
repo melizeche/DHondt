@@ -250,7 +250,7 @@ y no sólo cuántas sacó cada lista. Los 24 nombres que calcula la herramienta 
 los 24 concejales que asumieron, en el orden en que el voto preferente los dejó.
 Es la única prueba del orden interno contra un resultado oficial completo.
 
-La planilla sale de [datos.gov.py](https://www.datos.gov.py/) y trae las 261
+La planilla sale de [datos.gov.py](https://www.datos.gov.py/dataset/elecciones-municipales-2021-votos-preferentes-por-mesa) y trae las 261
 Juntas Municipales del país, así que sirve para cualquier ciudad:
 
 ```sh
