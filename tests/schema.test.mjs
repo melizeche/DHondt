@@ -9,6 +9,10 @@
  * la última prueba se asegura de que no queden palabras clave sin implementar.
  */
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const { normalizar } = require("../js/core.js");
 
 const esquema = JSON.parse(readFileSync(new URL("../datos/schema.json", import.meta.url), "utf8"));
 
@@ -154,6 +158,25 @@ console.log("\nLo mínimo alcanza");
 {
   const errores = validar(esquema, { listas: [{}] }, esquema);
   check("una lista vacía también (todo tiene valor por defecto)", errores.length === 0, errores);
+}
+
+console.log("\nLos «default» del esquema dicen lo que hace el cargador");
+{
+  const aplicado = normalizar({ listas: [{}] });
+  const declarados = {};
+  Object.keys(esquema.properties).forEach(function (clave) {
+    if ("default" in esquema.properties[clave]) {
+      declarados[clave] = esquema.properties[clave].default;
+    }
+  });
+  const malos = Object.keys(declarados).filter(function (clave) {
+    return JSON.stringify(aplicado[clave]) !== JSON.stringify(declarados[clave]);
+  });
+  check("los defaults de la raíz coinciden con los del cargador", malos.length === 0,
+    malos.map(function (clave) {
+      return clave + ": el esquema dice " + JSON.stringify(declarados[clave]) +
+        ", el cargador aplica " + JSON.stringify(aplicado[clave]);
+    }));
 }
 
 console.log("\nY el esquema rechaza lo que tiene que rechazar");

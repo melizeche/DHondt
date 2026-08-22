@@ -15,7 +15,8 @@ node tests/datos.test.mjs      # datos generados, elección por defecto
 node tests/schema.test.mjs     # todos los datos contra datos/schema.json
 ```
 
-Run all three after any change. No runner, no watch mode, no CI.
+Run all three after any change. No runner, no watch mode; the same three commands
+run again on every push, via `.github/workflows/tests.yml`.
 
 To look at the site: `python3 -m http.server`. Opening `index.html` from disk
 also has to keep working (see below).
