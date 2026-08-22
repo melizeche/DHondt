@@ -120,7 +120,7 @@
         },
         "soloLista": {
           "type": "integer",
-          "description": "Votos que eligieron la lista sin nombrar candidato. Si falta, se deduce restándole a `votos` la suma de los preferentes.",
+          "description": "Votos que eligieron la lista sin nombrar candidato. En Paraguay no se registran (Ley 6318/2019): todo voto nombra a un candidato. Si falta, se deduce restándole a `votos` la suma de los preferentes.",
           "minimum": 0
         },
         "candidatos": {

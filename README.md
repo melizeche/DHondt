@@ -356,6 +356,11 @@ candidato— porque el total de la lista puede venir informado aparte del detall
 por candidato. Es un supuesto más general: si no existen esos votos, queda en 0
 y no cambia nada.
 
+Y en Paraguay, de hecho, no existen: la Ley N° 6318/2019 sólo contempla el voto
+que nombra al candidato de su preferencia dentro de la casilla de su lista, así
+que bajo listas desbloqueadas todo voto entra al total por la vía de un
+candidato.
+
 ### Lo que la herramienta no hace
 
 El artículo también dice que el voto preferencial «se computará también para la
