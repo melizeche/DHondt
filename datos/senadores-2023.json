@@ -2,7 +2,8 @@
   "$schema": "schema.json",
   "eleccion": "Elecciones Generales 2023 · Senadores (resultados oficiales)",
   "fuente": {
-    "nombre": "resultados oficiales del TSJE"
+    "nombre": "resultados oficiales del TSJE",
+    "url": "https://tsje.gov.py/consulta_candidatos_electos_2023/"
   },
   "bancas": 45,
   "umbral": 0,

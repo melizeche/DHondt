@@ -3,7 +3,7 @@
   "eleccion": "Elecciones Municipales 2021 · Junta Municipal de Asunción",
   "fuente": {
     "nombre": "votos preferentes de las Municipales 2021, datos.gov.py",
-    "url": "https://www.datos.gov.py/dataset/resultados-electorales"
+    "url": "https://www.datos.gov.py/dataset/elecciones-municipales-2021-votos-preferentes-por-mesa"
   },
   "bancas": 24,
   "umbral": 0,
