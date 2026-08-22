@@ -75,9 +75,10 @@
 </div>
 
 <div class="callout no-print" id="aviso-preferente" hidden>
-  <strong>Esto reparte bancas entre listas, no adentro de cada una.</strong>
-  Con voto preferente, quiénes ocupan las bancas lo deciden los votos de cada candidato.
-  Para eso está la <a href="candidatos.html">página de votos por candidato</a>.
+  <strong>Los electos que se ven salen del orden de la nómina.</strong>
+  La elección es con voto preferente, pero no hay votos por candidato cargados, así que las bancas de cada
+  lista se muestran ocupadas por los primeros de su nómina. Con voto preferente ese orden lo deciden los
+  votos de cada candidato: se cargan en la <a href="candidatos.html">página de votos por candidato</a>.
 </div>
 
 <p class="footer no-print" id="origen-datos" style="margin:-8px 0 20px"></p>
@@ -301,12 +302,18 @@ function render() {
   renderCocientes(res);
 }
 
-/* Con voto preferente el total por lista no alcanza para saber quiénes entran:
- * eso lo hace candidatos.html. Se avisa sólo cuando hace falta —hay modo y
- * votos que de verdad se podrían reordenar—, para no molestar en el resto. */
+/* Con la elección desbloqueada y ningún voto preferente cargado, detalleOrden
+ * no tiene con qué reordenar y termina marcando como electos a los primeros de
+ * cada nómina. Eso se lee como un resultado y es apenas el orden que propuso el
+ * partido, así que ahí se avisa.
+ *
+ * En cuanto haya un voto preferente en cualquier lista el aviso se va: desde
+ * ese momento esta página muestra el reordenamiento igual que candidatos.html,
+ * y repetirlo sería molestar por algo que ya está bien. */
 function renderAvisoPreferente() {
+  const hayPreferentes = estado.listas.some(function (l) { return sumaPreferentes(l) > 0; });
   document.getElementById("aviso-preferente").hidden =
-    estado.modo !== "desbloqueada" || !hayVotosCargados();
+    estado.modo !== "desbloqueada" || !hayVotosCargados() || hayPreferentes;
 }
 
 function renderConfig() {
