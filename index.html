@@ -708,10 +708,20 @@ document.getElementById("dlg-cand").addEventListener("close", function (e) {
 
 /* ============================================================== eventos */
 function enlazarConfig(id, aplicar) {
-  document.getElementById(id).addEventListener("input", function (e) {
+  const campo = document.getElementById(id);
+  campo.addEventListener("input", function (e) {
+    // Un <input type="number"> vacío vale 0 al convertirlo a Number. No lo
+    // aplicamos todavía: así se puede borrar el valor anterior para escribir
+    // otro, sin que el mínimo lo reemplace enseguida por 1.
+    if (e.target.value === "") return;
     aplicar(e.target.value);
     guardar();
     render();
+  });
+  campo.addEventListener("blur", function () {
+    // La elección guardada siempre conserva valores válidos; si se dejó vacío,
+    // se vuelve a mostrar el último que estaba aplicado.
+    if (campo.value === "") renderConfig();
   });
 }
 enlazarConfig("cfg-bancas", function (v) { estado.bancas = clampInt(v, 1, 99, BANCAS_POR_DEFECTO); });
