@@ -161,6 +161,9 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-app
 .config { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
 .field { position: relative; }
 .field label { display: block; font-size: .78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; }
+/* La grilla de configuración puede mezclar rótulos de una y dos líneas. Cada
+ * uno reserva dos para que los controles de la fila queden alineados. */
+.config > .field > label { min-height: 2.8em; }
 .field .note { font-size: .72rem; color: var(--text-muted); margin-top: 4px; }
 
 /* Nota que se despliega. Es un <details> y no un title=, que en el teléfono
