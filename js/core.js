@@ -75,7 +75,7 @@ function nominaDeEjemplo(cantidad, letra) {
  *
  * Antes acá venían las candidaturas de la Junta Municipal de Asunción, que era
  * lo que correspondía cuando la herramienta calculaba esa elección y ninguna
- * otra. Ahora calcula cualquiera y trae seis conjuntos de datos, así que abrir
+ * otra. Ahora calcula cualquiera y trae varios conjuntos de datos, así que abrir
  * siempre en una ciudad (y encima en la capital) dejaba de ser un valor por
  * defecto para pasar a ser una afirmación. Asunción sigue estando, en el
  * desplegable, al lado de las demás.
@@ -309,7 +309,7 @@ function normalizar(bruto) {
       id: proximoId++,
       numero: clampInt(l.numero, 0, 9999, i + 1),
       partido: String(l.partido || l.nombre || ("Lista " + (i + 1))).trim(),
-      sigla: String(l.sigla || "").trim() || siglaDe(String(l.partido || ("L" + (i + 1)))),
+      sigla: String(l.sigla || "").trim() || siglaDe(String(l.partido || l.nombre || ("L" + (i + 1)))),
       color: clampInt(l.color, 0, PALETA.length - 1, i % PALETA.length),
       colorHex: normalizarHex(l.colorHex),
       votos: clampInt(l.votos, 0, 1e12, 0),
@@ -327,7 +327,7 @@ function normalizar(bruto) {
   });
 
   const fuente = bruto.fuente && typeof bruto.fuente === "object" && bruto.fuente.nombre
-    ? { nombre: String(bruto.fuente.nombre), url: bruto.fuente.url ? String(bruto.fuente.url) : null }
+    ? { nombre: String(bruto.fuente.nombre), url: urlHttp(bruto.fuente.url) }
     : null;
 
   return {
@@ -357,6 +357,15 @@ function clampNum(valor, min, max, porDefecto) {
 function siglaDe(texto) {
   const palabras = texto.split(/\s+/).filter(function (p) { return p.length > 2; });
   return palabras.slice(0, 3).map(function (p) { return p[0].toUpperCase(); }).join("") || "L";
+}
+
+/* La URL de la fuente termina en un enlace de la página, así que sólo se
+ * aceptan direcciones http(s): un archivo importado no puede colar un
+ * «javascript:» que se ejecute al hacer clic. */
+function urlHttp(valor) {
+  if (typeof valor !== "string") return null;
+  const limpio = valor.trim();
+  return /^https?:\/\//i.test(limpio) ? limpio : null;
 }
 
 function normalizarHex(valor) {
@@ -645,6 +654,14 @@ function nBancas(cantidad) {
   return cantidad + (cantidad === 1 ? " banca" : " bancas");
 }
 
+function nListas(cantidad) {
+  return cantidad + (cantidad === 1 ? " lista" : " listas");
+}
+
+function nCandidatos(cantidad) {
+  return cantidad + (cantidad === 1 ? " candidato" : " candidatos");
+}
+
 function pct(parte, total) {
   return total > 0 ? fmtDecimal.format((parte / total) * 100) + " %" : "—";
 }
@@ -744,7 +761,7 @@ function renderProcedencia() {
   const listas = estado.listas.length;
   const candidatos = estado.listas.reduce(function (s, l) { return s + l.candidatos.length; }, 0);
   origen.appendChild(document.createTextNode(
-    estado.eleccion + " · " + listas + " listas, " + candidatos + " candidatos."));
+    estado.eleccion + " · " + nListas(listas) + ", " + nCandidatos(candidatos) + "."));
 
   // La atribución sólo sale si el archivo dice de dónde salieron las nóminas:
   // no se le puede colgar el crédito de unos datos cualesquiera al TSJE.
@@ -766,15 +783,20 @@ function renderProcedencia() {
 }
 
 /* Selector de color de una lista. Si la lista trae el color oficial de la
- * boleta, ese va primero y queda elegido; los de la paleta lo reemplazan. */
-function renderSelectorColor(contenedor, lista) {
+ * boleta, ese va primero y queda elegido; los de la paleta lo reemplazan.
+ *
+ * No toca la lista: la elección queda en `borrador` y la aplica el diálogo al
+ * guardar, así «Cancelar» cancela también el color. */
+function renderSelectorColor(contenedor, lista, borrador) {
   contenedor.textContent = "";
+  borrador.color = lista.color;
+  borrador.colorHex = lista.colorHex;
 
   function marcar() {
     contenedor.querySelectorAll(".swatch").forEach(function (s) {
       const esOficial = s.dataset.oficial === "1";
-      const elegido = esOficial ? !!lista.colorHex
-                                : !lista.colorHex && Number(s.dataset.indice) === lista.color;
+      const elegido = esOficial ? !!borrador.colorHex
+                                : !borrador.colorHex && Number(s.dataset.indice) === borrador.color;
       s.setAttribute("aria-pressed", elegido ? "true" : "false");
     });
   }
@@ -785,7 +807,8 @@ function renderSelectorColor(contenedor, lista) {
       style: "background:" + ajustarParaFondo(lista.colorHex, modoOscuro()),
       title: "Color oficial de la boleta (" + lista.colorHex + ")",
       "aria-label": "Color oficial de la boleta",
-      onclick: function () { lista.colorHex = normalizarHex(lista.colorHex); marcar(); },
+      // el botón «oficial» recupera el hex después de descartarlo
+      onclick: function () { borrador.colorHex = lista.colorHex; marcar(); },
     });
     boton.dataset.oficial = "1";
     contenedor.appendChild(boton);
@@ -794,15 +817,14 @@ function renderSelectorColor(contenedor, lista) {
     }));
   }
 
-  const oficialOriginal = lista.colorHex;
   PALETA.forEach(function (p, i) {
     const boton = el("button", {
       type: "button", class: "swatch",
       style: "background:" + (modoOscuro() ? p.oscuro : p.claro),
       title: p.nombre, "aria-label": "Color " + p.nombre,
       onclick: function () {
-        lista.color = i;
-        lista.colorHex = null;   // elegir de la paleta descarta el color oficial
+        borrador.color = i;
+        borrador.colorHex = null;   // elegir de la paleta descarta el color oficial
         marcar();
       },
     });
@@ -810,13 +832,37 @@ function renderSelectorColor(contenedor, lista) {
     contenedor.appendChild(boton);
   });
 
-  // el botón "oficial" tiene que poder recuperar el hex después de descartarlo
-  if (oficialOriginal) {
-    const oficial = contenedor.querySelector('.swatch[data-oficial="1"]');
-    oficial.addEventListener("click", function () { lista.colorHex = oficialOriginal; marcar(); });
-  }
-
   marcar();
+}
+
+/* Abre el diálogo «Editar lista» y, al guardar, aplica número, nombre, sigla
+ * y color de una vez. Las dos páginas lo comparten. */
+let listaEnEdicion = null;
+const colorEnEdicion = { color: 0, colorHex: null };
+
+function abrirDialogoLista(lista) {
+  listaEnEdicion = lista;
+  document.getElementById("dl-num").value = lista.numero;
+  document.getElementById("dl-partido").value = lista.partido;
+  document.getElementById("dl-sigla").value = lista.sigla;
+  renderSelectorColor(document.getElementById("dl-colores"), lista, colorEnEdicion);
+  document.getElementById("dlg-lista").showModal();
+}
+
+function conectarDialogoLista(alGuardar) {
+  document.getElementById("dlg-lista").addEventListener("close", function (e) {
+    if (e.target.returnValue === "ok" && listaEnEdicion) {
+      const l = listaEnEdicion;
+      l.numero = clampInt(document.getElementById("dl-num").value, 0, 9999, l.numero);
+      l.partido = document.getElementById("dl-partido").value.trim() || l.partido;
+      l.sigla = document.getElementById("dl-sigla").value.trim() || l.sigla;
+      l.color = colorEnEdicion.color;
+      l.colorHex = colorEnEdicion.colorHex;
+      guardar();
+    }
+    listaEnEdicion = null;
+    alGuardar();
+  });
 }
 
 /* ============================================== importar / exportar JSON */
@@ -924,6 +970,18 @@ function conectarSelectorElecciones(idSelect, alCambiar) {
       /* Sin índice (file://, o el archivo no está) el selector no aparece y
          se sigue con los datos embebidos. Importar JSON sigue disponible. */
     });
+}
+
+/* «Restablecer»: vuelve a la elección de ejemplo. También olvida cuál estaba
+ * elegida en el desplegable, que si no seguiría diciendo «Asunción» sobre una
+ * página que ya no la muestra, y elegirla de nuevo no dispararía nada. */
+function restablecer() {
+  estado = datosPorDefecto();
+  votosSorteados = false;
+  recordarEleccion(null);
+  const sel = document.getElementById("cfg-eleccion");
+  if (sel) sel.value = VALOR_SIN_ARCHIVO;
+  guardar();
 }
 
 function cargarEleccion(archivo) {

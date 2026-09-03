@@ -353,7 +353,7 @@ function renderListas(res) {
       el("div", { class: "lista-num", text: String(lista.numero) }),
       el("div", { class: "lista-nombre" }, [
         el("div", { class: "p", text: lista.partido }),
-        el("div", { class: "s", text: lista.sigla + " · " + lista.candidatos.length + " candidatos" }),
+        el("div", { class: "s", text: lista.sigla + " · " + nCandidatos(lista.candidatos.length) }),
       ]),
       el("div", { class: "lista-votos" }, [inputVotos]),
       el("div", { class: "lista-pct", text: pct(lista.votos, res.votosValidos) }),
@@ -677,28 +677,7 @@ function actualizarInsigniasListas(res) {
 }
 
 /* ============================================================== diálogos */
-let listaEnEdicion = null;
-
-function abrirDialogoLista(lista) {
-  listaEnEdicion = lista;
-  document.getElementById("dl-num").value = lista.numero;
-  document.getElementById("dl-partido").value = lista.partido;
-  document.getElementById("dl-sigla").value = lista.sigla;
-
-  renderSelectorColor(document.getElementById("dl-colores"), lista);
-  document.getElementById("dlg-lista").showModal();
-}
-
-document.getElementById("dlg-lista").addEventListener("close", function (e) {
-  if (e.target.returnValue === "ok" && listaEnEdicion) {
-    listaEnEdicion.numero = clampInt(document.getElementById("dl-num").value, 0, 9999, listaEnEdicion.numero);
-    listaEnEdicion.partido = document.getElementById("dl-partido").value.trim() || listaEnEdicion.partido;
-    listaEnEdicion.sigla = document.getElementById("dl-sigla").value.trim() || listaEnEdicion.sigla;
-    guardar();
-  }
-  listaEnEdicion = null;
-  render();
-});
+conectarDialogoLista(render);
 
 function abrirDialogoCandidatos(lista) {
   listaEnEdicion = lista;
@@ -768,9 +747,7 @@ document.getElementById("btn-azar").addEventListener("click", function () {
 
 document.getElementById("btn-reset").addEventListener("click", function () {
   if (!confirm("Se borran los votos, las nóminas y los cambios de listas. ¿Continuar?")) return;
-  estado = datosPorDefecto();
-  votosSorteados = false;
-  guardar();
+  restablecer();
   render();
 });
 

@@ -67,8 +67,11 @@ one of these fails, the calculation changed and that is the news. Do not
 
 - the 2023 Senate allocation (ANR 23, Alianza 12, PCN 5, PEN 2, one each for
   PPQ, Frente Guasu and Yo Creo) is the officially proclaimed composition,
-  computed from the PDF totals. It is the only end-to-end check against a real
-  election.
+  computed from the PDF totals. It is the largest end-to-end check against a
+  real election.
+- the 2021 Asunción council (ANR 15, PLRA 5, PPQ 3, EC 1) and the 24 names
+  that took those seats, computed from every candidate's preferential votes.
+  It is the only check of the internal ordering against an official result.
 - the Star Wars example: the Empire's 5 seats go to Vader, Palpatine and three
   stormtroopers on **one preferential vote each**. The file exists to show that
   seats are won by the list, not by the candidate.

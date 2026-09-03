@@ -303,6 +303,18 @@ console.log("\nLectura de archivos JSON");
   try { normalizar({ listas: [] }); } catch (e) { error = e.message; }
   check("un archivo sin listas se rechaza", error !== null, true);
 }
+{
+  const e = normalizar({ listas: [{ nombre: "Partido Colorado Unido" }] });
+  check("«nombre» vale como alias de «partido»", e.listas[0].partido, "Partido Colorado Unido");
+  check("y la sigla se deduce igual del alias", e.listas[0].sigla, "PCU");
+}
+{
+  // La URL de la fuente termina en un <a href>: sólo se aceptan http(s).
+  const buena = normalizar({ fuente: { nombre: "TSJE", url: "https://tsje.gov.py/" }, listas: [{}] });
+  const mala = normalizar({ fuente: { nombre: "x", url: "javascript:alert(1)" }, listas: [{}] });
+  check("la URL http(s) de la fuente se conserva", buena.fuente.url, "https://tsje.gov.py/");
+  check("una URL que no es http(s) se descarta", mala.fuente.url, null);
+}
 
 /* ====================================================== sorteo de votos
  * El sorteo se recorre con un generador propio en lugar de Math.random: así

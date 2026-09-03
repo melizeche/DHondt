@@ -409,7 +409,7 @@ function renderListas(res) {
       el("div", { class: "lista-num", text: String(lista.numero) }),
       el("div", { class: "lista-nombre" }, [
         el("div", { class: "p", text: lista.partido }),
-        el("div", { class: "s", text: lista.sigla + " · " + lista.candidatos.length + " candidatos" }),
+        el("div", { class: "s", text: lista.sigla + " · " + nCandidatos(lista.candidatos.length) }),
       ]),
       el("div", { class: "total-lista" }, [
         document.createTextNode(n(lista.votos)),
@@ -761,7 +761,7 @@ function renderReordenamiento(res) {
     if (aMostrar < filas.length) {
       tbody.appendChild(el("tr", null, [
         el("td", { colspan: "7", class: "empty",
-          text: "…y " + (filas.length - aMostrar) + " candidatos más sin banca." }),
+          text: "…y " + nCandidatos(filas.length - aMostrar) + " más sin banca." }),
       ]));
     }
 
@@ -900,8 +900,6 @@ function actualizarCabecerasListas(res) {
 }
 
 /* ============================================================== diálogos */
-let listaEnEdicion = null;
-
 function abrirDialogoPegar(lista) {
   listaEnEdicion = lista;
   document.getElementById("dp-titulo").textContent = "Pegar votos · " + lista.numero + " · " + lista.partido;
@@ -945,26 +943,7 @@ document.getElementById("dlg-pegar").addEventListener("close", function (e) {
   render();
 });
 
-function abrirDialogoLista(lista) {
-  listaEnEdicion = lista;
-  document.getElementById("dl-num").value = lista.numero;
-  document.getElementById("dl-partido").value = lista.partido;
-  document.getElementById("dl-sigla").value = lista.sigla;
-
-  renderSelectorColor(document.getElementById("dl-colores"), lista);
-  document.getElementById("dlg-lista").showModal();
-}
-
-document.getElementById("dlg-lista").addEventListener("close", function (e) {
-  if (e.target.returnValue === "ok" && listaEnEdicion) {
-    listaEnEdicion.numero = clampInt(document.getElementById("dl-num").value, 0, 9999, listaEnEdicion.numero);
-    listaEnEdicion.partido = document.getElementById("dl-partido").value.trim() || listaEnEdicion.partido;
-    listaEnEdicion.sigla = document.getElementById("dl-sigla").value.trim() || listaEnEdicion.sigla;
-    guardar();
-  }
-  listaEnEdicion = null;
-  render();
-});
+conectarDialogoLista(render);
 
 /* ============================================================== eventos */
 function enlazarConfig(id, aplicar) {
@@ -1019,8 +998,7 @@ document.getElementById("btn-azar").addEventListener("click", function () {
 
 document.getElementById("btn-reset").addEventListener("click", function () {
   if (!confirm("Se borran los votos, las nóminas y los cambios de listas. ¿Continuar?")) return;
-  estado = datosPorDefecto();
-  votosSorteados = false;
+  restablecer();
   abrirPrimeraLista();   // igual que en la primera visita
   guardar();
   render();
