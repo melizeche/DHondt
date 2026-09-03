@@ -85,7 +85,7 @@ El desplegable **Elección** lista los conjuntos de datos de `datos/`, según [`
 
 El desplegable trae los archivos con `fetch`, y eso necesita un servidor. Abriendo el HTML con doble clic (`file://`) el navegador bloquea esos pedidos por CORS, así que ahí el desplegable no aparece: queda la elección de ejemplo y se cambia con «Importar JSON», que lee del disco. Servido (Cloudflare Pages, GitHub Pages, `python3 -m http.server`) el desplegable aparece.
 
-Cuál quedó elegida se recuerda en el navegador y vale para las dos páginas. Importar un archivo suelto deja el desplegable en «(datos cargados)», porque lo que hay no sale del índice.
+Cuál quedó elegida se recuerda en el navegador y vale para las dos páginas. Al importar un archivo suelto, el desplegable muestra el nombre que trae aunque no figure en el índice.
 
 ## Las candidaturas
 

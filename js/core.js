@@ -29,6 +29,7 @@ const PALETA = [
 
 const BANCAS_POR_DEFECTO = 12;
 const LISTAS_POR_DEFECTO = 3;
+const NOMBRE_ELECCION_POR_DEFECTO = "Elección de ejemplo";
 
 /* Las claves ya no llevan «asuncion»: la herramienta sirve para cualquier
  * elección y la de Asunción es una más de las que se pueden elegir. */
@@ -102,7 +103,7 @@ function datosPorDefecto() {
     });
   }
   return {
-    eleccion: "Elección de ejemplo",
+    eleccion: NOMBRE_ELECCION_POR_DEFECTO,
     fuente: null,
     bancas: BANCAS_POR_DEFECTO,
     umbral: 0,
@@ -896,6 +897,13 @@ function exportarJSON(nombreArchivo) {
  * ================================================================== */
 const VALOR_SIN_ARCHIVO = "";
 
+/* La opción sin archivo del índice representa los datos embebidos o importados.
+ * Lleva el nombre de la elección, no una etiqueta de estado. */
+function actualizarMarcadorEleccion(sel, nombre) {
+  const marcador = sel.querySelector('option[value=""]');
+  if (marcador) marcador.textContent = nombre || estado.eleccion;
+}
+
 function recordarEleccion(archivo) {
   try {
     if (archivo) localStorage.setItem(CLAVE_ELECCION, archivo);
@@ -932,10 +940,15 @@ function conectarSelectorElecciones(idSelect, alCambiar) {
       const elecciones = (indice && indice.elecciones) || [];
       if (!elecciones.length) return;
 
+      const recordada = eleccionRecordada();
       sel.textContent = "";
-      // Marcador para cuando lo cargado no sale de un archivo del índice:
-      // los datos embebidos, o algo que el usuario importó.
-      sel.appendChild(el("option", { value: VALOR_SIN_ARCHIVO, text: "(datos cargados)" }));
+      // Para los datos embebidos o importados, que no salen de un archivo del
+      // índice, la opción conserva igual el nombre de la elección. Si hay una
+      // del índice elegida, queda disponible la elección de ejemplo.
+      sel.appendChild(el("option", {
+        value: VALOR_SIN_ARCHIVO,
+        text: recordada ? NOMBRE_ELECCION_POR_DEFECTO : estado.eleccion,
+      }));
       elecciones.forEach(function (e) {
         sel.appendChild(el("option", {
           value: e.archivo,
@@ -944,13 +957,21 @@ function conectarSelectorElecciones(idSelect, alCambiar) {
         }));
       });
 
-      const recordada = eleccionRecordada();
       sel.value = elecciones.some(function (e) { return e.archivo === recordada; })
         ? recordada : VALOR_SIN_ARCHIVO;
 
       sel.addEventListener("change", function () {
         const archivo = sel.value;
-        if (!archivo) return;   // el marcador no carga nada
+        if (!archivo) {
+          if (hayVotosCargados() &&
+              !confirm("Volver a la elección de ejemplo reemplaza las listas y los votos que tengas cargados. ¿Continuar?")) {
+            sel.value = eleccionRecordada() || VALOR_SIN_ARCHIVO;
+            return;
+          }
+          restablecer();
+          alCambiar();
+          return;
+        }
         if (hayVotosCargados() &&
             !confirm("Cargar otra elección reemplaza las listas y los votos que tengas cargados. ¿Continuar?")) {
           sel.value = eleccionRecordada() || VALOR_SIN_ARCHIVO;
@@ -980,7 +1001,10 @@ function restablecer() {
   votosSorteados = false;
   recordarEleccion(null);
   const sel = document.getElementById("cfg-eleccion");
-  if (sel) sel.value = VALOR_SIN_ARCHIVO;
+  if (sel) {
+    actualizarMarcadorEleccion(sel);
+    sel.value = VALOR_SIN_ARCHIVO;
+  }
   guardar();
 }
 
@@ -994,6 +1018,8 @@ function cargarEleccion(archivo) {
       estado = normalizar(bruto);
       votosSorteados = false;   // lo que traiga el archivo no es un sorteo
       recordarEleccion(archivo);
+      const sel = document.getElementById("cfg-eleccion");
+      if (sel) actualizarMarcadorEleccion(sel, NOMBRE_ELECCION_POR_DEFECTO);
       guardar();
     });
 }
@@ -1013,7 +1039,10 @@ function conectarImportacion(idBoton, idInput, alImportar) {
         votosSorteados = false;
         recordarEleccion(null);   // ya no corresponde a ningún archivo del índice
         const sel = document.getElementById("cfg-eleccion");
-        if (sel) sel.value = VALOR_SIN_ARCHIVO;
+        if (sel) {
+          actualizarMarcadorEleccion(sel);
+          sel.value = VALOR_SIN_ARCHIVO;
+        }
         guardar();
         alImportar();
       } catch (err) {
