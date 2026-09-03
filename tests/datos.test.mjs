@@ -235,6 +235,13 @@ console.log("\nSenado Galáctico: electos con uno o dos votos");
     electos.slice(3).map(function (d) { return d.posOriginal; }), [3, 4]);
 }
 
+console.log("\nEjemplo mínimo: nóminas completas");
+{
+  const e = normalizar(leer("ejemplo.json"));
+  check("cada lista tiene tantos candidatos como bancas",
+    e.listas.every(function (l) { return l.candidatos.length === e.bancas; }), true);
+}
+
 /* Con qué se abre la página en una ventana nueva, sin nada guardado. Es una
  * elección inventada y en cero a propósito: la herramienta no arranca diciendo
  * nada de ninguna elección real ni de ninguna ciudad en particular. */
@@ -243,9 +250,9 @@ console.log("\nLa elección con la que se abre");
   const d = datosPorDefecto();
   const cands = d.listas.flatMap(function (l) { return l.candidatos; });
 
-  check("6 listas", d.listas.length, 6);
+  check("3 listas", d.listas.length, 3);
   check("12 bancas", d.bancas, 12);
-  check("nóminas completas", cands.length, 72);
+  check("nóminas completas", cands.length, 36);
   check("todo en cero",
     d.listas.filter(function (l) { return l.votos !== 0 || l.soloLista !== 0; }).length +
     cands.filter(function (c) { return c.pref !== 0; }).length + d.blancos + d.nulos, 0);
@@ -253,7 +260,7 @@ console.log("\nLa elección con la que se abre");
   // Ninguna lista, sigla ni candidato puede coincidir con algo de verdad.
   check("listas sin nombre de partido real",
     d.listas.map(function (l) { return l.partido; }),
-    ["Lista A", "Lista B", "Lista C", "Lista D", "Lista E", "Lista F"]);
+    ["Lista A", "Lista B", "Lista C"]);
   check("no acredita ninguna fuente", d.fuente, null);
   check("no dice ser ninguna elección real", d.eleccion, "Elección de ejemplo");
   check("no usa el color oficial de ninguna boleta",

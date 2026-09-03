@@ -28,7 +28,7 @@ const PALETA = [
 ];
 
 const BANCAS_POR_DEFECTO = 12;
-const LISTAS_POR_DEFECTO = 6;
+const LISTAS_POR_DEFECTO = 3;
 
 /* Las claves ya no llevan «asuncion»: la herramienta sirve para cualquier
  * elección y la de Asunción es una más de las que se pueden elegir. */

@@ -97,7 +97,7 @@ Vienen cargadas tres Juntas Municipales, tomadas del [simulador oficial del TSJE
 | Junta Municipal de Encarnación | `59.7.0` | 7 | 84 | 12 |
 | Junta Municipal de Ciudad del Este | `59.10.0` | 8 | 96 | 12 |
 
-Las tres se eligen en el desplegable. Ninguna viene cargada de entrada: la página se abre con una elección de ejemplo (seis listas llamadas A, B, C…, 12 bancas, todo en cero). Con varios conjuntos de datos, arrancar siempre en una ciudad no tiene sentido.
+Las tres se eligen en el desplegable. Ninguna viene cargada de entrada: la página se abre con una elección de ejemplo (tres listas llamadas A, B y C, 12 bancas, todo en cero). Con varios conjuntos de datos, arrancar siempre en una ciudad no tiene sentido.
 
 Los votos los pone quien usa la herramienta: los archivos de candidaturas traen todos los totales en cero. Esto no publica ni pronostica resultados, calcula el reparto de los números que uno cargue.
 
@@ -356,7 +356,7 @@ El `canonical` está porque Cloudflare Pages sirve el mismo contenido también e
 
 `og.png` se genera con `tools/og.mjs`: arma la cinta de bancas en HTML y la fotografía con un navegador headless. Necesita Playwright, que no es dependencia del proyecto (es para regenerar la imagen si cambia el diseño), y acepta `CHROMIUM=<ruta>` para usar un navegador ya instalado.
 
-Dibuja el ejemplo de `datos/ejemplo.json`, no una elección real: listas A, B y C con los colores de la paleta. El reparto que se ve (7-4-1 sobre 12 bancas) lo calcula el mismo `js/core.js` con esos votos.
+Dibuja el ejemplo de `datos/ejemplo.json`, no una elección real: listas A, B y C con los colores de la paleta. El reparto que se ve (5-2-1 sobre 8 bancas) lo calcula el mismo `js/core.js` con esos votos.
 
 ### Otros
 

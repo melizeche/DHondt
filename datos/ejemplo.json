@@ -1,7 +1,7 @@
 {
   "$schema": "schema.json",
   "eleccion": "Ejemplo de carga (datos inventados)",
-  "bancas": 12,
+  "bancas": 8,
   "umbral": 0,
   "modo": "bloqueada",
   "blancos": 1200,
@@ -46,7 +46,11 @@
         {
           "nombre": "Cuarto candidato de la lista B",
           "pref": 2200
-        }
+        },
+        "Quinta candidata de la lista B",
+        "Sexto candidato de la lista B",
+        "Séptima candidata de la lista B",
+        "Octavo candidato de la lista B"
       ]
     },
     {
@@ -57,7 +61,13 @@
       "votos": 9500,
       "candidatos": [
         "Primera candidata de la lista C",
-        "Segundo candidato de la lista C"
+        "Segundo candidato de la lista C",
+        "Tercera candidata de la lista C",
+        "Cuarto candidato de la lista C",
+        "Quinta candidata de la lista C",
+        "Sexto candidato de la lista C",
+        "Séptima candidata de la lista C",
+        "Octavo candidato de la lista C"
       ]
     }
   ]
