@@ -124,12 +124,12 @@
     </div>
     <div class="field">
       <label for="cfg-blancos">Votos en blanco</label>
-      <input type="number" id="cfg-blancos" min="0" step="1">
+      <input type="text" inputmode="numeric" enterkeyhint="done" autocomplete="off" class="votos" id="cfg-blancos">
       <div class="note">No entran en el reparto.</div>
     </div>
     <div class="field">
       <label for="cfg-nulos">Votos nulos</label>
-      <input type="number" id="cfg-nulos" min="0" step="1">
+      <input type="text" inputmode="numeric" enterkeyhint="done" autocomplete="off" class="votos" id="cfg-nulos">
       <div class="note">No entran en el reparto.</div>
     </div>
   </div>
@@ -321,8 +321,8 @@ function renderConfig() {
   document.getElementById("cfg-bancas").value = estado.bancas;
   document.getElementById("cfg-umbral").value = estado.umbral;
   document.getElementById("cfg-modo").value = estado.modo;
-  document.getElementById("cfg-blancos").value = estado.blancos;
-  document.getElementById("cfg-nulos").value = estado.nulos;
+  document.getElementById("cfg-blancos").value = n(estado.blancos);
+  document.getElementById("cfg-nulos").value = n(estado.nulos);
 }
 
 function renderListas(res) {
@@ -337,15 +337,14 @@ function renderListas(res) {
   estado.listas.forEach(function (lista) {
     const gan = res.ganadas.get(lista.id) || 0;
 
-    const inputVotos = el("input", {
-      type: "number", min: "0", step: "1", value: String(lista.votos),
+    const inputVotos = campoDeVotos({
+      value: lista.votos,
       "aria-label": "Votos de la lista " + lista.numero + " " + lista.sigla,
-      oninput: function (e) {
-        lista.votos = clampInt(e.target.value, 0, 1e12, 0);
-        reconciliarSoloLista(lista);
-        guardar();
-        renderTrasVotos();
-      },
+    }, function (votos) {
+      lista.votos = votos;
+      reconciliarSoloLista(lista);
+      guardar();
+      renderTrasVotos();
     });
 
     const cabecera = el("div", { class: "lista-head" }, [
@@ -387,18 +386,17 @@ function cuerpoLista(lista, gan) {
       el("div", { class: "tag-electo", text: f.electo ? "Electo" : "" }),
     ]);
     if (desbloqueada) {
-      fila.appendChild(el("input", {
-        type: "number", min: "0", step: "1", class: "pref", value: String(f.pref),
+      // En esta página el total de la lista es el que se escribió arriba: los
+      // votos preferentes reparten ese total, no se le suman. Lo que ningún
+      // candidato se lleva queda como voto de sola lista.
+      fila.appendChild(campoDeVotos({
+        class: "pref", value: f.pref,
         "aria-label": "Votos preferentes de " + f.nombre,
-        // En esta página el total de la lista es el que se escribió arriba:
-        // los votos preferentes reparten ese total, no se le suman. Lo que
-        // ningún candidato se lleva queda como voto de sola lista.
-        oninput: function (e) {
-          f.candidato.pref = clampInt(e.target.value, 0, 1e12, 0);
-          reconciliarSoloLista(lista);
-          guardar();
-        },
         onchange: function () { render(); },
+      }, function (pref) {
+        f.candidato.pref = pref;
+        reconciliarSoloLista(lista);
+        guardar();
       }));
     }
     grid.appendChild(fila);
@@ -724,11 +722,27 @@ function enlazarConfig(id, aplicar) {
     if (campo.value === "") renderConfig();
   });
 }
+
+/* Lo mismo para los campos que llevan separador de miles: el valor se lee de
+ * los dígitos, no del texto del campo. */
+function enlazarCampoVotos(id, aplicar) {
+  const campo = document.getElementById(id);
+  campo.addEventListener("input", function () {
+    const valor = formatearCampoVotos(campo);
+    if (campo.value === "") return;
+    aplicar(valor);
+    guardar();
+    render();
+  });
+  campo.addEventListener("blur", function () {
+    if (campo.value === "") renderConfig();
+  });
+}
 enlazarConfig("cfg-bancas", function (v) { estado.bancas = clampInt(v, 1, 99, BANCAS_POR_DEFECTO); });
 enlazarConfig("cfg-umbral", function (v) { estado.umbral = clampNum(v, 0, 20, 0); });
 enlazarConfig("cfg-modo", function (v) { estado.modo = v === "desbloqueada" ? "desbloqueada" : "bloqueada"; });
-enlazarConfig("cfg-blancos", function (v) { estado.blancos = clampInt(v, 0, 1e12, 0); });
-enlazarConfig("cfg-nulos", function (v) { estado.nulos = clampInt(v, 0, 1e12, 0); });
+enlazarCampoVotos("cfg-blancos", function (v) { estado.blancos = v; });
+enlazarCampoVotos("cfg-nulos", function (v) { estado.nulos = v; });
 
 document.getElementById("btn-agregar").addEventListener("click", function () {
   const i = estado.listas.length;

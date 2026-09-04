@@ -667,6 +667,61 @@ function pct(parte, total) {
   return total > 0 ? fmtDecimal.format((parte / total) * 100) + " %" : "—";
 }
 
+/* --------------------------------------------- campos de cantidad de votos */
+/* Los votos se escriben con separador de miles: 1.319.617 se lee de un vistazo
+ * y 1319617 hay que contarlo con el dedo. Eso obliga a que el campo sea de
+ * texto y no <input type="number">, porque un campo numérico descarta como
+ * inválido cualquier valor con separadores. Se compensa con inputmode e
+ * enterkeyhint, que son los que deciden qué teclado abre el teléfono.
+ *
+ * Lo que se escribe se lee siempre con enteroDeTexto: cualquier cosa que no sea
+ * un dígito se ignora, así da igual si el separador que tipeó la persona es el
+ * punto, la coma o un espacio. */
+const ATRIBUTOS_CAMPO_VOTOS = {
+  type: "text", inputmode: "numeric", enterkeyhint: "done", autocomplete: "off",
+};
+
+function enteroDeTexto(valor) {
+  const digitos = String(valor === null || valor === undefined ? "" : valor).replace(/\D+/g, "");
+  return digitos === "" ? 0 : clampInt(digitos, 0, 1e12, 0);
+}
+
+/* Reescribe el campo con los separadores puestos y deja el cursor donde
+ * estaba, contado en dígitos: si se inserta un punto a la izquierda del
+ * cursor, el cursor tiene que correrse con él. Devuelve el valor ya leído. */
+function formatearCampoVotos(campo) {
+  const antes = campo.value;
+  const corte = campo.selectionStart === null ? antes.length : campo.selectionStart;
+  const digitosAntes = antes.slice(0, corte).replace(/\D+/g, "").length;
+  const valor = enteroDeTexto(antes);
+  // Un campo vacío se deja vacío: se está por escribir otro número, y poner un
+  // 0 obligaría a borrarlo antes de seguir.
+  const texto = antes.replace(/\D+/g, "") === "" ? "" : n(valor);
+
+  if (texto !== antes) {
+    campo.value = texto;
+    let i = 0;
+    for (let vistos = 0; i < texto.length && vistos < digitosAntes; i++) {
+      if (texto[i] >= "0" && texto[i] <= "9") vistos++;
+    }
+    try { campo.setSelectionRange(i, i); } catch (e) { /* el campo no tiene foco */ }
+  }
+  return valor;
+}
+
+/* Campo de votos armado: los atributos de arriba, el valor ya formateado y el
+ * reformateo en cada tecla. «props» puede traer cualquier otro atributo (id,
+ * class, aria-label) y también onchange, que el llamador usa para redibujar
+ * recién cuando se termina de escribir. */
+function campoDeVotos(props, alEscribir) {
+  const atributos = Object.assign({}, ATRIBUTOS_CAMPO_VOTOS, props);
+  atributos.class = "votos" + (props && props.class ? " " + props.class : "");
+  atributos.value = n(clampInt(props && props.value, 0, 1e12, 0));
+  const campo = el("input", atributos);
+  campo.addEventListener("input", function () { alEscribir(formatearCampoVotos(campo)); });
+  return campo;
+}
+
 /* ================================================================== tema */
 function modoOscuro() {
   const t = document.documentElement.getAttribute("data-theme");
@@ -1062,5 +1117,6 @@ if (typeof module !== "undefined" && module.exports) {
     datosPorDefecto, sortearVotos, PALETA, normalizarHex, ajustarParaFondo, contraste,
     FONDO_CLARO, FONDO_OSCURO, CONTRASTE_MINIMO,
     distanciaColor, seDistinguen, SEPARACION_MINIMA,
+    enteroDeTexto, formatearCampoVotos,
   };
 }

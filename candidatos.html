@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="css/base.css">
 <style>
 .tabla-cand td, .tabla-cand th { padding: 5px 8px; }
-.tabla-cand input[type="number"] { width: 96px; }
+.tabla-cand input.votos { width: 108px; }
 .tabla-cand td.nombre { min-width: 200px; }
 .mov { font-variant-numeric: tabular-nums; font-size: .82rem; }
 .mov.sube { color: var(--good-ink); font-weight: 600; }
@@ -136,11 +136,11 @@
     </div>
     <div class="field">
       <label for="cfg-blancos">Votos en blanco</label>
-      <input type="number" id="cfg-blancos" min="0" step="1">
+      <input type="text" inputmode="numeric" enterkeyhint="done" autocomplete="off" class="votos" id="cfg-blancos">
     </div>
     <div class="field">
       <label for="cfg-nulos">Votos nulos</label>
-      <input type="number" id="cfg-nulos" min="0" step="1">
+      <input type="text" inputmode="numeric" enterkeyhint="done" autocomplete="off" class="votos" id="cfg-nulos">
     </div>
   </div>
 </section>
@@ -386,8 +386,8 @@ function renderConfig() {
   document.getElementById("cfg-bancas").value = estado.bancas;
   document.getElementById("cfg-umbral").value = estado.umbral;
   document.getElementById("cfg-modo").value = estado.modo;
-  document.getElementById("cfg-blancos").value = estado.blancos;
-  document.getElementById("cfg-nulos").value = estado.nulos;
+  document.getElementById("cfg-blancos").value = n(estado.blancos);
+  document.getElementById("cfg-nulos").value = n(estado.nulos);
 }
 
 /* -------------------------------------------------- carga por candidato */
@@ -461,14 +461,13 @@ function cuerpoCarga(lista, gan) {
 
   const soloLista = el("div", { class: "solo-lista no-print" }, [
     el("label", { for: "solo-" + lista.id, text: "Votos sólo a la lista" }),
-    el("input", {
-      type: "number", min: "0", step: "1", id: "solo-" + lista.id, value: String(lista.soloLista),
-      oninput: function (e) {
-        lista.soloLista = clampInt(e.target.value, 0, 1e12, 0);
-        recalcularTotal(lista);
-        guardar();
-        renderTrasVotos();
-      },
+    campoDeVotos({
+      id: "solo-" + lista.id, value: lista.soloLista,
+    }, function (votos) {
+      lista.soloLista = votos;
+      recalcularTotal(lista);
+      guardar();
+      renderTrasVotos();
     }),
     el("span", { class: "note", text: "Votos que eligieron la lista sin nombrar a ningún candidato. Suman al total pero no reordenan la nómina. En Paraguay no existen (Ley 6318/2019): todo voto nombra a un candidato. El campo queda para totales conocidos sin el desglose por candidato o para otros países." }),
   ]);
@@ -482,15 +481,14 @@ function cuerpoCarga(lista, gan) {
       el("td", { class: "num", style: "color:var(--text-muted)", text: String(i + 1) }),
       el("td", { class: "nombre", text: c.nombre }),
       el("td", null, [
-        el("input", {
-          type: "number", min: "0", step: "1", value: String(c.pref),
+        campoDeVotos({
+          value: c.pref,
           "aria-label": "Votos de " + c.nombre,
-          oninput: function (e) {
-            c.pref = clampInt(e.target.value, 0, 1e12, 0);
-            recalcularTotal(lista);
-            guardar();
-            renderTrasVotos();
-          },
+        }, function (pref) {
+          c.pref = pref;
+          recalcularTotal(lista);
+          guardar();
+          renderTrasVotos();
         }),
       ]),
       el("td", null, [
@@ -963,11 +961,27 @@ function enlazarConfig(id, aplicar) {
     if (campo.value === "") renderConfig();
   });
 }
+
+/* Lo mismo para los campos que llevan separador de miles: el valor se lee de
+ * los dígitos, no del texto del campo. */
+function enlazarCampoVotos(id, aplicar) {
+  const campo = document.getElementById(id);
+  campo.addEventListener("input", function () {
+    const valor = formatearCampoVotos(campo);
+    if (campo.value === "") return;
+    aplicar(valor);
+    guardar();
+    render();
+  });
+  campo.addEventListener("blur", function () {
+    if (campo.value === "") renderConfig();
+  });
+}
 enlazarConfig("cfg-bancas", function (v) { estado.bancas = clampInt(v, 1, 99, BANCAS_POR_DEFECTO); });
 enlazarConfig("cfg-umbral", function (v) { estado.umbral = clampNum(v, 0, 20, 0); });
 enlazarConfig("cfg-modo", function (v) { estado.modo = v === "desbloqueada" ? "desbloqueada" : "bloqueada"; });
-enlazarConfig("cfg-blancos", function (v) { estado.blancos = clampInt(v, 0, 1e12, 0); });
-enlazarConfig("cfg-nulos", function (v) { estado.nulos = clampInt(v, 0, 1e12, 0); });
+enlazarCampoVotos("cfg-blancos", function (v) { estado.blancos = v; });
+enlazarCampoVotos("cfg-nulos", function (v) { estado.nulos = v; });
 
 document.getElementById("btn-agregar").addEventListener("click", function () {
   const i = estado.listas.length;

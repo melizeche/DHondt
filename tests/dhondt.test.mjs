@@ -6,6 +6,7 @@ const require = createRequire(import.meta.url);
 const {
   calcularDHondt, ordenInterno, detalleOrden, sumaPreferentes,
   recalcularTotal, reconciliarSoloLista, normalizar, sortearVotos,
+  enteroDeTexto, formatearCampoVotos,
 } = require("../js/core.js");
 
 let fallos = 0;
@@ -270,6 +271,49 @@ console.log("\nTotales de la lista (las dos páginas comparten el estado)");
     if (recalcularTotal(l) !== total) malas++;
   }
   check("ida y vuelta entre vistas conserva el total", malas, 0);
+}
+
+/* Los campos de votos llevan separador de miles, así que son de texto: lo que
+ * se escribe se lee de los dígitos y el cursor tiene que quedar donde estaba
+ * aunque el formateo haya metido un punto a su izquierda. */
+console.log("\nCampos de votos con separador de miles");
+{
+  check("lee un número con puntos", enteroDeTexto("1.319.617"), 1319617);
+  check("y también con comas o espacios", [enteroDeTexto("1,319,617"), enteroDeTexto("1 319 617")], [1319617, 1319617]);
+  check("sin separadores", enteroDeTexto("1319617"), 1319617);
+  check("vacío o basura vale cero", [enteroDeTexto(""), enteroDeTexto("abc"), enteroDeTexto(null)], [0, 0, 0]);
+  check("no hay negativos: el signo es un carácter más que se ignora", enteroDeTexto("-500"), 500);
+  check("se recorta en el tope", enteroDeTexto("99999999999999"), 1e12);
+
+  // Un campo de texto de mentira: formatearCampoVotos sólo mira estas tres cosas.
+  function campo(valor, cursor) {
+    return {
+      value: valor,
+      selectionStart: cursor === undefined ? valor.length : cursor,
+      setSelectionRange: function (a) { this.selectionStart = a; },
+    };
+  }
+  const escribir = function (valor, cursor) {
+    const c = campo(valor, cursor);
+    const leido = formatearCampoVotos(c);
+    return [c.value, c.selectionStart, leido];
+  };
+
+  check("pone los puntos y deja el cursor al final", escribir("1319617"), ["1.319.617", 9, 1319617]);
+  check("un número corto se deja como está", escribir("617"), ["617", 3, 617]);
+  check("el campo vacío queda vacío, no en cero", escribir(""), ["", 0, 0]);
+  check("no acumula puntos al reformatear", escribir("1.319.617"), ["1.319.617", 9, 1319617]);
+  // Con el cursor entre el 1 y el 3 se agrega un punto a su izquierda: el
+  // cursor tiene que correrse con él para no quedar del otro lado.
+  check("el cursor se corre con el separador que aparece a su izquierda",
+    escribir("1319617", 1).slice(0, 2), ["1.319.617", 1]);
+  check("y sigue contando dígitos, no caracteres",
+    escribir("1319617", 4).slice(0, 2), ["1.319.617", 5]);
+  check("borrar todo no reinstala el número", escribir("", 0)[0], "");
+  // Borrar un separador no borra nada: los dígitos son los mismos, así que el
+  // campo vuelve a quedar igual y el cursor se queda donde estaba.
+  check("borrar un punto deja el número intacto",
+    escribir("1.319617", 5), ["1.319.617", 5, 1319617]);
 }
 
 console.log("\nLectura de archivos JSON");

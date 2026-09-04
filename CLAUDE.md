@@ -97,6 +97,13 @@ one of these fails, the calculation changed and that is the news. Do not
 - **The tool never predicts.** Generated data ships with zero votes, the default
   election is invented, and «Votos al azar» says it is a draw. Nothing should
   present computed numbers as a forecast.
+- **Vote fields are `type="text"`, not `type="number"`.** They show a thousands
+  separator (1.319.617) and a numeric input rejects any value carrying one, so
+  they go through `campoDeVotos`, which formats on every keystroke and restores
+  the caret by digit count. `inputmode="numeric"` is what keeps the phone
+  keypad; do not "fix" these back to `type="number"`. New fields holding a vote
+  count should use `campoDeVotos` too. Small numbers (bancas, umbral, the list
+  number) stay numeric — no separator wanted there.
 - **The umbral field defaults to 0** because Paraguay has no legal threshold. It
   exists to answer "what if", and the UI says so where it sits.
 

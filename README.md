@@ -46,6 +46,7 @@ Son dos páginas sobre los mismos datos. Se puede pasar de una a la otra sin per
 - **Empates señalados, no resueltos.** Cuando dos listas comparten el cociente de la última banca en disputa, la página lo avisa. El Código Electoral resuelve esos casos por sorteo, así que la herramienta no lo decide.
 - **Bancas configurables** y **umbral opcional**. En Paraguay va en 0: el Artículo 258 reparte entre todas las listas que sacaron votos, sin mínimo. El campo está para probar qué pasaría con una barrera. Otros países que usan D'Hondt la tienen: España pide 3 % de los votos válidos de la circunscripción, Argentina 3 % del padrón del distrito, Polonia 5 %. La página lo aclara al lado del campo.
 - **Votos en blanco y nulos** para las estadísticas, sin entrar al reparto.
+- **Los votos se escriben con separador de miles.** Se van punteando solos mientras se tipea (1.319.617), y se leen sólo los dígitos: da igual si el separador que se pega es punto, coma o espacio.
 
 ## Página por candidato (`candidatos.html`)
 

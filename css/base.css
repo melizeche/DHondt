@@ -142,7 +142,9 @@ input[type="text"], input[type="number"], select, textarea {
   width: 100%;
 }
 textarea { line-height: 1.55; resize: vertical; }
-input[type="number"] { font-variant-numeric: tabular-nums; -moz-appearance: textfield; }
+/* .votos son los campos de cantidades: van como texto porque llevan separador
+   de miles (ver campoDeVotos en core.js), pero se muestran como los numéricos. */
+input[type="number"], input.votos { font-variant-numeric: tabular-nums; -moz-appearance: textfield; }
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
 /* ------------------------------------------------------------- contenedores */
