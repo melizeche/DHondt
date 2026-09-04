@@ -313,7 +313,11 @@ console.log("\nSenado Galáctico: electos con uno o dos votos");
     e.listas.filter(function (l) {
       return l.soloLista + l.candidatos.reduce(function (a, c) { return a + c.pref; }, 0) !== l.votos;
     }).length, 0);
-  check("el Imperio gana 5 bancas con 452.000 votos", [imperio.votos, ganadas], [452000, 5]);
+  // Si parte del total no nombrara a nadie, el ejemplo tendría una respuesta
+  // fácil: que las bancas de los stormtroopers salieron de esos votos.
+  check("ningún voto quedó sin nombrar a un candidato",
+    e.listas.filter(function (l) { return l.soloLista !== 0; }).length, 0);
+  check("el Imperio gana 5 bancas con 159.011 votos", [imperio.votos, ganadas], [159011, 5]);
   check("los 5 electos", electos.map(function (d) { return d.nombre; }), [
     "Darth Vader", "Sheev Palpatine",
     "Stormtrooper TD-9091", "Stormtrooper TK-421", "Stormtrooper TK-422",

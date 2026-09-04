@@ -13,8 +13,8 @@
       "sigla": "Rebelión",
       "color": 2,
       "colorHex": "#2a78d6",
-      "votos": 318000,
-      "soloLista": 198000,
+      "votos": 120000,
+      "soloLista": 0,
       "candidatos": [
         { "nombre": "Leia Organa", "pref": 38000 },
         { "nombre": "Mon Mothma", "pref": 9500 },
@@ -36,8 +36,8 @@
       "sigla": "Imperio",
       "color": 1,
       "colorHex": "#eb6834",
-      "votos": 452000,
-      "soloLista": 292989,
+      "votos": 159011,
+      "soloLista": 0,
       "candidatos": [
         { "nombre": "Sheev Palpatine", "pref": 63000 },
         { "nombre": "Darth Vader", "pref": 96000 },
@@ -59,8 +59,8 @@
       "sigla": "Separatistas",
       "color": 3,
       "colorHex": "#1baf7a",
-      "votos": 141000,
-      "soloLista": 81000,
+      "votos": 60000,
+      "soloLista": 0,
       "candidatos": [
         { "nombre": "Conde Dooku", "pref": 24500 },
         { "nombre": "Nute Gunray", "pref": 8200 },

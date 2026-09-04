@@ -239,7 +239,7 @@ Hay dos ejemplos para importar:
 
   Está armado para mostrar que las bancas las gana la lista, no el candidato. En el Imperio sólo dos nombres juntaron votos: Vader 96.000 y Palpatine 63.000, y Vader pasa a Palpatine aunque el partido lo puso segundo. Los otros diez son stormtroopers con un voto cada uno, salvo TD-9091, que tiene dos.
 
-  Los 452.000 votos de la lista alcanzan para 5 bancas, así que después de Vader y Palpatine quedan tres. La tercera se la lleva TD-9091, que iba último de los doce: con un voto más que el resto sube nueve lugares y entra. Las otras dos van a TK-421 y TK-422, con un voto cada uno; como empatan, el orden lo decide la nómina del partido, que es lo que manda el Artículo 258 para los empates de preferencias.
+  Los 159.011 votos de la lista —todos de gente que nombró a alguien, no hay votos de sola lista— alcanzan para 5 bancas, así que después de Vader y Palpatine quedan tres. La tercera se la lleva TD-9091, que iba último de los doce: con un voto más que el resto sube nueve lugares y entra. Las otras dos van a TK-421 y TK-422, con un voto cada uno; como empatan, el orden lo decide la nómina del partido, que es lo que manda el Artículo 258 para los empates de preferencias.
 
   La Rebelión queda de contraste, con votos repartidos como en una lista normal: Luke pasa a Leia, Mon Mothma cae del segundo lugar al cuarto y entra por la última banca, Jyn Erso queda primera suplente.
 
