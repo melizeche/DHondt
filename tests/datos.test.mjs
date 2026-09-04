@@ -7,7 +7,7 @@ import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 
 const require = createRequire(import.meta.url);
-const { normalizar, calcularDHondt, detalleOrden, datosPorDefecto, normalizarHex,
+const { normalizar, calcularDHondt, ordenInterno, detalleOrden, datosPorDefecto, normalizarHex,
         ajustarParaFondo, contraste, FONDO_CLARO, FONDO_OSCURO, CONTRASTE_MINIMO } = require("../js/core.js");
 
 let fallos = 0;
@@ -120,6 +120,106 @@ console.log("\nSenadores 2023: resultados oficiales");
   // La banca 45 se define por poco más de mil votos.
   check("la última banca fue para Yo Creo", Math.round(r.ultima.cociente), 56386);
   check("y la primera afuera fue el sexto cociente del PCN", Math.round(r.siguiente.cociente), 55324);
+}
+
+/* Y los 45 nombres, en el orden en que se adjudicó cada banca. La lista oficial
+ * de electos vive acá y no en datos/senadores-2023.json a propósito: el archivo
+ * que carga la calculadora trae los votos, no el resultado. Quién ganó es lo
+ * que tiene que salir de la cuenta.
+ *
+ * Los nombres del JSON salen del PDF del TSJE y vienen cortados a lo ancho de
+ * la columna, así que se compara por prefijo contra el nombre oficial entero. */
+console.log("\nSenadores 2023: los 45 electos, banca por banca");
+{
+  // orden | nombre | nro de lista | votos preferentes
+  const oficiales = [
+    [1, "SILVIO ADALBERTO OVELAR BENITEZ", 1, 282237],
+    [2, "ENRIQUE SALYN CONCEPCION BUZARQUIS CACERES", 2, 125096],
+    [3, "DERLIS HERNAN MAIDANA ZARZA", 1, 76066],
+    [4, "JUAN CARLOS BARUJA FERNANDEZ", 1, 71867],
+    [5, "SERGIO ROBERTO ROJAS SOSA", 2, 71072],
+    [6, "RAMONA YOLANDA PAREDES", 911, 141102],
+    [7, "LUIS ALBERTO PETTENGILL VACCA", 1, 61168],
+    [8, "DERLIS ARIEL ALEJANDRO OSORIO NUNES", 1, 57361],
+    [9, "EDGAR IDALINO LOPEZ RUIZ", 2, 63077],
+    [10, "OSCAR RUBEN SALOMON FERNANDEZ", 1, 56504],
+    [11, "REGINA LIZARELLA VALIENTE CABRERA", 1, 56047],
+    [12, "CELESTE JOSEFINA AMARILLA VDA DE BOCCIA", 2, 42207],
+    [13, "RAFAEL ESQUIVEL", 911, 51443],
+    [14, "LILIAN GRACIELA SAMANIEGO GONZALEZ", 1, 54750],
+    [15, "KATTYA MABEL GONZALEZ VILLANUEVA", 9, 100155],
+    [16, "CARLOS NUÑEZ AGUERO", 1, 54498],
+    [17, "EVER FEDERICO VILLALBA BENITEZ", 2, 37734],
+    [18, "MARIO ALBERTO VARELA CARDOZO", 1, 47925],
+    [19, "ARNALDO SAMANIEGO GONZALEZ", 1, 35022],
+    [20, "EDUARDO HIROHITO NAKAYAMA ROJAS", 2, 28499],
+    [21, "JOSE DANIEL OVIEDO ANTUNEZ", 911, 18100],
+    [22, "CARLOS ALCIBIADES GIMENEZ DIAZ", 1, 33729],
+    [23, "BASILIO GUSTAVO NUÑEZ GIMENEZ", 1, 31631],
+    [24, "RAFAEL AUGUSTO FILIZZOLA SERRA", 2, 28251],
+    [25, "NATALICIO ESTEBAN CHASE ACOSTA", 1, 30165],
+    [26, "COLYM GREGORIO SOROKA BENITEZ", 1, 29555],
+    [27, "HERMELINDA ALVARENGA DE ORTEGA", 2, 26296],
+    [28, "ZENAIDA CONCEPCION DELGADO BENITEZ", 911, 12859],
+    [29, "ERICO GALEANO SEGOVIA", 1, 27977],
+    [30, "JOSE GREGORIO LEDESMA NARVAEZ", 2, 25241],
+    [31, "HERNAN DAVID RIVAS ROMAN", 1, 25178],
+    [32, "PATRICK PAUL KEMPER THIEDE", 9, 7315],
+    [33, "ENRIQUE RIERA ESCUDERO", 1, 23598],
+    [34, "ORLANDO PENNER DURKSEN", 8, 14185],
+    [35, "DIONISIO OSWALDO AMARILLA GUIRLAND", 2, 24880],
+    [36, "PEDRO ALEJANDRO DIAZ VERON", 1, 23059],
+    [37, "NORMA BEATRIZ AQUINO LURAGHI", 911, 12637],
+    [38, "ERNESTO JAVIER ZACARIAS IRUN", 1, 22567],
+    [39, "LIDER SANTIAGO AMARILLA RIOS", 2, 24383],
+    [40, "JUAN EUDES AFARA MACIEL", 1, 21302],
+    [41, "ESPERANZA MARTINEZ DE PORTILLO", 40, 11735],
+    [42, "BLANCA MARGARITA OVELAR DE DUARTE", 1, 17864],
+    [43, "LOURDES NOELIA CABRERA PETTERS", 2, 22312],
+    [44, "GUSTAVO ALFREDO LEITE GUSINKY", 1, 15978],
+    [45, "ANTONIO RUBEN VELAZQUEZ CHAMORRO", 123, 18485],
+  ];
+
+  const s = leer("senadores-2023.json");
+  const e = normalizar(s);
+  const r = calcularDHondt(e.listas, e.bancas, e.umbral);
+
+  // Cada ronda adjudica una banca a una lista: la ocupa el candidato que quedó
+  // en ese lugar de su orden interno (la primera banca de la lista, la primera
+  // de la nómina reordenada; la segunda, la segunda, y así).
+  const porId = new Map(e.listas.map(function (l) { return [l.id, l]; }));
+  const ordenes = new Map(e.listas.map(function (l) { return [l.id, ordenInterno(l, e.modo)]; }));
+  const electos = r.rondas.map(function (ronda) {
+    const l = porId.get(ronda.listaId);
+    const c = l.candidatos[ordenes.get(l.id)[ronda.divisor - 1]];
+    return { numero: l.numero, nombre: c.nombre, pref: c.pref };
+  });
+
+  // Mayúsculas, sin tildes y con los espacios colapsados: el PDF no es parejo.
+  const clave = function (texto) {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .toUpperCase().replace(/\s+/g, " ").trim();
+  };
+
+  check("45 bancas adjudicadas", electos.length, 45);
+
+  let malos = 0;
+  oficiales.forEach(function (of, i) {
+    const puesto = of[0];
+    const obtenido = electos[i];
+    if (!obtenido) { malos++; console.log("  FALLA  puesto " + puesto + ": no se adjudicó ninguna banca"); return; }
+    // El nombre del JSON viene cortado, así que tiene que ser prefijo del
+    // oficial; el oficial no se recorta.
+    const ok = obtenido.numero === of[2] && obtenido.pref === of[3] &&
+               clave(of[1]).startsWith(clave(obtenido.nombre)) && clave(obtenido.nombre) !== "";
+    if (!ok) {
+      malos++;
+      console.log("  FALLA  puesto " + puesto +
+        `\n           esperado ${of[1]} (lista ${of[2]}, ${of[3]} pref.)` +
+        `\n           obtenido ${obtenido.nombre} (lista ${obtenido.numero}, ${obtenido.pref} pref.)`);
+    }
+  });
+  check("los 45 electos, con nombre, lista y voto preferente, en el orden de adjudicación", malos, 0);
 }
 
 /* La segunda comprobación contra una elección real, y la más exigente: la

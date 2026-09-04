@@ -143,7 +143,7 @@ Vienen cargados dos resultados reales.
 
 El reparto que da es ANR 23, Alianza 12, Cruzada Nacional 5, Encuentro Nacional 2, y una banca para Patria Querida, Frente Guasu y Yo Creo: la composición proclamada para el período 2023-2028. La banca 45 se definió por poco: Yo Creo entró con un cociente de 56.386 y el sexto del Cruzada Nacional quedó afuera con 55.324.
 
-Es la comprobación más grande de la herramienta contra un resultado oficial: 2,9 millones de votos, 18 listas y 45 bancas, partiendo sólo de los totales del PDF. El test lo deja fijado; si algún cambio en el cálculo rompiera esa coincidencia, se nota.
+Es la comprobación real de la herramienta contra un resultado oficial: ~2,9 millones de votos, 18 listas y 45 bancas, partiendo sólo de los votos del PDF. El test verifica además los 45 nombres, cada uno con su lista y su voto preferente, en el mismo orden de adjudicación que la lista de electos del TSJE. Si algún cambio en el cálculo rompiera esa coincidencia, se nota.
 
 El PDF se convierte con:
 
@@ -161,7 +161,7 @@ El script no escribe nada si las cuentas no cierran: los votos preferentes de ca
 
 `datos/asuncion-junta-municipal-2021.json` trae las Municipales 2021 de Asunción con los votos preferentes de cada uno de los 552 candidatos, no sólo el total de cada lista. 23 listas, 24 bancas, 246.844 votos válidos.
 
-El reparto da ANR 15, PLRA 5, Patria Querida 3 y Encuentro Ciudadano 1, que es la Junta que asumió. Como están los votos de cada candidato, también se comprueba quiénes ocuparon esas bancas: los 24 nombres que calcula la herramienta son los 24 concejales que asumieron, en el orden en que el voto preferente los dejó. Es la única prueba del orden interno contra un resultado oficial completo.
+El reparto da ANR 15, PLRA 5, Patria Querida 3 y Encuentro Ciudadano 1, que es la Junta que asumió. Como están los votos de cada candidato, también se comprueba quiénes ocuparon esas bancas: los 24 nombres que calcula la herramienta son los 24 concejales que asumieron, en el orden en que el voto preferente los dejó.
 
 La planilla sale de [datos.gov.py](https://www.datos.gov.py/dataset/elecciones-municipales-2021-votos-preferentes-por-mesa) y trae las 261 Juntas Municipales del país, así que sirve para cualquier ciudad:
 
@@ -318,7 +318,7 @@ node tests/schema.test.mjs
 
 `datos.test.mjs` comprueba los tres conjuntos municipales generados: cantidad de listas, bancas y candidatos; nóminas completas, sin nombres de relleno ni votos precargados; números de lista y siglas sin repetir; y que cada color oficial alcance 3:1 contra el fondo en los dos modos. También comprueba los dos resultados oficiales, el ejemplo de Star Wars y la elección con la que se abre la página (toda en cero, sin fuente, sin nombres que se confundan con algo real).
 
-De los dos resultados oficiales, el de Asunción 2021 es el más exigente: con los votos preferentes de los 552 candidatos se verifica el reparto entre listas y los 24 nombres que ocuparon las bancas. Es lo único que prueba el orden interno contra una elección real, y por eso también fija que el voto preferente movió de lugar a buena parte de las nóminas: si eso diera cero, el caso pasaría sin probar nada.
+Los dos resultados oficiales se verifican hasta los nombres: los 45 senadores de 2023 en el orden en que se adjudicó cada banca, y los 24 concejales de Asunción 2021. En los dos casos el voto preferente reordenó casi todas las nóminas, así que no alcanza con repartir bien entre listas. El caso de Asunción fija además cuánto las movió: si eso diera cero, la nómina y el resultado coincidirían y el caso pasaría sin probar nada.
 
 `schema.test.mjs` valida contra el esquema todos los archivos del índice y prueba una veintena de casos que tiene que rechazar. Trae un validador propio que cubre sólo las palabras clave que el esquema usa (hay una prueba que falla si aparece alguna sin implementar); el esquema además se verificó aparte con [ajv](https://ajv.js.org/) en modo estricto, que coincidió en todos los casos.
 
