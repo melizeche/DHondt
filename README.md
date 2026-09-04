@@ -55,7 +55,7 @@ Acá se cargan los votos de cada candidato y el total de la lista sale solo. La 
 1. **Total de votos de cada lista**: votos de sola lista + votos preferentes de sus candidatos, con el desglose.
 2. **Reparto D'Hondt entre listas**: la misma tabla de cocientes, con la banca que ganó cada celda.
 3. **Orden interno de cada lista**: la nómina reordenada por voto preferente. Para cada candidato, sus votos, su porcentaje dentro de la lista, la posición en la que quedó, de qué posición venía y cuántos lugares subió o bajó. Arranca mostrando a los que entran más los tres siguientes; con «Mostrar nóminas completas» se ve todo.
-4. **Concejales electos**: en el orden en que se adjudicó cada banca, con sus votos propios y su posición original.
+4. **Electos**: en el orden en que se adjudicó cada banca, con sus votos propios y su posición original.
 
 Además, **«Pegar votos»** carga una lista entera de una vez (acepta `Nombre <tab> votos`, `Nombre; votos`, `Nombre, votos`, o sólo el número, con puntos de miles), y el selector **«Orden dentro de la lista»** permite comparar el resultado con voto preferente contra el de la lista cerrada y bloqueada.
 
