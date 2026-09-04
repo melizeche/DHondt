@@ -79,7 +79,9 @@ one of these fails, the calculation changed and that is the news. Do not
 - the Star Wars example: the Empire's 5 seats go to Vader, Palpatine and three
   stormtroopers on **one preferential vote each**. The file exists to show that
   seats are won by the list, not by the candidate. `soloLista` is 0 everywhere
-  in it on purpose: votes that named nobody would answer the example.
+  in it on purpose: votes that named nobody would answer the example. The
+  Separatists sit one vote from a second seat (their 60.000 ÷ 2 ties Rebelión's
+  120.000 ÷ 4 at 30.000), so their preferential votes are not free to retune.
 - the Article 258 quotient table is checked against the figures published in the
   article itself.
 

@@ -317,7 +317,7 @@ console.log("\nSenado Galáctico: electos con uno o dos votos");
   // fácil: que las bancas de los stormtroopers salieron de esos votos.
   check("ningún voto quedó sin nombrar a un candidato",
     e.listas.filter(function (l) { return l.soloLista !== 0; }).length, 0);
-  check("el Imperio gana 5 bancas con 159.011 votos", [imperio.votos, ganadas], [159011, 5]);
+  check("el Imperio gana 5 bancas con 159.009 votos", [imperio.votos, ganadas], [159009, 5]);
   check("los 5 electos", electos.map(function (d) { return d.nombre; }), [
     "Darth Vader", "Sheev Palpatine",
     "Stormtrooper TD-9091", "Stormtrooper TK-421", "Stormtrooper TK-422",
@@ -327,16 +327,67 @@ console.log("\nSenado Galáctico: electos con uno o dos votos");
     electos.filter(function (d) { return d.pref === 1; }).length, 2);
   check("y el voto preferente igual da vuelta a los dos primeros",
     [electos[0].posOriginal, electos[1].posOriginal], [2, 1]);
-  // TD-9091 iba último de doce y tiene un voto más que el resto de la tropa:
-  // con esa diferencia se salta nueve lugares y entra.
+  // TD-9091 va último de la nómina y tiene un voto más que el resto de la
+  // tropa: con esa diferencia se salta siete lugares y entra.
   const td = electos[2];
   check("el último de la nómina entra con dos votos",
     [td.nombre, td.pref, td.posOriginal, td.posFinal],
-    ["Stormtrooper TD-9091", 2, 12, 3]);
+    ["Stormtrooper TD-9091", 2, 10, 3]);
   // Los demás stormtroopers empatan en 1: el Artículo 258 resuelve a favor del
   // orden que propuso el partido, así que entran los primeros de la nómina.
   check("entre los que empatan en un voto, manda el orden de la nómina",
     electos.slice(3).map(function (d) { return d.posOriginal; }), [3, 4]);
+}
+
+/* La otra cosa que enseña el archivo, y está armada al voto: la banca 10 la
+ * definen dos cocientes iguales en 30.000 —Rebelión 120.000 ÷ 4 y Separatistas
+ * 60.000 ÷ 2—, que el Artículo 258 resuelve a favor de la lista con más votos.
+ * Un voto más al último de los Separatistas da vuelta esa banca, y no a favor
+ * de quien lo recibió. Si alguien retoca esos preferentes, el ejemplo deja de
+ * mostrarlo y no se nota mirando el archivo. */
+console.log("\nSenado Galáctico: un voto al último de la nómina");
+{
+  const g = leer("ejemplo-star-wars.json");
+  const e = normalizar(g);
+  const r = calcularDHondt(e.listas, e.bancas, e.umbral);
+  const sep = e.listas.find(function (l) { return l.sigla === "Separatistas"; });
+  const orden = detalleOrden(sep, "desbloqueada", r.ganadas.get(sep.id));
+  const ultimo = orden[orden.length - 1];
+
+  check("Lott Dod es el menos votado de su lista",
+    [ultimo.nombre, ultimo.pref], ["Lott Dod", 200]);
+  check("la banca 10 y la primera afuera salen del mismo cociente",
+    [r.ultima.cociente, r.siguiente.cociente], [30000, 30000]);
+  // Mismo cociente pero distintos votos: lo resuelve el 258, no un sorteo.
+  check("la gana Rebelión por tener más votos, sin sorteo",
+    [e.listas.find(function (l) { return l.id === r.ultima.listaId; }).sigla, r.empates.length],
+    ["Rebelión", 0]);
+
+  // Un voto más para Lott Dod, que es también un voto más para su lista.
+  const mas = leer("ejemplo-star-wars.json");
+  const sepMas = mas.listas.find(function (l) { return l.sigla === "Separatistas"; });
+  sepMas.votos += 1;
+  sepMas.candidatos.find(function (c) { return c.nombre === "Lott Dod"; }).pref += 1;
+  const e2 = normalizar(mas);
+  const r2 = calcularDHondt(e2.listas, e2.bancas, e2.umbral);
+  const electosDe = function (est, res, sigla) {
+    const l = est.listas.find(function (x) { return x.sigla === sigla; });
+    return detalleOrden(l, "desbloqueada", res.ganadas.get(l.id))
+      .filter(function (d) { return d.electo; })
+      .map(function (d) { return d.nombre; });
+  };
+
+  check("con ese voto los Separatistas pasan a 2 bancas y Rebelión baja a 3",
+    e2.listas.map(function (l) { return [l.sigla, r2.ganadas.get(l.id)]; }),
+    [["Rebelión", 3], ["Imperio", 5], ["Separatistas", 2]]);
+  // La banca no es para quien recibió el voto: es de la lista, y adentro la
+  // ordena el voto preferente.
+  check("la banca no es para Lott Dod sino para Grievous",
+    electosDe(e2, r2, "Separatistas"), ["Conde Dooku", "General Grievous"]);
+  check("y la que sale es Mon Mothma, de otra lista",
+    electosDe(e, r, "Rebelión").filter(function (n) {
+      return electosDe(e2, r2, "Rebelión").indexOf(n) === -1;
+    }), ["Mon Mothma"]);
 }
 
 console.log("\nEjemplo mínimo: nóminas completas");

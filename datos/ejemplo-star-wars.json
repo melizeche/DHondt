@@ -25,9 +25,7 @@
         { "nombre": "Wedge Antilles", "pref": 1900 },
         { "nombre": "Jyn Erso", "pref": 4800 },
         { "nombre": "Cassian Andor", "pref": 2300 },
-        { "nombre": "Bail Organa", "pref": 1700 },
-        { "nombre": "Almirante Ackbar", "pref": 1500 },
-        { "nombre": "Hera Syndulla", "pref": 1000 }
+        { "nombre": "Bail Organa", "pref": 4200 }
       ]
     },
     {
@@ -36,7 +34,7 @@
       "sigla": "Imperio",
       "color": 1,
       "colorHex": "#eb6834",
-      "votos": 159011,
+      "votos": 159009,
       "soloLista": 0,
       "candidatos": [
         { "nombre": "Sheev Palpatine", "pref": 63000 },
@@ -48,8 +46,6 @@
         { "nombre": "Stormtrooper FN-2199", "pref": 1 },
         { "nombre": "Stormtrooper TK-819", "pref": 1 },
         { "nombre": "Stormtrooper TD-4445", "pref": 1 },
-        { "nombre": "Stormtrooper FN-2003", "pref": 1 },
-        { "nombre": "Stormtrooper TK-1147", "pref": 1 },
         { "nombre": "Stormtrooper TD-9091", "pref": 2 }
       ]
     },
@@ -65,15 +61,13 @@
         { "nombre": "Conde Dooku", "pref": 24500 },
         { "nombre": "Nute Gunray", "pref": 8200 },
         { "nombre": "General Grievous", "pref": 15700 },
-        { "nombre": "Wat Tambor", "pref": 3400 },
-        { "nombre": "San Hill", "pref": 2100 },
-        { "nombre": "Poggle el Menor", "pref": 1900 },
-        { "nombre": "Shu Mai", "pref": 1400 },
-        { "nombre": "Passel Argente", "pref": 900 },
-        { "nombre": "Rune Haako", "pref": 800 },
-        { "nombre": "Lott Dod", "pref": 600 },
-        { "nombre": "Tikkes", "pref": 300 },
-        { "nombre": "Po Nudo", "pref": 200 }
+        { "nombre": "Wat Tambor", "pref": 3600 },
+        { "nombre": "San Hill", "pref": 2300 },
+        { "nombre": "Poggle el Menor", "pref": 2100 },
+        { "nombre": "Shu Mai", "pref": 1500 },
+        { "nombre": "Passel Argente", "pref": 1000 },
+        { "nombre": "Rune Haako", "pref": 900 },
+        { "nombre": "Lott Dod", "pref": 200 }
       ]
     }
   ]

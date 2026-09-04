@@ -237,11 +237,13 @@ Hay dos ejemplos para importar:
 - [`datos/ejemplo.json`](datos/ejemplo.json): mínimo, para ver el formato.
 - [`datos/ejemplo-star-wars.json`](datos/ejemplo-star-wars.json): 3 listas, 10 bancas y voto preferente. El Imperio saca 5 bancas, la Rebelión 4 y los Separatistas 1.
 
-  Está armado para mostrar que las bancas las gana la lista, no el candidato. En el Imperio sólo dos nombres juntaron votos: Vader 96.000 y Palpatine 63.000, y Vader pasa a Palpatine aunque el partido lo puso segundo. Los otros diez son stormtroopers con un voto cada uno, salvo TD-9091, que tiene dos.
+  Está armado para mostrar que las bancas las gana la lista, no el candidato. En el Imperio sólo dos nombres juntaron votos: Vader 96.000 y Palpatine 63.000, y Vader pasa a Palpatine aunque el partido lo puso segundo. Los otros ocho son stormtroopers con un voto cada uno, salvo TD-9091, que tiene dos.
 
-  Los 159.011 votos de la lista —todos de gente que nombró a alguien, no hay votos de sola lista— alcanzan para 5 bancas, así que después de Vader y Palpatine quedan tres. La tercera se la lleva TD-9091, que iba último de los doce: con un voto más que el resto sube nueve lugares y entra. Las otras dos van a TK-421 y TK-422, con un voto cada uno; como empatan, el orden lo decide la nómina del partido, que es lo que manda el Artículo 258 para los empates de preferencias.
+  Los 159.009 votos de la lista alcanzan para 5 bancas, así que después de Vader y Palpatine quedan tres. La tercera se la lleva TD-9091, que iba último de la nómina: con un voto más que el resto sube siete lugares y entra. Las otras dos van a TK-421 y TK-422, con un voto cada uno; como empatan, el orden lo decide la nómina del partido, que es lo que manda el Artículo 258 para los empates de preferencias.
 
   La Rebelión queda de contraste, con votos repartidos como en una lista normal: Luke pasa a Leia, Mon Mothma cae del segundo lugar al cuarto y entra por la última banca, Jyn Erso queda primera suplente.
+
+  Los Separatistas están puestos al borde: la banca 10 se define entre dos cocientes iguales en 30.000 (Rebelión 120.000 ÷ 4 y Separatistas 60.000 ÷ 2) y se la lleva Rebelión porque tiene más votos, como manda el 258. Un voto más para Lott Dod, el último de la nómina con 200, da vuelta esa banca. No se la queda él: entra Grievous, que ya era segundo de su lista, y la que pierde la suya es Mon Mothma, de otra lista.
 
 ## Cómo se calcula
 
