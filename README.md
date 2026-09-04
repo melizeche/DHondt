@@ -15,7 +15,7 @@ Sirve para cualquier elección proporcional por listas: las bancas, las listas, 
 - [Resultados de elecciones que ya pasaron](#resultados-de-elecciones-que-ya-pasaron)
 - [Formato del JSON](#formato-del-json)
 - [Cómo se calcula](#cómo-se-calcula)
-- [Estructura](#estructura), [tests](#tests) y [publicar](#publicar)
+- [Estructura](#estructura) y [tests](#tests)
 - [Licencia](#licencia)
 
 ## Usar ahora
@@ -321,46 +321,6 @@ node tests/schema.test.mjs
 Los dos resultados oficiales se verifican hasta los nombres: los 45 senadores de 2023 en el orden en que se adjudicó cada banca, y los 24 concejales de Asunción 2021. En los dos casos el voto preferente reordenó casi todas las nóminas, así que no alcanza con repartir bien entre listas. El caso de Asunción fija además cuánto las movió: si eso diera cero, la nómina y el resultado coincidirían y el caso pasaría sin probar nada.
 
 `schema.test.mjs` valida contra el esquema todos los archivos del índice y prueba una veintena de casos que tiene que rechazar. Trae un validador propio que cubre sólo las palabras clave que el esquema usa (hay una prueba que falla si aparece alguna sin implementar); el esquema además se verificó aparte con [ajv](https://ajv.js.org/) en modo estricto, que coincidió en todos los casos.
-
-## Publicar
-
-Es un sitio estático sin build: HTML, CSS, JS y JSON servidos tal cual. Anda en cualquier hosting estático; para usarlo desde el disco, ver [Usar ahora](#usar-ahora).
-
-### GitHub Pages
-
-No hace falta ningún workflow. Con esto en la rama principal:
-
-1. *Settings → Pages*
-2. **Source**: «Deploy from a branch»
-3. **Branch**: la rama principal, carpeta `/ (root)` → *Save*
-
-Queda en `https://<usuario>.github.io/DHondt/`. Todas las rutas son relativas, así que funciona bajo ese subdirectorio, incluido el `fetch` del selector.
-
-El `.nojekyll` de la raíz le dice a Pages que publique los archivos tal cual en vez de pasarlos por Jekyll. Con este contenido Jekyll no rompería nada, pero saltearlo es más rápido y evita problemas si mañana se agrega algún archivo que empiece con guion bajo.
-
-### Cloudflare Pages
-
-Seguí la [guía de HTML estático de Cloudflare](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/): elegí el repositorio y el directorio raíz que contiene estos archivos. No hay build ni directorio generado; la guía recomienda `exit 0` como comando de build, y la [configuración general](https://developers.cloudflare.com/pages/configuration/build-configuration/) también documenta dejarlo vacío en proyectos sin framework.
-
-Queda en `https://<proyecto>.pages.dev`, y cada push a la rama elegida vuelve a desplegar.
-
-`_headers` es de Cloudflare (Netlify usa el mismo formato) y agrega unas cabeceras de seguridad. GitHub Pages lo ignora.
-
-### Vista previa al compartir
-
-Las dos páginas traen etiquetas Open Graph y Twitter Card, así que un enlace pegado en WhatsApp, X o Slack muestra título, descripción e imagen. La imagen es `og.png` (1200×630).
-
-El sitio vive en `https://bancas.melizeche.com`. Ese dominio aparece siete veces entre las dos páginas: `og:url`, `og:image` y `twitter:image` en cada una, más el `<link rel="canonical">`. Tienen que ser absolutas, porque los scrapers no ejecutan JavaScript y varios no resuelven rutas relativas; si el sitio se muda, hay que cambiar esas líneas.
-
-El `canonical` está porque Cloudflare Pages sirve el mismo contenido también en `<proyecto>.pages.dev`: sin él, los buscadores ven dos sitios idénticos en dos dominios.
-
-`og.png` se genera con `tools/og.mjs`: arma la cinta de bancas en HTML y la fotografía con un navegador headless. Necesita Playwright, que no es dependencia del proyecto (es para regenerar la imagen si cambia el diseño), y acepta `CHROMIUM=<ruta>` para usar un navegador ya instalado.
-
-Dibuja el ejemplo de `datos/ejemplo.json`, no una elección real: listas A, B y C con los colores de la paleta. El reparto que se ve (5-2-1 sobre 8 bancas) lo calcula el mismo `js/core.js` con esos votos.
-
-### Otros
-
-Cualquier hosting estático sirve igual, sin cambios: Netlify, Vercel, Firebase Hosting o un bucket de Cloud Storage o S3. No hay servidor: los datos que se cargan quedan en el `localStorage` del navegador y no se envían a ningún lado.
 
 ## Licencia
 
