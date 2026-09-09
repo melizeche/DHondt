@@ -1,0 +1,369 @@
+{
+  "$schema": "schema.json",
+  "eleccion": "Elecciones Municipales · Junta Municipal de Luque",
+  "fuente": {
+    "nombre": "simulador oficial del TSJE",
+    "url": "https://simuladoroficial.tsje.gov.py/"
+  },
+  "bancas": 12,
+  "umbral": 0,
+  "modo": "desbloqueada",
+  "blancos": 0,
+  "nulos": 0,
+  "listas": [
+    {
+      "numero": 1,
+      "partido": "PARTIDO COLORADO",
+      "sigla": "ANR",
+      "color": 0,
+      "colorHex": "#ff0000",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "ARNALDO BAEZA",
+          "pref": 0
+        },
+        {
+          "nombre": "HANS KEMPER",
+          "pref": 0
+        },
+        {
+          "nombre": "ENRIQUE KIKE QUINTANA",
+          "pref": 0
+        },
+        {
+          "nombre": "RAULITO GRUNCE",
+          "pref": 0
+        },
+        {
+          "nombre": "ELEN NUÑEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "JUAN ANGEL MARECOS",
+          "pref": 0
+        },
+        {
+          "nombre": "MARIO PINEDA",
+          "pref": 0
+        },
+        {
+          "nombre": "CHITO ORTIZ",
+          "pref": 0
+        },
+        {
+          "nombre": "PABLO PEDROSO",
+          "pref": 0
+        },
+        {
+          "nombre": "CHRISTIAN GILL",
+          "pref": 0
+        },
+        {
+          "nombre": "JOSUE LURAGHI",
+          "pref": 0
+        },
+        {
+          "nombre": "RAUL SALINAS",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "partido": "PARTIDO LIBERAL RADICAL AUTENTICO",
+      "sigla": "PLRA",
+      "color": 1,
+      "colorHex": "#002bc7",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "DAYSI ROLON",
+          "pref": 0
+        },
+        {
+          "nombre": "RODRIGO RODRIGUEZ “GUACAMAYO LUQUEÑO”",
+          "pref": 0
+        },
+        {
+          "nombre": "FRANCISCA FRANCO",
+          "pref": 0
+        },
+        {
+          "nombre": "SANTI FLORENTIN",
+          "pref": 0
+        },
+        {
+          "nombre": "JORGE ROMAN",
+          "pref": 0
+        },
+        {
+          "nombre": "ROMULO PEREZ",
+          "pref": 0
+        },
+        {
+          "nombre": "JULIO GOMEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "MATI MALDONADO",
+          "pref": 0
+        },
+        {
+          "nombre": "MARITO AGUILERA",
+          "pref": 0
+        },
+        {
+          "nombre": "DR. JOSE MEZA",
+          "pref": 0
+        },
+        {
+          "nombre": "LUZ BORJA",
+          "pref": 0
+        },
+        {
+          "nombre": "CESAR FRANCO CORONEL",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "partido": "ALIANZA LUQUE DEMOCRATICO",
+      "sigla": "LD",
+      "color": 2,
+      "colorHex": "#ffc000",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "KATY LATERRA",
+          "pref": 0
+        },
+        {
+          "nombre": "BRAULIO MARTINEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "OSDANI AGUILERA ZELAYA",
+          "pref": 0
+        },
+        {
+          "nombre": "MIRIAN FRANCO",
+          "pref": 0
+        },
+        {
+          "nombre": "ING. MARIO ESQUIVEL BADO",
+          "pref": 0
+        },
+        {
+          "nombre": "NERY VIDAL ORUE",
+          "pref": 0
+        },
+        {
+          "nombre": "ALE MORENO",
+          "pref": 0
+        },
+        {
+          "nombre": "DAMIANA RIVAROLA GONZALEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "CARMEN RODRIGUEZ ARCE",
+          "pref": 0
+        },
+        {
+          "nombre": "PAULA MARTINEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "OSCAR RUIZ",
+          "pref": 0
+        },
+        {
+          "nombre": "PROFE ROCIO SERVIN",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "partido": "ALIANZA LUQUEÑOS UNIDOS",
+      "sigla": "LU",
+      "color": 3,
+      "colorHex": "#ffea15",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "CECILIO CUEVAS MENDOZA",
+          "pref": 0
+        },
+        {
+          "nombre": "JULIO SANCHEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "VERONICA GALEANO",
+          "pref": 0
+        },
+        {
+          "nombre": "RUBEN BARRETO",
+          "pref": 0
+        },
+        {
+          "nombre": "SHEILA RODRIGUEZ BAEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "RICARDO GONZALEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "FRAN SOTERAS",
+          "pref": 0
+        },
+        {
+          "nombre": "CHIQUI LUQUE",
+          "pref": 0
+        },
+        {
+          "nombre": "EDGAR VERDUN AQUINO",
+          "pref": 0
+        },
+        {
+          "nombre": "MARIA MERCEDES CUEVAS AYALA",
+          "pref": 0
+        },
+        {
+          "nombre": "JOSE VILLAR",
+          "pref": 0
+        },
+        {
+          "nombre": "PEDRO FERNANDEZ",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 300,
+      "partido": "PARTIDO PATRIA SOÑADA",
+      "sigla": "PS",
+      "color": 4,
+      "colorHex": "#b9cdbe",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "PERLA PATRICIA PAVON PAREDES",
+          "pref": 0
+        },
+        {
+          "nombre": "ANDRES AVELINO BRITEZ CESPEDES",
+          "pref": 0
+        },
+        {
+          "nombre": "LIMPIA ISABEL VILLASBOA ALMADA",
+          "pref": 0
+        },
+        {
+          "nombre": "EBELYN YAMINA VILLALBA GODOY",
+          "pref": 0
+        },
+        {
+          "nombre": "LAURA ANTONIA LEON DE DELACRUZ",
+          "pref": 0
+        },
+        {
+          "nombre": "JOSE DE LA CRUZ GONZALEZ FERNANDEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "JESUS MANUEL GONZALEZ LEON",
+          "pref": 0
+        },
+        {
+          "nombre": "ALBERTO ODILON NUÑEZ AGUILERA",
+          "pref": 0
+        },
+        {
+          "nombre": "LUCILA SALINAS VDA DE LEON",
+          "pref": 0
+        },
+        {
+          "nombre": "ANDRES VILLALBA INSFRAN",
+          "pref": 0
+        },
+        {
+          "nombre": "JORGE DAVID ZARATE DELVALLE",
+          "pref": 0
+        },
+        {
+          "nombre": "SHIRLEY ARAMI DELVALLE AYALA",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 400,
+      "partido": "MOVIMIENTO DEPARTAMENTAL UNIDOS PODEMOS",
+      "sigla": "MUP",
+      "color": 5,
+      "colorHex": "#f1be7e",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "LIBRADO FLECHA BENITEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "ENRIQUE JAVIER PAREDES ROJAS",
+          "pref": 0
+        },
+        {
+          "nombre": "CATALINO ARCE SANTACRUZ",
+          "pref": 0
+        },
+        {
+          "nombre": "OSCAR JAVIER MORINIGO GARCIA",
+          "pref": 0
+        },
+        {
+          "nombre": "JULIETA VALLEJOS",
+          "pref": 0
+        },
+        {
+          "nombre": "MATIAS JAVIER ESTIGARRIBIA MERELES",
+          "pref": 0
+        },
+        {
+          "nombre": "IRMA DA ROSA TIJERA",
+          "pref": 0
+        },
+        {
+          "nombre": "RICARDO MARCIAL RIVAS",
+          "pref": 0
+        },
+        {
+          "nombre": "HERMES RAMON DIAZ",
+          "pref": 0
+        },
+        {
+          "nombre": "CINTHIA ROSSANA ZORRILLA",
+          "pref": 0
+        },
+        {
+          "nombre": "SILDA NAUJE",
+          "pref": 0
+        },
+        {
+          "nombre": "ALCIDES ZARATE CARDOZO",
+          "pref": 0
+        }
+      ]
+    }
+  ]
+}
