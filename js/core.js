@@ -138,8 +138,6 @@ const CAIDA_LISTAS = [0.45, 0.85];
 const CAIDA_PREFERENTES = [0.70, 0.95];
 /* Votos válidos por banca en juego: Asunción reparte 24 con unos 250.000. */
 const VOTOS_POR_BANCA = [6000, 18000];
-/* Parte del total de una lista que la votó sin nombrar a ningún candidato. */
-const CUOTA_SOLO_LISTA = [0.30, 0.60];
 /* Blancos y nulos sobre los válidos. En el Senado 2023 fueron 4,2 % y 0,5 %. */
 const CUOTA_BLANCOS = [0.015, 0.045];
 const CUOTA_NULOS = [0.003, 0.012];
@@ -201,8 +199,10 @@ function destronarAlPrimero(candidatos, azar) {
   if (candidatos[mayor].pref === candidatos[0].pref) candidatos[mayor].pref++;
 }
 
-/* Reparte el total de una lista entre voto de sola lista y preferentes. Con la
- * lista bloqueada no hay preferentes que sortear: todo es voto de lista. */
+/* Reparte el total de una lista. Con la lista bloqueada no hay preferentes que
+ * sortear: todo es voto de lista. Con la desbloqueada es al revés: en Paraguay
+ * cada voto nombra a un candidato y no existe el voto de sola lista, así que
+ * el sorteo tampoco lo inventa. */
 function sortearLista(lista, total, desbloqueada, azar) {
   const cant = lista.candidatos.length;
   if (!desbloqueada || !cant) {
@@ -211,17 +211,18 @@ function sortearLista(lista, total, desbloqueada, azar) {
     return recalcularTotal(lista);
   }
 
-  const aRepartir = Math.round(total * (1 - azarEntre(CUOTA_SOLO_LISTA, azar)));
   // Sin piso: que el final de la nómina no saque ni un voto preferente es
   // exactamente lo que pasa en una elección de verdad.
   const pesos = perfilDesparejo(cant, CAIDA_PREFERENTES, null, azar);
-  const votos = repartirPorPesos(aRepartir, pesos, 0);
+  const votos = repartirPorPesos(total, pesos, 0);
+  // Lo que se pierde o sobra al redondear va al más votado, para que la suma
+  // dé justo el total sorteado.
+  const diferencia = total - votos.reduce(function (a, b) { return a + b; }, 0);
+  votos[votos.indexOf(Math.max.apply(null, votos))] += diferencia;
   lista.candidatos.forEach(function (c, j) { c.pref = votos[j]; });
   destronarAlPrimero(lista.candidatos, azar);
 
-  // El total sorteado es una intención: lo que manda es la suma, así que el
-  // resto (lo que no fue a ningún candidato) se cuenta como voto de lista.
-  lista.soloLista = Math.max(0, total - sumaPreferentes(lista));
+  lista.soloLista = 0;
   return recalcularTotal(lista);
 }
 

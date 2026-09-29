@@ -417,6 +417,14 @@ enTodas("la suma cierra: sola lista + preferentes = total de la lista",
     return e.listas.every(function (l) { return l.soloLista + sumaPreferentes(l) === l.votos; });
   });
 
+enTodas("en el sorteo desbloqueado todos los votos van a candidatos",
+  function () { return estadoDe(9, 24); },
+  function (e) {
+    return e.listas.every(function (l) {
+      return l.soloLista === 0 && sumaPreferentes(l) === l.votos;
+    });
+  });
+
 /* Lo que hace didáctico al sorteo: que el electorado salga desparejo. Con
  * nueve listas y una caída de 0,85 como techo, la más chica no puede pasar del
  * 27 % de la más grande; se exige bastante menos que eso para no atarse a la
