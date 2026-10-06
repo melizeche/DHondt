@@ -299,6 +299,30 @@ console.log("\nJunta Municipal de Asunción 2021: resultados oficiales");
  * entran candidatos con un solo voto preferente. Si el cálculo cambiara y eso
  * dejara de pasar, el ejemplo dejaría de enseñar lo que el README dice que
  * enseña, y nadie lo notaría mirando el archivo. */
+/* El TREP de las Municipales 2026 en Asunción. Son resultados preliminares, así
+ * que acá no se fija el reparto: sólo que el archivo cuadre con lo que declaró
+ * el TREP y que diga que es preliminar. */
+console.log("\nJunta Municipal de Asunción 2026: TREP preliminar");
+{
+  const t = leer("asuncion-junta-municipal-2026-trep.json");
+  const cands = t.listas.flatMap(function (l) { return l.candidatos; });
+
+  check("9 listas, 24 bancas", [t.listas.length, t.bancas], [9, 24]);
+  check("216 candidatos, 24 por lista", [cands.length, new Set(t.listas.map(function (l) {
+    return l.candidatos.length; })).size], [216, 1]);
+  check("mismos números de lista que las candidaturas",
+    t.listas.map(function (l) { return l.numero; }), [1, 2, 3, 6, 7, 10, 16, 21, 300]);
+  check("cada lista: los preferentes suman su total",
+    t.listas.filter(function (l) {
+      return l.candidatos.reduce(function (s, c) { return s + c.pref; }, 0) !== l.votos;
+    }).length, 0);
+  // 267.837 válidos + 10.215 blancos + 917 nulos + 89 no computados = 279.058.
+  check("válidos, blancos y nulos del TREP",
+    [t.listas.reduce(function (s, l) { return s + l.votos; }, 0), t.blancos, t.nulos],
+    [267837, 10215, 917]);
+  check("la fuente dice que es preliminar", /preliminar/.test(t.fuente.nombre), true);
+}
+
 console.log("\nSenado Galáctico: electos con uno o dos votos");
 {
   const g = leer("ejemplo-star-wars.json");
