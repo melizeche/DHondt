@@ -8,8 +8,10 @@
  *   https://resultados.tsje.gov.py/publicacion/dinamics/divulgacion.ajax.php
  *     ?codeleccion=<n>&candidatura=<n>&departamento=<n>&distrito=<n>
  * guardado tal cual desde el navegador. El sitio está detrás de un firewall
- * que pide ejecutar JavaScript, así que el conversor no lo descarga: lee el
- * archivo que se guardó a mano.
+ * que pide ejecutar JavaScript, así que el conversor no lo descarga: se abre
+ * https://resultados.tsje.gov.py/publicacion/divulgacion.html, se elige el
+ * distrito y en la pestaña Network de las herramientas de desarrollo se guarda
+ * la respuesta del request a divulgacion.ajax.php.
  *
  * Son resultados preliminares y el archivo lo dice: la fuente lleva la hora del
  * corte y cuántas mesas había transmitidas.

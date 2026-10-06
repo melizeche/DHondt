@@ -186,7 +186,7 @@ La planilla es sólo de votos preferentes y no trae los votos en blanco ni los n
 
 `datos/asuncion-junta-municipal-2026-trep.json` trae los resultados **preliminares** del TREP (Transmisión de Resultados Electorales Preliminares) del TSJE, cortados el 05-10-2026 a las 10:20 con 1.324 de 1.325 mesas: 9 listas, 24 bancas, 267.837 votos válidos y los votos preferentes de cada candidato. No es el cómputo definitivo, y por eso el test comprueba que el archivo cuadre con el TREP, pero no fija el reparto.
 
-El TREP publica, por candidatura y distrito, un JSON en `https://resultados.tsje.gov.py/publicacion/dinamics/divulgacion.ajax.php?codeleccion=47&candidatura=2&departamento=0&distrito=0`. El sitio está detrás de un firewall que pide ejecutar JavaScript, así que el conversor no lo descarga: se abre esa dirección en el navegador, se guarda la respuesta y se convierte:
+La página del TREP, [resultados.tsje.gov.py/publicacion/divulgacion.html](https://resultados.tsje.gov.py/publicacion/divulgacion.html), pide los datos de cada candidatura y distrito a `divulgacion.ajax.php` (para Asunción, `...?codeleccion=47&candidatura=2&departamento=0&distrito=0`). El sitio está detrás de un firewall que pide ejecutar JavaScript, así que el conversor no lo descarga. Hay que abrir la página, elegir el distrito y, en las herramientas de desarrollo del navegador (pestaña Network, filtrando por `divulgacion.ajax`), guardar la respuesta de ese request. Los códigos de departamento y distrito los pone la página. Después se convierte:
 
 ```sh
 node tools/trep-a-json.mjs --trep asuncion-trep.json \
