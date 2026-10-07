@@ -53,6 +53,9 @@ Re-run the converter, don't hand-edit:
 
 - the three `*-junta-municipal.json` ← `tools/tsje-a-json.mjs`
 - `senadores-2023.json` ← `tools/pdf-resultados-a-json.py`
+- `asuncion-junta-municipal-2026-trep.json` ← `tools/trep-a-json.mjs`, from a
+  TREP response saved by hand (the site sits behind a JS firewall). These are
+  preliminary results: the test checks the file adds up, not the allocation.
 - `og.png` ← `tools/og.mjs` (needs Playwright)
 
 `ejemplo.json` and `ejemplo-star-wars.json` are hand-written and meant to be

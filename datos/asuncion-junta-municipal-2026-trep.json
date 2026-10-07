@@ -1,0 +1,978 @@
+{
+  "$schema": "schema.json",
+  "eleccion": "Elecciones Municipales 2026 · Junta Municipal de Asunción (TREP, preliminar)",
+  "fuente": {
+    "nombre": "TREP del TSJE, resultados preliminares al 05-10-2026 10:20:02 (1.324 de 1.325 mesas)",
+    "url": "https://resultados.tsje.gov.py/"
+  },
+  "bancas": 24,
+  "umbral": 0,
+  "modo": "desbloqueada",
+  "blancos": 10215,
+  "nulos": 917,
+  "listas": [
+    {
+      "numero": 1,
+      "partido": "PARTIDO COLORADO",
+      "sigla": "ANR",
+      "color": 0,
+      "colorHex": "#ff0000",
+      "votos": 149231,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "GERARDO \"GRINGO\" BENITEZ",
+          "pref": 15711
+        },
+        {
+          "nombre": "MIGUEL SOSA",
+          "pref": 12986
+        },
+        {
+          "nombre": "SEBA RADICE",
+          "pref": 13005
+        },
+        {
+          "nombre": "NASSER ESGAIB",
+          "pref": 5379
+        },
+        {
+          "nombre": "\"EL ARKI\" SOTOMAYOR",
+          "pref": 7994
+        },
+        {
+          "nombre": "JOSE PLATE",
+          "pref": 3832
+        },
+        {
+          "nombre": "IVAN CHILAVERT",
+          "pref": 4013
+        },
+        {
+          "nombre": "MARCE CENTURION",
+          "pref": 7533
+        },
+        {
+          "nombre": "CERES ESCOBAR",
+          "pref": 4962
+        },
+        {
+          "nombre": "DANI FERNANDEZ",
+          "pref": 10615
+        },
+        {
+          "nombre": "CARLOS MOREL",
+          "pref": 6307
+        },
+        {
+          "nombre": "TINO AYALA",
+          "pref": 9431
+        },
+        {
+          "nombre": "\"PIRIKI\" RODRIGUEZ",
+          "pref": 6242
+        },
+        {
+          "nombre": "JESUS LARA",
+          "pref": 3515
+        },
+        {
+          "nombre": "HUGO RAMIREZ",
+          "pref": 2772
+        },
+        {
+          "nombre": "MARIANO CACERES",
+          "pref": 4746
+        },
+        {
+          "nombre": "CYNTHIA ROMERO",
+          "pref": 6284
+        },
+        {
+          "nombre": "GABRIEL CALONGA",
+          "pref": 3457
+        },
+        {
+          "nombre": "AXEL MONGELOS",
+          "pref": 6564
+        },
+        {
+          "nombre": "OSCAR NOLDIN",
+          "pref": 4146
+        },
+        {
+          "nombre": "KARINA ACUÑA",
+          "pref": 3852
+        },
+        {
+          "nombre": "ENRIQUE WAGENER",
+          "pref": 922
+        },
+        {
+          "nombre": "JAVIER PINTOS",
+          "pref": 3417
+        },
+        {
+          "nombre": "ARTURO TUKI ALMIRON",
+          "pref": 1546
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "partido": "PARTIDO LIBERAL RADICAL AUTENTICO",
+      "sigla": "PLRA",
+      "color": 1,
+      "colorHex": "#002bc7",
+      "votos": 36338,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "AUGUSTO WAGNER",
+          "pref": 7541
+        },
+        {
+          "nombre": "RAMON ORTIZ",
+          "pref": 4564
+        },
+        {
+          "nombre": "CHRISTIAN BAREIRO",
+          "pref": 3676
+        },
+        {
+          "nombre": "FIORELLA FORESTIERI \"YO CONFIO\"",
+          "pref": 6996
+        },
+        {
+          "nombre": "HUMBERTO BLASCO",
+          "pref": 2867
+        },
+        {
+          "nombre": "ARIEL ANDINO",
+          "pref": 1007
+        },
+        {
+          "nombre": "TANCREDO LUIS CENTURION",
+          "pref": 205
+        },
+        {
+          "nombre": "CARINA BENITEZ YEGROS",
+          "pref": 1115
+        },
+        {
+          "nombre": "SEBA JAEGGLI",
+          "pref": 965
+        },
+        {
+          "nombre": "COCO GONZALEZ",
+          "pref": 1275
+        },
+        {
+          "nombre": "MARIA JOSE MIRANDA",
+          "pref": 1951
+        },
+        {
+          "nombre": "ARQ. CARLOS E. RUIZ SCHAERER",
+          "pref": 594
+        },
+        {
+          "nombre": "CECILIA VARGAS PEÑA",
+          "pref": 1412
+        },
+        {
+          "nombre": "MAITO VARGAS",
+          "pref": 207
+        },
+        {
+          "nombre": "NERY VELAZQUEZ",
+          "pref": 547
+        },
+        {
+          "nombre": "FATIMA GOMEZ",
+          "pref": 412
+        },
+        {
+          "nombre": "MARIA CRISTINA BENITEZ",
+          "pref": 114
+        },
+        {
+          "nombre": "ROGELIO BARROS",
+          "pref": 71
+        },
+        {
+          "nombre": "YESICA SAGUIER",
+          "pref": 109
+        },
+        {
+          "nombre": "NITO SANTA CRUZ",
+          "pref": 104
+        },
+        {
+          "nombre": "LUIS FRETES",
+          "pref": 198
+        },
+        {
+          "nombre": "HENRY NELSON CAÑETE FERNANDEZ",
+          "pref": 78
+        },
+        {
+          "nombre": "JUAN FRANCISCO BENITEZ RIVAS",
+          "pref": 203
+        },
+        {
+          "nombre": "JUAN JARA",
+          "pref": 127
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "partido": "ALIANZA UNIDOS POR ASUNCION",
+      "sigla": "AUA",
+      "color": 2,
+      "colorHex": "#0c9b27",
+      "votos": 65505,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "SEBAS GARAY PQ",
+          "pref": 9490
+        },
+        {
+          "nombre": "NOELIA DIAZ",
+          "pref": 4653
+        },
+        {
+          "nombre": "MAURI MALUFF",
+          "pref": 7379
+        },
+        {
+          "nombre": "GUSTAVO RODRIGUEZ",
+          "pref": 2245
+        },
+        {
+          "nombre": "ROSA VACCHETTA",
+          "pref": 2053
+        },
+        {
+          "nombre": "DR. CELINO FERREIRA S.",
+          "pref": 313
+        },
+        {
+          "nombre": "ALVARO GRAU PQ",
+          "pref": 13531
+        },
+        {
+          "nombre": "GLADIS FISCHER",
+          "pref": 1245
+        },
+        {
+          "nombre": "JORGE RAMOS \"DOCTOR FRANCIA\"",
+          "pref": 629
+        },
+        {
+          "nombre": "JOSEFINA DUARTE",
+          "pref": 786
+        },
+        {
+          "nombre": "OTI SANCHEZ",
+          "pref": 483
+        },
+        {
+          "nombre": "JULIO VILLALBA CAVE",
+          "pref": 161
+        },
+        {
+          "nombre": "PABLO CALLIZO",
+          "pref": 5386
+        },
+        {
+          "nombre": "FABI MONTIEL KLEINER",
+          "pref": 817
+        },
+        {
+          "nombre": "MAXI SEIFERHELD \"LEVANTA ESCUELAS\"",
+          "pref": 5148
+        },
+        {
+          "nombre": "CORA ARBO",
+          "pref": 572
+        },
+        {
+          "nombre": "\"TU BUEN AMIGO\" BRUNO",
+          "pref": 1867
+        },
+        {
+          "nombre": "ING AGR CARMEN \"TATE\" CUBAS",
+          "pref": 144
+        },
+        {
+          "nombre": "JAZMIN GALEANO SAPENA PQ",
+          "pref": 4447
+        },
+        {
+          "nombre": "INGRID NOGUERA",
+          "pref": 1139
+        },
+        {
+          "nombre": "DANI RODRIGUEZ",
+          "pref": 269
+        },
+        {
+          "nombre": "ING GLADYS CANESE",
+          "pref": 736
+        },
+        {
+          "nombre": "PEDRO MAYOR",
+          "pref": 1895
+        },
+        {
+          "nombre": "MAGIN LOPEZ \"GESTION Y CONTROL\"",
+          "pref": 117
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "partido": "PARTIDO DEMOCRATA CRISTIANO",
+      "sigla": "PDC",
+      "color": 3,
+      "colorHex": "#ffffff",
+      "votos": 4827,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "HUGO LOPEZ",
+          "pref": 989
+        },
+        {
+          "nombre": "TADEO ZARRATEA DAVALOS",
+          "pref": 739
+        },
+        {
+          "nombre": "MARIA LUISA BELLO",
+          "pref": 347
+        },
+        {
+          "nombre": "RODRIGO SEBASTIAN ARELLANO MOREIRA",
+          "pref": 569
+        },
+        {
+          "nombre": "JOSE \"PUMA\" RODRIGUEZ",
+          "pref": 372
+        },
+        {
+          "nombre": "FERNANDO \"FERGO\" GAMARRA",
+          "pref": 361
+        },
+        {
+          "nombre": "CAP R LETIZIA RAMIREZ PAREDES",
+          "pref": 89
+        },
+        {
+          "nombre": "LIC. AMI LOMBARDO",
+          "pref": 68
+        },
+        {
+          "nombre": "CLAUDIO \"MORSA\" GONZALEZ",
+          "pref": 68
+        },
+        {
+          "nombre": "DIXON BUTTERWORTH KENNEDY",
+          "pref": 91
+        },
+        {
+          "nombre": "JORGE ANTONIO PRADO ESQUIVEL",
+          "pref": 57
+        },
+        {
+          "nombre": "CARLOS ENRIQUE BAREIRO DUARTE",
+          "pref": 62
+        },
+        {
+          "nombre": "ALFREDO RAUL NOGUERA VARGAS",
+          "pref": 51
+        },
+        {
+          "nombre": "TOMAS FABIAN PLATE FRANCO",
+          "pref": 27
+        },
+        {
+          "nombre": "ANDRES MIGUEL RUIZ DIAZ ARECO",
+          "pref": 34
+        },
+        {
+          "nombre": "ADA LISSI ARRIOLA ALCARAZ",
+          "pref": 72
+        },
+        {
+          "nombre": "JOSE LUIS FONTCLARA FERNANDEZ",
+          "pref": 240
+        },
+        {
+          "nombre": "VICTORIA JARA HEYN",
+          "pref": 283
+        },
+        {
+          "nombre": "NELSON CASTRO",
+          "pref": 23
+        },
+        {
+          "nombre": "NORMA REINA ISABEL RIOS",
+          "pref": 38
+        },
+        {
+          "nombre": "JORGE DANIEL CHAVEZ QUIÑONEZ",
+          "pref": 106
+        },
+        {
+          "nombre": "LINO ANDRES AVILA ORTEGA",
+          "pref": 39
+        },
+        {
+          "nombre": "CARLOS FERREIRA",
+          "pref": 44
+        },
+        {
+          "nombre": "CRISTIAN DAVID SAMANIEGO NUÑEZ",
+          "pref": 58
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "partido": "PARTIDO UNION NACIONAL DE CIUDADANOS ETICOS",
+      "sigla": "UNACE",
+      "color": 4,
+      "colorHex": "#517a00",
+      "votos": 2428,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "ALBERTO NUÑEZ ISASI",
+          "pref": 300
+        },
+        {
+          "nombre": "ALFREDO EFRAIN ESQUIVEL",
+          "pref": 151
+        },
+        {
+          "nombre": "FERNANDO CENTURION",
+          "pref": 179
+        },
+        {
+          "nombre": "MIRTHA ARACELI ORTIZ BENITEZ",
+          "pref": 296
+        },
+        {
+          "nombre": "SAMU ALVAREZ",
+          "pref": 113
+        },
+        {
+          "nombre": "RAFAELA BEATRIZ VELAZQUEZ",
+          "pref": 206
+        },
+        {
+          "nombre": "GUSTAVO ADOLFO CLOSA BENITEZ",
+          "pref": 224
+        },
+        {
+          "nombre": "JOSE DEL ROSARIO ORTELLADO FRANCO",
+          "pref": 91
+        },
+        {
+          "nombre": "VICTOR HUGO SANCHEZ ACOSTA",
+          "pref": 72
+        },
+        {
+          "nombre": "MIGUEL GUSTAVO PORTILLO ORUE",
+          "pref": 85
+        },
+        {
+          "nombre": "LEONARDO OJEDA",
+          "pref": 63
+        },
+        {
+          "nombre": "EDITH FRANCO DE SARDI",
+          "pref": 90
+        },
+        {
+          "nombre": "ALBERTO DA SILVA",
+          "pref": 54
+        },
+        {
+          "nombre": "ALBERTO GEREMIAS BORDON",
+          "pref": 9
+        },
+        {
+          "nombre": "HUGO ENRIQUE STANLEY PERSON",
+          "pref": 46
+        },
+        {
+          "nombre": "MIRNA CONCEPCION PAREDES",
+          "pref": 27
+        },
+        {
+          "nombre": "THAMARA GISEL MATTO",
+          "pref": 105
+        },
+        {
+          "nombre": "OSCAR FABIAN RODRIGUEZ",
+          "pref": 64
+        },
+        {
+          "nombre": "ANA MARIA QUINTANA",
+          "pref": 42
+        },
+        {
+          "nombre": "ABRAHAN GARCIA INSAURRALDE",
+          "pref": 19
+        },
+        {
+          "nombre": "GLADIS PAOLA ESPINOLA OTAZU",
+          "pref": 45
+        },
+        {
+          "nombre": "HUGO DANIEL LONCHARICH BASUALDO",
+          "pref": 38
+        },
+        {
+          "nombre": "JOSE ANTONIO CABRERA MIÑARRO",
+          "pref": 28
+        },
+        {
+          "nombre": "LUCIANO ANTONIO BENITEZ GONZALEZ",
+          "pref": 81
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "partido": "ALIANZA SOCIALISTA UNIDA ASU",
+      "sigla": "ASU",
+      "color": 5,
+      "colorHex": "#644aaf",
+      "votos": 2659,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "MARIA DENIS",
+          "pref": 791
+        },
+        {
+          "nombre": "JESSI ARIAS",
+          "pref": 314
+        },
+        {
+          "nombre": "MANU GERDING",
+          "pref": 58
+        },
+        {
+          "nombre": "PACHIN CENTURION",
+          "pref": 169
+        },
+        {
+          "nombre": "HAIDEE ROMERO",
+          "pref": 69
+        },
+        {
+          "nombre": "IVAN ISASI",
+          "pref": 79
+        },
+        {
+          "nombre": "MALU VAZQUEZ",
+          "pref": 47
+        },
+        {
+          "nombre": "LIZ OSORIO",
+          "pref": 65
+        },
+        {
+          "nombre": "JUANI CASURIAGA",
+          "pref": 27
+        },
+        {
+          "nombre": "HECTOR OTAZU",
+          "pref": 336
+        },
+        {
+          "nombre": "SUSANA BARRETO",
+          "pref": 66
+        },
+        {
+          "nombre": "ROSA MIRANDA",
+          "pref": 36
+        },
+        {
+          "nombre": "CESAR GONZALEZ PARINI",
+          "pref": 66
+        },
+        {
+          "nombre": "OSCAR HERREROS USHER",
+          "pref": 44
+        },
+        {
+          "nombre": "JORGE ENRIQUE AYALA",
+          "pref": 19
+        },
+        {
+          "nombre": "NATHALIA CORREA",
+          "pref": 31
+        },
+        {
+          "nombre": "SAMUEL VERA",
+          "pref": 70
+        },
+        {
+          "nombre": "ALHELI GONZALEZ CACERES",
+          "pref": 48
+        },
+        {
+          "nombre": "BETO DUNJO",
+          "pref": 35
+        },
+        {
+          "nombre": "MARIA CONCEPCION CANDIA",
+          "pref": 86
+        },
+        {
+          "nombre": "CARLOS PORTILLO",
+          "pref": 59
+        },
+        {
+          "nombre": "YOLANDA MUJICA",
+          "pref": 60
+        },
+        {
+          "nombre": "PAOLA ACOSTA DENIS",
+          "pref": 23
+        },
+        {
+          "nombre": "ORLANDO MAIDANA",
+          "pref": 61
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "partido": "PARTIDO PATRIOTAS INDEPENDIENTES",
+      "sigla": "PPI",
+      "color": 6,
+      "colorHex": "#98add4",
+      "votos": 1308,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "EVER RAMON RECALDE BAREIRO",
+          "pref": 164
+        },
+        {
+          "nombre": "GUILLERMO BAE KIM",
+          "pref": 132
+        },
+        {
+          "nombre": "ROSA MARIA PALACIOS DE PAREDES",
+          "pref": 66
+        },
+        {
+          "nombre": "ANGEL MARIA FERREIRA",
+          "pref": 36
+        },
+        {
+          "nombre": "OSCAR MOREIRA LACASA",
+          "pref": 29
+        },
+        {
+          "nombre": "ADOLFO JOSE ZACARIAS BUCCINI",
+          "pref": 44
+        },
+        {
+          "nombre": "ROBERTO VICENTE MERELES MARTINEZ",
+          "pref": 65
+        },
+        {
+          "nombre": "MARIA ELENA SUGASTI VILLAMAYOR",
+          "pref": 42
+        },
+        {
+          "nombre": "DANY CHUNG",
+          "pref": 68
+        },
+        {
+          "nombre": "PABLO EDUARDO QUIROZ",
+          "pref": 25
+        },
+        {
+          "nombre": "VICTOR MANUEL GOMEZ ORTIZ",
+          "pref": 30
+        },
+        {
+          "nombre": "RODRIGO ALBERTO PEREIRA PENAYO",
+          "pref": 32
+        },
+        {
+          "nombre": "SANTIAGO CORONEL SANCHEZ",
+          "pref": 26
+        },
+        {
+          "nombre": "FATIMA MARIA VEGA ARZAMENDIA",
+          "pref": 72
+        },
+        {
+          "nombre": "JUAN ULISES VILLALBA DAVALOS",
+          "pref": 29
+        },
+        {
+          "nombre": "SANTIAGO GAMARRA DELGADO",
+          "pref": 181
+        },
+        {
+          "nombre": "JUSTINA FRETES DE CHILAVERT",
+          "pref": 80
+        },
+        {
+          "nombre": "FRANCISCO VALDEZ SOSA",
+          "pref": 24
+        },
+        {
+          "nombre": "ODILIO ARMANDO BRITEZ ALVAREZ",
+          "pref": 27
+        },
+        {
+          "nombre": "FELIPE SANTIAGO GOMEZ",
+          "pref": 24
+        },
+        {
+          "nombre": "GERARDO JAVIER JARA VARELA",
+          "pref": 42
+        },
+        {
+          "nombre": "CESAR ANDRES CACERES CARDOZO",
+          "pref": 15
+        },
+        {
+          "nombre": "ISAAC RAMON CABRERA IRIGOYEN",
+          "pref": 17
+        },
+        {
+          "nombre": "FLORENCIO PEREZ OTAZU",
+          "pref": 38
+        }
+      ]
+    },
+    {
+      "numero": 21,
+      "partido": "PARTIDO DE LA JUVENTUD FUERZA JOVEN",
+      "sigla": "PJFJ",
+      "color": 7,
+      "colorHex": "#d8ff40",
+      "votos": 3450,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "DIGNA PERLA CONCEPCION MALDONADO DIAZ",
+          "pref": 209
+        },
+        {
+          "nombre": "RAUL MELAMED",
+          "pref": 269
+        },
+        {
+          "nombre": "OSCAR FERNANDO OVELAR OLMEDO",
+          "pref": 86
+        },
+        {
+          "nombre": "IRENEO ROMAN",
+          "pref": 126
+        },
+        {
+          "nombre": "TOMAS TORRES",
+          "pref": 143
+        },
+        {
+          "nombre": "MARTITA",
+          "pref": 180
+        },
+        {
+          "nombre": "SUSI SACCO",
+          "pref": 483
+        },
+        {
+          "nombre": "VICTORIA JULIANA THOMPSON GOMEZ",
+          "pref": 58
+        },
+        {
+          "nombre": "NINFA RAMONA VIVEROS LEGUIZAMON",
+          "pref": 151
+        },
+        {
+          "nombre": "ANA FELIPA MALDONADO DIAZ",
+          "pref": 69
+        },
+        {
+          "nombre": "PEDRO ARIEL MARTINEZ",
+          "pref": 130
+        },
+        {
+          "nombre": "TOMAS EUBLO ALVARENGA SAMANIEGO",
+          "pref": 48
+        },
+        {
+          "nombre": "MARY",
+          "pref": 353
+        },
+        {
+          "nombre": "UBALDO SALVADOR ROA GODOY",
+          "pref": 42
+        },
+        {
+          "nombre": "AGUSTIN",
+          "pref": 63
+        },
+        {
+          "nombre": "ESTELA MARI MARTINEZ CACERES",
+          "pref": 79
+        },
+        {
+          "nombre": "JOEL PEREIRA",
+          "pref": 213
+        },
+        {
+          "nombre": "DYLAN GABRIEL VERA SAMANIEGO",
+          "pref": 310
+        },
+        {
+          "nombre": "LUIS ALBERTO PACHAS MEDRANO",
+          "pref": 44
+        },
+        {
+          "nombre": "SANDRA CAROLINA SUAREZ MENDOZA",
+          "pref": 55
+        },
+        {
+          "nombre": "LUISA BEATRIZ KREITMAYR DE MIÑO",
+          "pref": 186
+        },
+        {
+          "nombre": "CARLOS VILLANUEVA CALZADILLA",
+          "pref": 40
+        },
+        {
+          "nombre": "ALFREDO MARTINEZ CACERES",
+          "pref": 41
+        },
+        {
+          "nombre": "LUIS IGNACIO DIAZ MENDOZA",
+          "pref": 72
+        }
+      ]
+    },
+    {
+      "numero": 300,
+      "partido": "PARTIDO PATRIA SOÑADA",
+      "sigla": "PS",
+      "color": 0,
+      "colorHex": "#b9cdbe",
+      "votos": 2091,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "CLAUDIA AQUINO",
+          "pref": 326
+        },
+        {
+          "nombre": "SILVIA AQUINO",
+          "pref": 100
+        },
+        {
+          "nombre": "HECTOR ELIZECHE",
+          "pref": 95
+        },
+        {
+          "nombre": "CAROL DORIA MOREL",
+          "pref": 227
+        },
+        {
+          "nombre": "LIDER BEBU FLEITAS",
+          "pref": 123
+        },
+        {
+          "nombre": "SUSANA MERELES",
+          "pref": 101
+        },
+        {
+          "nombre": "JOHN WENTZENSEN",
+          "pref": 59
+        },
+        {
+          "nombre": "BETHA CUBILLA",
+          "pref": 72
+        },
+        {
+          "nombre": "JOSE BENITEZ",
+          "pref": 34
+        },
+        {
+          "nombre": "LIZ MAQUEDA",
+          "pref": 106
+        },
+        {
+          "nombre": "LIZ DELGADO",
+          "pref": 134
+        },
+        {
+          "nombre": "XIMENA LEON",
+          "pref": 26
+        },
+        {
+          "nombre": "TANA ZARATE",
+          "pref": 34
+        },
+        {
+          "nombre": "CARLITO ACUÑA",
+          "pref": 55
+        },
+        {
+          "nombre": "CRISTINO VEGA LEIVA",
+          "pref": 18
+        },
+        {
+          "nombre": "CATHIA CENTURION",
+          "pref": 39
+        },
+        {
+          "nombre": "NATHAN OLAVARRIETA",
+          "pref": 58
+        },
+        {
+          "nombre": "GLORIA RIVAS",
+          "pref": 67
+        },
+        {
+          "nombre": "ARNOLD GOOSSEN",
+          "pref": 97
+        },
+        {
+          "nombre": "JUDITH GALEANO",
+          "pref": 23
+        },
+        {
+          "nombre": "JUAN ANGEL BOVEDA",
+          "pref": 52
+        },
+        {
+          "nombre": "LIZ VILLAGRA",
+          "pref": 36
+        },
+        {
+          "nombre": "CARLOS URBIETA",
+          "pref": 59
+        },
+        {
+          "nombre": "MENCHI SALDIVAR",
+          "pref": 150
+        }
+      ]
+    }
+  ]
+}

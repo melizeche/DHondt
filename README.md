@@ -138,7 +138,7 @@ Con ese código se bajan los tres archivos de `https://simuladoroficial.tsje.gov
 
 ## Resultados de elecciones que ya pasaron
 
-Vienen cargados dos resultados reales.
+Vienen cargados dos resultados reales y uno preliminar.
 
 ### Senadores 2023
 
@@ -181,6 +181,21 @@ python3 tools/xlsx-preferentes-a-json.py 1VotosPref_Dep_Distrito_JuMu2021_da.xls
 No necesita instalar nada: un `.xlsx` es un zip de XML y el conversor lo abre con `zipfile` y `xml.etree`, que vienen con Python. Sin `--bancas` toma la cantidad de filas marcadas `ELECTO` en la planilla, y no escribe nada si el `ORDEN_LISTA` de alguna lista tiene huecos o si las filas `ELECTO` no coinciden con las bancas pedidas.
 
 La planilla es sólo de votos preferentes y no trae los votos en blanco ni los nulos, así que quedan en cero. Los totales por lista son votos válidos y el reparto no usa blancos ni nulos, pero la estadística de «emitidos» queda corta.
+
+### Junta Municipal de Asunción 2026 (TREP)
+
+`datos/asuncion-junta-municipal-2026-trep.json` trae los resultados **preliminares** del TREP (Transmisión de Resultados Electorales Preliminares) del TSJE, cortados el 05-10-2026 a las 10:20 con 1.324 de 1.325 mesas: 9 listas, 24 bancas, 267.837 votos válidos y los votos preferentes de cada candidato. No es el cómputo definitivo, y por eso el test comprueba que el archivo cuadre con el TREP, pero no fija el reparto.
+
+La página del TREP, [resultados.tsje.gov.py/publicacion/divulgacion.html](https://resultados.tsje.gov.py/publicacion/divulgacion.html), pide los datos de cada candidatura y distrito a `divulgacion.ajax.php` (para Asunción, `...?codeleccion=47&candidatura=2&departamento=0&distrito=0`). El sitio está detrás de un firewall que pide ejecutar JavaScript, así que el conversor no lo descarga. Hay que abrir la página, elegir el distrito y, en las herramientas de desarrollo del navegador (pestaña Network, filtrando por `divulgacion.ajax`), guardar la respuesta de ese request. Los códigos de departamento y distrito los pone la página. Después se convierte:
+
+```sh
+node tools/trep-a-json.mjs --trep asuncion-trep.json \
+  --siglas datos/asuncion-junta-municipal.json \
+  --eleccion "Elecciones Municipales 2026 · Junta Municipal de Asunción (TREP, preliminar)" \
+  --salida datos/asuncion-junta-municipal-2026-trep.json
+```
+
+El TREP no trae siglas: `--siglas` las toma, por número de lista, de otro archivo del proyecto con la misma boleta; sin él, las deduce la página. La nómina sale en el orden en que se presentó (`ordCandidato`), no en el de votos, y el color de la boleta viene en el mismo JSON. La fuente lleva la hora del corte y las mesas transmitidas. El script no escribe nada si las cuentas no cierran: el `ordCandidato` de cada lista tiene que ir de 1 a N sin huecos, los preferentes tienen que sumar el total de su lista, y válidos más blancos, nulos y no computados tienen que dar el total de votos del TREP. Los no computados no tienen campo en el formato y quedan afuera.
 
 ## Formato del JSON
 
@@ -295,12 +310,14 @@ datos/encarnacion-junta-municipal.json   candidaturas de Encarnación (generado)
 datos/ciudad-del-este-junta-municipal.json  candidaturas de Ciudad del Este (generado)
 datos/senadores-2023.json           resultados reales de los Senadores 2023 (generado)
 datos/asuncion-junta-municipal-2021.json  resultados reales de Asunción 2021 (generado)
+datos/asuncion-junta-municipal-2026-trep.json  TREP preliminar de Asunción 2026 (generado)
 datos/schema.json                   JSON Schema del formato
 datos/ejemplo.json                  ejemplo mínimo del formato
 datos/ejemplo-star-wars.json        ejemplo chico: electos con un solo voto preferente
 tools/tsje-a-json.mjs               conversor de las candidaturas del TSJE
 tools/pdf-resultados-a-json.py      conversor de los PDF de resultados oficiales
 tools/xlsx-preferentes-a-json.py    conversor de la planilla de preferentes 2021
+tools/trep-a-json.mjs               conversor de los resultados preliminares del TREP
 tools/og.mjs                        genera og.png con un navegador headless
 tests/dhondt.test.mjs               cálculo
 tests/datos.test.mjs                datos generados
