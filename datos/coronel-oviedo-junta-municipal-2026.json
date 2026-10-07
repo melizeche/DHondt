@@ -1,0 +1,192 @@
+{
+  "$schema": "schema.json",
+  "eleccion": "Elecciones Municipales · Junta Municipal de Coronel Oviedo",
+  "fuente": {
+    "nombre": "simulador oficial del TSJE",
+    "url": "https://simuladoroficial.tsje.gov.py/"
+  },
+  "bancas": 12,
+  "umbral": 0,
+  "modo": "desbloqueada",
+  "blancos": 0,
+  "nulos": 0,
+  "listas": [
+    {
+      "numero": 1,
+      "partido": "PARTIDO COLORADO",
+      "sigla": "ANR",
+      "color": 0,
+      "colorHex": "#ff0000",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "HUGO OVELAR",
+          "pref": 0
+        },
+        {
+          "nombre": "RODRIGO LOPEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "OSVALDITO MORA",
+          "pref": 0
+        },
+        {
+          "nombre": "PEY VARGAS",
+          "pref": 0
+        },
+        {
+          "nombre": "DIEGO RODRIGUEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "ALEXIS MENDEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "JULIO BALBUENA",
+          "pref": 0
+        },
+        {
+          "nombre": "JUANCITO TORRES",
+          "pref": 0
+        },
+        {
+          "nombre": "JALIL GOSSEN",
+          "pref": 0
+        },
+        {
+          "nombre": "CARLOS “CHUPA” CORONEL",
+          "pref": 0
+        },
+        {
+          "nombre": "OSCAR CHAVEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "JAVI RAMOA",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 123,
+      "partido": "ALIANZA TODOS POR CORONEL OVIEDO",
+      "sigla": "ATPCO",
+      "color": 1,
+      "colorHex": "#9adbf7",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "MARCIAL CARDOZO",
+          "pref": 0
+        },
+        {
+          "nombre": "ELVIRA MARTINEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "ARMANDO RIVEROS",
+          "pref": 0
+        },
+        {
+          "nombre": "VICENTE BAEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "ELIGIO CAMPUZANO",
+          "pref": 0
+        },
+        {
+          "nombre": "ISIDRO BOGADO",
+          "pref": 0
+        },
+        {
+          "nombre": "ROQUITO OLMEDO",
+          "pref": 0
+        },
+        {
+          "nombre": "MONICA ALFONSO",
+          "pref": 0
+        },
+        {
+          "nombre": "RUBEN VAZQUEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "NESTOR BENITEZ SOSA",
+          "pref": 0
+        },
+        {
+          "nombre": "LUIS PORTILLO BIGOTE AL PODER",
+          "pref": 0
+        },
+        {
+          "nombre": "JENNY MENDOZA",
+          "pref": 0
+        }
+      ]
+    },
+    {
+      "numero": 300,
+      "partido": "PARTIDO PATRIA SOÑADA",
+      "sigla": "PS",
+      "color": 2,
+      "colorHex": "#b9cdbe",
+      "votos": 0,
+      "soloLista": 0,
+      "candidatos": [
+        {
+          "nombre": "CHILO CHAMORO",
+          "pref": 0
+        },
+        {
+          "nombre": "GABINO MEDINA PORTILLO",
+          "pref": 0
+        },
+        {
+          "nombre": "DIEGO ARMANDO PEREIRA BENITEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "MARLIN ROSANA OVIEDO CRISTALDO",
+          "pref": 0
+        },
+        {
+          "nombre": "RUBEN DARIO MEDINA CANDIA",
+          "pref": 0
+        },
+        {
+          "nombre": "ARNILDA BURGOS BAEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "COSME SANTACRUZ GONZALEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "MIGUEL CONCEPCION GARCETE GIMENEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "ASUNCION ORTIZ PAEZ",
+          "pref": 0
+        },
+        {
+          "nombre": "FRANCISCO BRITEZ RIVEROS",
+          "pref": 0
+        },
+        {
+          "nombre": "RAFAEL BRITEZ AVALOS",
+          "pref": 0
+        },
+        {
+          "nombre": "ARLIS ALEXIS BOGADO RIVAS",
+          "pref": 0
+        }
+      ]
+    }
+  ]
+}
